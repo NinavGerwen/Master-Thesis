@@ -1,5 +1,11 @@
 \documentclass{article}
 
+\usepackage[american]{babel}
+\usepackage{csquotes}
+\usepackage[style=apa, backend=biber]{biblatex}
+
+\addbibresource{proposalref.bib}
+
 \title{Designing and Evaluating a Likelihood-Ratio Test for IRT models}
 \author{Nina van Gerwen (1860852)}
 \date{13th of October, 2022}
@@ -9,19 +15,19 @@
 
 \newpage
 \begin{itemize}
-\item Real life problem: For every type of research, it is important to know whether the model you are using actually fits the data. If you do not know this, you can draw wrong conclusions and have inefficient use of your data. Hence, there exist goodness-of-fit tests. However, in IRT research, there is no LR test that is generally applicable to all IRT models. Instead, all models have specific LR tests that suffer from different issues (e.g., Andersen's LR test for Rasch models).
+\item Real life problem: For every type of research, it is important to know whether the model you are using actually correctly illustrates the response process. In other words, it is important to know whether the model fits the data. If the wrong model is used, this can lead to dire consequences such as false conclusions. Furthermore, it also entails that you are make inefficient use of your data. So in order to test whether the model fits the data, there exist goodness-of-fit tests in almost every field of statistics. Most indicators of model fit, such as the AIC/BIC/DIC are relative: they can be used to compare two models on their fit. In Structural Equation Modeling, there also exist fit indices (e.g., SRMR, RMSEA, CFI/TLI), which when all taken together with their rules of thumb can also indicate model fit. However, for IRT research, there exists no goodness-of-fit LR test that is generally applicable to all IRT models (besides the $\chi^2$ test of a model vs. alternative model). Instead, some models have specific LR tests that tend to suffer from different issues (e.g., Andersen's LR test for all Rasch models, which has been shown to lack power \autocite{ref2}). Therefore, we have come up with a LR test, also based on the proof behind the $\chi^2$ test for a model vs. alternative model, that would be applicable to all IRT models in order to improve model-fit research. 
 	\begin{itemize}
-		\item Furthermore, goodness-of-fit tests all sufer from specific issues, such as a sensitivity to larger sample sizes. Therefore, there exist fit indices, which can help determine your model fit. IRT models, however, have a lack of fit indices.
+		\item Furthermore, goodness-of-fit tests all sufer from specific issues, such as a sensitivity to larger sample sizes. Therefore, there exist fit indices, which can help determine your model fit. Compared to SEM research, IRT models, however, have a lack of fit indices. For a relatively recent overview of fit indices used in IRT, see \textcite{ref1}.
 	\end{itemize}
-\item Research questions: What are the statistical properties (robustness, power, empirical \alpha) of the designed LR test that is applicable to all IRT models?
+\item Research questions: What are the statistical properties (robustness, power, empirical $\alpha$) of the designed LR test that is applicable to all IRT models?
 	\begin{itemize} 
 		\item Extra possible research question: something fit index related
 	\end{itemize}
-\item Analytic strategy: To research the statistical properties of our test, a simulation study will be conducted. First, data will be simulated according to certain IRT models. Then, knowing the true model, we can test both the real and other IRT models to the data and see whether our goodness-of-fit test has the abillity to determine when we used the right or wrong IRT model. 
+\item Analytic strategy: To research the statistical properties of our test, a simulation study will be conducted. First, data will be simulated according to certain IRT models. Then, knowing the true model, we can test both the real and other IRT models to the data and see whether our goodness-of-fit test has the abillity to determine when we used the right or wrong IRT model. Empirical $\alpha$ can be determined by calculating how many times the test rejects the model that was used to simulate the data. Power can be determined by calculating what percentage of wrong models are correctly rejected by the test. Robustness ??
 	\begin{itemize}
-		\item When simulatig data, we will for sure vary: the amount of items and sample size. Other factors we can vary in order to increase generalizability are: the parameters used for the IRT model, different types of IRT models, and the amount of group randomization used in the LR test.
+		\item When simulating data, we will for sure vary: the amount of items in the test (e.g., 5 - 10 - 20) and sample size (e.g., 20 - 50 - 100 - 200 - 500). Other factors we can vary in order to increase generalizability are: the parameters used for the IRT model (e.g., discrimination parameter of 0.4 and 0.7 and difficulty parameter with intervals of 0.5 versus intervals of 1.0), different types of IRT models (e.g., Graded Response Model - Rasch Model, Dichotomous / Polytomous IRT), and the amount of group randomization used in the LR test (e.g., randomized into 2 - 3 - 4 groups).
 	\end{itemize}
-\item Ethical Consent: considering the fact that the data will be simulated, there should be no issue with the license of the data or ethical consent.
+\item Ethical Consent: due to the fact that the data will be simulated, there should be no issue with either license of the data or ethical consent.
 \end{itemize}
 
 The Likelihood-Ratio test formula:
@@ -29,6 +35,9 @@ The Likelihood-Ratio test formula:
 - 2ln (\frac{L_{total}}{L_{half1}\cdot L_{half2}}) \rightarrow \chi^{2}(k)
 \end{equation}
 
+\nocite{*}
 
+\newpage
+\printbibliography
 
 \end{document}
