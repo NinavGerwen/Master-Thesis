@@ -1,0 +1,34 @@
+\documentclass{article}
+
+\title{Designing and Evaluating a Likelihood-Ratio Test for IRT models}
+\author{Nina van Gerwen (1860852)}
+\date{13th of October, 2022}
+
+\begin{document}
+\maketitle
+
+\newpage
+\begin{itemize}
+\item Real life problem: For every type of research, it is important to know whether the model you are using actually fits the data. If you do not know this, you can draw wrong conclusions and have inefficient use of your data. Hence, there exist goodness-of-fit tests. However, in IRT research, there is no LR test that is generally applicable to all IRT models. Instead, all models have specific LR tests that suffer from different issues (e.g., Andersen's LR test for Rasch models).
+	\begin{itemize}
+		\item Furthermore, goodness-of-fit tests all sufer from specific issues, such as a sensitivity to larger sample sizes. Therefore, there exist fit indices, which can help determine your model fit. IRT models, however, have a lack of fit indices.
+	\end{itemize}
+\item Research questions: What are the statistical properties (robustness, power, empirical \alpha) of the designed LR test that is applicable to all IRT models?
+	\begin{itemize} 
+		\item Extra possible research question: something fit index related
+	\end{itemize}
+\item Analytic strategy: To research the statistical properties of our test, a simulation study will be conducted. First, data will be simulated according to certain IRT models. Then, knowing the true model, we can test both the real and other IRT models to the data and see whether our goodness-of-fit test has the abillity to determine when we used the right or wrong IRT model. 
+	\begin{itemize}
+		\item When simulatig data, we will for sure vary: the amount of items and sample size. Other factors we can vary in order to increase generalizability are: the parameters used for the IRT model, different types of IRT models, and the amount of group randomization used in the LR test.
+	\end{itemize}
+\item Ethical Consent: considering the fact that the data will be simulated, there should be no issue with the license of the data or ethical consent.
+\end{itemize}
+
+The Likelihood-Ratio test formula:
+\begin{equation}
+- 2ln (\frac{L_{total}}{L_{half1}\cdot L_{half2}}) \rightarrow \chi^{2}(k)
+\end{equation}
+
+
+
+\end{document}
