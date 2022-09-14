@@ -6,8 +6,13 @@
 
 \addbibresource{proposalref.bib}
 
-\title{Designing and Evaluating a Likelihood-Ratio Test for IRT models}
-\author{Nina van Gerwen (1860852)}
+\title{%
+	Designing and Evaluating a Likelihood-Ratio Test for IRT models \\
+	\large Methodology and Statistics for the Behavioural, \\
+	Biomedical and Social Sciences}
+\author{Nina van Gerwen (1860852) \\
+	Dave Hessen \\
+	\small Applied Psychological Measurement}
 \date{13th of October, 2022}
 
 \begin{document}
@@ -34,6 +39,26 @@ The Likelihood-Ratio test formula:
 \begin{equation}
 - 2ln (\frac{L_{total}}{L_{half1}\cdot L_{half2}}) \rightarrow \chi^{2}(k)
 \end{equation}
+
+\newpage
+
+\part{Introduction}
+In many types of organisations, a lot of effort tends to be dedicated to researching important organising variables, such as job performance and personality traits. These types of variables are latent constructs, in other words they are not directly visible. In order to measure these constructs, To research these types of questions, we infer the latent constructs based on responses to items on a test or questionnaire. To achieve this, Item Response Theory (IRT) is often used. A large issue in the field of IRT is that you must use a model that correctly describes the answer process of the test in order to gain correct conclusions. This means that you should test whether the model you used fits the data you acquired. If a wrong model is used, it can lead to dire consequences such as faults in the validity of your measurement \autocite{consq1}. In an organisation, this would translate into issues such as discharging the wrong people. To summarize, it is important that you test model-fit. \\
+\indent Currently in IRT research, however, here are not a lot of measures of model-fit available in IRT compared to other fields of statistics. To illustrate, there exists no generally applicable model-fit test in IRT. Instead, there are specialised tests that work on certain types of IRT models (e.g., Andersen's (modified) Likelihood-Ratio (LR) test, which only works for Rasch models and has been shown to lack power \autocite{ref2}). Furthermore, there are very few fit indices available for IRT research compared to Structural Equation Modelling. For an overview of current fit indices that are available, see \textcite{ref1}. The paper also shows us that the current fit indices have large limitations, such as being unable to detect minor forms of misfit and faults due to multidimensionality. To summarizs, there is a large lack of measures of model fit in IRT research that we will try to address.\\
+\indent Our proposed research would develop and test a goodness-of-fit test in the form of a LR test that is applicable to all IRT models. Furthermore, we will research the performance of the test by answering what its' statistical properties (power, empirical $\alpha$, robustness)?
+
+\part{Analytic strategy}
+In order to answer the research question, we will conduct a simulation study. 
+First, data will be simulated according to certain IRT models. Then we will fit multiple types of IRT models to the data and calculate the following LR:
+
+\begin{equation}
+- 2ln (\frac{L_{total}}{L_{half1}\cdot L_{half2}}) \rightarrow \chi^{2}(k)
+\end{equation}
+
+where the nominator is the likelihood for the whole dataset, and the denominator is the likelihood for the two halved datasets, which are gained by randomly assigning the whole dataset to two groups. Due to the fact that the test will asymptomatically follow a $\chi^2$ distribution as proven by Wilks' theorem \autocite{wilkth}, it can be used for Null Hypothesis Significance testing. Then, due to the fact that we know the true model, we can calculate the proportion of times that the test rejects the correct model (i.e.,$\beta$: type II error). From this, we can then calculate the statistical power. Furthermore, we can also calculate the proportion of times that the test accepts a wrong model (i.e., empirical $\alpha$). Robustness ?? \\
+\indent When simulating data, we will for sure vary: the amount of items in the test (e.g., 5 - 10 - 20) and sample size (e.g., 20 - 50 - 100 - 200 - 500). Other factors we can vary in order to increase generalizability are: the parameters used for the IRT model (e.g., discrimination parameter of 0.4 and 0.7 and difficulty parameter with intervals of 0.5 versus intervals of 1.0), different types of IRT models (e.g., Graded Response Model - Rasch Model, Dichotomous / Polytomous IRT), and the amount of group randomization used in the LR test (e.g., randomised into 2 - 3 - 4 groups). The more factors we cross-examine, the more information we will receive about the scenarios in which the LR test works and does not work. \\
+\indent The proposed research would be conducted in R \autocite{R} through the use of RStudio \autocite{Rstudio}. For packages, we will use the MASS \autocite{mass}, lavaan \autocite{lavaan} and XXX packages. 
+
 
 \nocite{*}
 
