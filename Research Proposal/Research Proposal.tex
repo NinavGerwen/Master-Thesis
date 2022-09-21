@@ -34,7 +34,7 @@
 	\end{itemize}
 \item Ethical Consent: due to the fact that the data will be simulated, there should be no issue with either license of the data or ethical consent.
 \end{itemize}
-\item
+
 The Likelihood-Ratio test formula:
 \begin{equation}
 - 2ln (\frac{L_{total}}{L_{half1}\cdot L_{half2}}) \rightarrow \chi^{2}(k)
@@ -43,24 +43,51 @@ The Likelihood-Ratio test formula:
 \newpage
 
 \part{Introduction}
-In organisations, a lot of effort tends to be dedicated to researching important organising variables, such as job performance and personality traits. These types of variables are latent constructs, in other words they are not directly visible. In order to measure these constructs, we infer the latent constructs based on responses to items on a test or questionnaire. To achieve this, Item Response Theory (IRT) is often used. A large issue in the field of IRT is that you must use a model that correctly describes the answering process of the test in order to gain correct conclusions. This means that you should test whether the model you used fits the data you acquired. If a wrong model is used, it can lead to dire consequences such as faults in the validity of your measurement \autocite{consq1} and invalid conclusions (citation). In an organisation, this could translate into issues such as discharging the wrong people. Hence, it is important that you test the appropriateness of your model (i.e., model-fit). \\
-\indent Currently in IRT research, there are not a lot of procedures to measures model-fit widely available  compared to other fields of statistics (e.g., SEM). To illustrate, there exists only one generally applicable model-fit test in IRT. Namely, a comparative $\chi^2$ LR test between two models. The issue with this test, however, is that (a) it requires the null model to be nested under the alternative model and (b) the test of model-fit is relative, it only informs researchers whether the null model is more appropriate than the alternative model. Furthermore, other available tests tend to be specialised, such that the tests work only on certain types of IRT models (e.g., Andersen's (modified) Likelihood-Ratio (LR) test, which only works for Rasch models and has been shown to lack power \autocite{ref2}). As for global indicators of model-fit, there exist fit indices. -- explanation of fit indices -- However, there are very few fit indices available for IRT research compared to Structural Equation Modelling. For an overview of current fit indices that are available, see \textcite{ref1}. The paper also shows us that the available fit indices have large limitations, such as being unable to detect minor forms of misfit and faults due to multidimensionality. To summarise, there is a large lack of different measures of model fit in IRT research that we will attempt to address.\\
-\indent Our proposed research would develop and test the performance of a model-fit LR test that is applicable to all IRT models. In more detail, we will answer the following two research questions.
+In organisations, a lot of effort tends to be dedicated to researching important organising variables, such as job performance and personality traits. These types of variables are latent constructs, in other words they are not directly visible. In order to measure these constructs, we infer the latent constructs based on responses to items on a test or questionnaire. To achieve this, Item Response Theory (IRT) is often used. A large issue in IRT, however, is that you must use a model that correctly describes the answering process of the test in order to gain correct conclusions. This means that you should test whether the model you used fits the data you acquired. If a wrong model is used, it can lead to dire consequences such as faults in the validity of your measurement \autocite{consq1} and invalid conclusions (citation). In an organisation, this could translate into issues such as discharging the wrong people. Hence, it is vital that you test the appropriateness of your model (i.e., model-fit). \\
+\indent Currently in IRT research, there are not a lot of procedures to measures model-fit widely available compared to other fields of statistics (e.g., Structural Equation Modelling (SEM)). To illustrate, there exists only a few generally applicable model-fit test in IRT. One of these is the $\chi^2$-difference test between two nested models. The issues with this test, however, is that (a) it requires the null model to be nested under the alternative model, (b) the test of model-fit is relative, it only informs researchers whether the null model is more appropriate than the alternative model and (c) the test is sensitive to large sample sizes (citations). Besides model-fit tests, there also exist fit indices, which are global indicators of model-fit. However, the fit indices available in IRT are also few. - hier nog extra informatie toevoegen -- For an informative overview of current fit indices and their limitations, see \textcite{ref1}. To summarise, there is a large lack of model-fit measures in IRT research that we will attempt to address.
+\indent Our proposed researched would develop and test the performance of a model-fit LR test that is applicable to all IRT models. More specifically, we will answer the following two research questions:
 \begin{enumerate}
-\item What is the robustness (i.e., empericial $\alpha$ and power) of the $\chi^2$ test associated with our LR?
+\item What is the robustness (i.e., emperical $\alpha$ and power) of the $\chi^2$ test associated with our LR?
 \item How does the performance of our developed test compare to the performance of other available IRT tests?
+\end{enumerate}
 
 \part{Analytic strategy}
-In order to answer the research question, we will conduct a simulation study. 
-First, data will be simulated according to certain IRT models. Then we will fit multiple types of IRT models to the data and calculate the following LR:
+In order to answer the research question, we will conduct a simulation study. When simulating data, we will vary the following variables:
+
+\begin{itemize}
+\item Test items
+	\begin{itemize}
+	\item We will use the following two number of test item conditions: 5 - 10 - 20.
+	\end{itemize}
+\item Sample size
+	\begin{itemize}
+	\item We will use the following five sample size conditions: 20 - 50 - 100 - 200 - 500.
+	\end{itemize}
+\item Model-types
+	\begin{itemize}
+	\item We will use the following models as the basis for both our data generation and model-fitting: one-parameter logistic model (1PL), two-parameter logistic model (2PL) and three-parameter logistic model (3PL).
+	\end{itemize}
+\item Number of group randomisation
+	\begin{itemize}
+	\item We will use the following number of groups that the total dataset gets divided into: 2 - 3 - 4.
+	\end{itemize}
+\item Other options: parameters of the IRT model, dichotomous vs. polytomous IRT
+\end{itemize}
+
+Each condition will be replicated 500 times and for each dataset the following LR will be calculated:
 
 \begin{equation}
-- 2ln (\frac{L_{0}}{L_{1}\cdot L_{2}}) \rightarrow \chi^{2}(2k)
+\frac{\prod_{i=1}^n f(x_i)}{\prod_{j=1}^g\prod_{i=1}^{n_g} f(x_{ij})} = \frac{L_0}{\prod_{j = 1}^g L_j}
 \end{equation}
 
-where the nominator is the likelihood for the whole dataset, and the denominator is the likelihood for the two halved datasets, which are gained by randomly assigning the whole dataset to two groups. Due to the fact that the test will asymptomatically follow a $\chi^2$ distribution as proven by Wilks' theorem \autocite{wilkth}, it can be used for Null Hypothesis Significance testing. Then, due to the fact that we know the data-generating model, we can calculate the proportion of times that the test rejects the correct model (i.e.,$\beta$: type II error). Furthermore, we can also calculate the proportion of times that the test accepts a wrong model (i.e., empirical $\alpha$). Knowing these values, we can compare the multiple tests with one another, where a test with higher values for either proportions will be noted as performing worse. \\
-\indent When simulating data, we will for sure vary: the amount of items in the test (e.g., 5 - 10 - 20) and sample size (e.g., 20 - 50 - 100 - 200 - 500). Other factors we can vary in order to increase generalisability are: the parameters used for the IRT model (e.g., discrimination parameter of 0.4 and 0.7 and difficulty parameter with intervals of 0.5 versus intervals of 1.0), different types of IRT models (e.g., Graded Response Model - Rasch Model, Dichotomous / Polytomous IRT), and the amount of group randomisation used in the LR test (e.g., randomised into 2 - 3 - 4 groups). The more factors we cross-examine, the more information we will receive about the scenarios in which the LR test works and does not work. \\
-\indent The proposed research would be conducted in R \autocite{R} through the use of RStudio \autocite{Rstudio}. For packages, we will use the MASS \autocite{mass}, lavaan \autocite{lavaan} and ltm packages. 
+where $f(x)$ is the probability distribution, $n$ is the total sample size, $g$ is the group number and $n_g$ is the sample size in group $g$. The groups will be gained by randomly assigning the dataset to the $g$ groups. According to Wilk's theorem \autocite{wilkth}, this LR will then asymptotically follow a $\chi^2$-distribution with the following formula:
+
+\begin{equation}
+- 2ln\frac{L_0}{\prod_{j = 1}^g L_j} \rightarrow \chi^{2}(\delta)
+\end{equation}
+
+where $\delta$ is the difference in estimated parameters between the two likelihoods. This entails that the LR can be used for Null Hypothesis Significance testing. Then, due to the fact that we know the data-generating model, we can calculate the proportion of times that the test rejects the correct model (i.e.,$\beta$: type II error). Furthermore, we can also calculate the proportion of times that the test accepts a wrong model (i.e., empirical $\alpha$). Knowing these values, we can compare the multiple tests with one another, where a test with higher values for either proportions will be noted as performing worse. This will inform us of the scenarios where our test works properly, where the test lacks power or where the test has a too high empirical $\alpha$. Finally, we will provide an empirical example by testing the LR test on an existing dataset and interpreting the results. \\
+\indent The proposed research would be conducted in R \autocite{R} through the use of RStudio \autocite{Rstudio}. As for packages, we will use the MASS \autocite{mass}, lavaan \autocite{lavaan} and ltm \autocite{ltmpack} packages. Approval for the ethical consent for the simulated dataset has been requested. The approval for the empirical example, however, has to wait until a proper dataset has been found.
 
 
 \nocite{*}
