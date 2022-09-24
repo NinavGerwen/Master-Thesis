@@ -26,7 +26,7 @@ In organisations, a lot of effort tends to be dedicated to researching important
 \indent Our proposed researched would develop and test the performance of a model-fit Likelihood Ratio (LR) test that is applicable to all IRT models. More specifically, we will answer the following two research questions:
 \begin{enumerate}
 \item What is the robustness (i.e., emperical $\alpha$ and power) of the $\chi^2$-test associated with our LR?
-\item How does the performance of our developed test compare to the performance of the $chi^2$-difference test?
+\item How does the performance of our developed test compare to the performance of the $\chi^2$-difference and Pearson's $\chi^2$ test?
 \end{enumerate}
 
 \part{Analytic strategy}
@@ -61,7 +61,7 @@ Each condition will be replicated 500 times and for each dataset the following L
 where $f(x)$ is the probability distribution, $n$ is the total sample size, $g$ is the group number and $n_g$ is the sample size in group $g$. The groups will be gained by randomly assigning the dataset to the $g$ groups. According to Wilk's theorem \autocite{wilkth}, this LR will then asymptotically follow a $\chi^2$-distribution with the following formula:
 
 \begin{equation}
-- 2ln\frac{L_0}{\prod_{j = 1}^g L_j} \rightarrow \chi^{2}(\delta)
+- 2ln\frac{L_0}{\prod_{j = 1}^g L_j} \rightarrow \chi^{2}(\Delta)
 \end{equation}
 
 where $\delta$ is the difference in estimated parameters between the two likelihoods. This entails that the LR can be used for Null Hypothesis Significance testing. Then, due to the fact that we know the data-generating model, we can calculate the proportion of times that the test rejects the correct model (i.e.,$\beta$: type II error). Furthermore, we can also calculate the proportion of times that the test accepts a wrong model (i.e., empirical $\alpha$). Knowing these values, we can compare the multiple tests with one another, where a test with higher values for either proportions will be noted as performing worse. This will inform us of the scenarios where our test works properly, where the test lacks power or where the test has a too high empirical $\alpha$. Finally, we will provide an empirical example by testing the LR test on an existing dataset and interpreting the results. \\
