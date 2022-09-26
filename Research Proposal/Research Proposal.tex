@@ -8,11 +8,11 @@
 
 \title{%
 	Designing and Evaluating a Likelihood-Ratio Test for IRT models \\
-	\large Methodology and Statistics for the Behavioural, \\
-	Biomedical and Social Sciences}
-\author{Nina van Gerwen (1860852) \\
-	Dave Hessen \\
-	\small Applied Psychological Measurement}
+	\large \textit{Methodology and Statistics for the Behavioural, \\
+	Biomedical and Social Sciences}}
+\author{Nina van Gerwen (1860852) \\ 
+	Supervisor: Dave Hessen \\ 
+	\small {Candidate Journal: \textit{Applied Psychological Measurement}}}
 \date{13th of October, 2022}
 
 \begin{document}
@@ -22,15 +22,17 @@
 
 \part{Introduction}
 In organisations, a lot of effort tends to be dedicated to researching important organising variables, such as job performance and personality traits. These types of variables are latent constructs. This entails that they are not directly visible. In order to measure these constructs, we infer the latent constructs based on responses to items on a test or questionnaire. To achieve this, Item Response Theory (IRT) is often used. A large issue in IRT, however, is that you must use a model that correctly describes the answering process of the test in order to gain correct conclusions. This means that you should test whether the model you used fits the data you acquired. If a wrong model is used, it can lead to dire consequences such as faults in the validity of your measurement \autocite{consq1} and invalid conclusions (extra citations hier). In an organisation, this could translate into issues such as discharging the wrong people. Hence, it is vital that you test the appropriateness of your model (i.e., model-fit). \\
-\indent Currently in IRT research, there are not a lot of procedures to measures model-fit widely available compared to other fields of statistics (e.g., Structural Equation Modelling (SEM)). To illustrate, there exists only a few generally applicable model-fit test in IRT. One of these is the $\chi^2$-difference test between two nested models. The issues with this test, however, is that (a) it requires the null model to be nested under the alternative model, (b) the test of model-fit is relative, it only informs researchers whether the null model is more appropriate than the alternative model and (c) the test is sensitive to large sample sizes, where it will always reject a model \autocite{chi2sens}. Besides model-fit tests, there also exist fit indices, which are global indicators of model-fit. However, the amount fit indices available in IRT is also lacking. For an overview of current fit indices in IRT and their limitations, see \textcite{ref1}. To summarise, there are not enough measures of model-fit in IRT research that we will attempt to address.
-\indent Our proposed researched would develop and test the performance of a model-fit Likelihood Ratio (LR) test that is applicable to all IRT models. More specifically, we will answer the following two research questions:
+\indent Currently in IRT research, there are only two procedures that are applicable to every model that allow you to measure model-fit. Namely, the $\chi^2$-difference test and the Pearson's $\chi^2$ test. The $\chi^2$-difference test, however, requires the null model to be nested under the alternative model, and the test is sensitive to large sample sizes, where it will always reject a model \autocite{chi2sens}. This requirement of nesting also forms a serious issue for an often used model in IRT, namely the three-parameter logistic (3PL) model. This is because the 3PL model can only be nested under the four-parameter logistic (4PL) model, which suffers from consistency and estimation issues \autocite{4plconsist1, 4plconsist2}. This in turn entails that the $\chi^2$-difference test often cannot be properly used under the 3PL model. 
+Another option of assessing model-fit is to calculate fit indices, which tend to be standardized indicators of global model-fit. For an overview of current fit indices in IRT and their limitations, see \textcite{ref1}. Furthermore, fit indices from Structural Equation Modeling can also be used in IRT. However, hardly any research has been done towards the use of the Tucker-Lewis Index (TLI; \cite{tli}) and the Comparative Fit Index (CFI; \cite{cfi}) in IRT. We found only one paper examining the CFI \autocite{yangfitindex} and two papers investigating the TLI \autocite{yangfitindex, tliirt}. However, we believe that the baseline model, which is  used to calculate the CFI and  TLI, used by Yang might not be correct, which could have affected their results. To summarise, there are too few measures of model-fit available in IRT to test the 3PL model and too little research on the CFI and TLI, which we will attempt to address. \\
+\indent Our proposed researched would (a) develop and test the performance of a model-fit Likelihood Ratio (LR) test that is applicable to all IRT models and (b) test the performance of the CFI and TLI with a different baseline model. More specifically, we will answer the following three research questions:
 \begin{enumerate}
 \item What is the robustness (i.e., emperical $\alpha$ and power) of the $\chi^2$-test associated with our LR?
 \item How does the performance of our developed test compare to the performance of the $\chi^2$-difference and Pearson's $\chi^2$ test?
+\item What is the performance of the TLI and CFI with a complete-independence baseline model in IRT?
 \end{enumerate}
 
 \part{Analytic strategy}
-In order to answer the research question, we will conduct a simulation study. When simulating data, we will vary the following variables:
+In order to answer the research questions, we will conduct a simulation study. When simulating data, we will vary the following variables:
 
 \begin{itemize}
 \item Test items
@@ -49,10 +51,9 @@ In order to answer the research question, we will conduct a simulation study. Wh
 	\begin{itemize}
 	\item We will use the following number of groups that the total dataset gets divided into: 2 - 3 - 4.
 	\end{itemize}
-\item Other options: parameters of the IRT model, dichotomous vs. polytomous IRT
 \end{itemize}
 
-Each condition will be replicated 500 times and for each dataset the following LR will be calculated:
+Each condition will be replicated 500 times and in each replication the following LR will be calculated:
 
 \begin{equation}
 \frac{\prod_{i=1}^n f(x_i)}{\prod_{j=1}^g\prod_{i=1}^{n_g} f(x_{ij})} = \frac{L_0}{\prod_{j = 1}^g L_j}
@@ -64,7 +65,8 @@ where $f(x)$ is the probability distribution, $n$ is the total sample size, $g$ 
 - 2ln\frac{L_0}{\prod_{j = 1}^g L_j} \rightarrow \chi^{2}(\Delta)
 \end{equation}
 
-where $\delta$ is the difference in estimated parameters between the two likelihoods. This entails that the LR can be used for Null Hypothesis Significance testing. Then, due to the fact that we know the data-generating model, we can calculate the proportion of times that the test rejects the correct model (i.e.,$\beta$: type II error). Furthermore, we can also calculate the proportion of times that the test accepts a wrong model (i.e., empirical $\alpha$). Knowing these values, we can compare the multiple tests with one another, where a test with higher values for either proportions will be noted as performing worse. This will inform us of the scenarios where our test works properly, where the test lacks power or where the test has a too high empirical $\alpha$. Finally, we will provide an empirical example by testing the LR test on an existing dataset and interpreting the results. \\
+where $\Delta$ is the difference in the number of estimated parameters between the two likelihoods. This entails that the LR can be used for Null Hypothesis Significance testing. Then, due to the fact that we know the data-generating model, we can calculate the proportion of times that the test rejects the correct model (i.e.,$\beta$: type II error). Furthermore, we can also calculate the proportion of times that the test accepts a wrong model (i.e., empirical $\alpha$). Knowing these values, we can compare the multiple tests with one another, where a test with higher values for either proportions will be noted as performing worse. This will inform us of the scenarios where our test works properly and scenarios where the test lacks power. 
+To measure the performance of the TLI and CFI, we can calculate the proportion of times that the fit index improves (i.e., approaches the value 1) when the correct model is used compared to the other models. Finally, we will provide an empirical example by testing the LR test, CFI and TLI on an existing dataset and interpreting their results. \\
 \indent The proposed research would be conducted in R \autocite{R} through the use of RStudio \autocite{Rstudio}. As for packages, we will use the MASS \autocite{mass}, lavaan \autocite{lavaan} and ltm \autocite{ltmpack} packages. Approval for the ethical consent for the simulated dataset has been requested. The approval for the empirical example, however, has to wait until a proper dataset has been found.
 
 
