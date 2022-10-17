@@ -9,9 +9,6 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \def\volumeyear{2023}
 
-% setting reference style
-\bibliographystyle{sageapa}
-\bibliography{reportref.bib}
 
 \begin{document}
 
@@ -43,10 +40,16 @@ Introduction text \cite{consq1}.
 
 \section{Methods}
 
+\begin{equation}
+\frac{max(L_0)}{\prod_{j = 1}^g max(L_j)}
+\end{equation}
+
 \section{Results}
 
 \section{Discussion}
 
 \nocite{*}
+\bibliographystyle{apalike}
+\bibliography{reportref}
 
 \end{document}
