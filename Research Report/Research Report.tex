@@ -1,59 +1,141 @@
-\documentclass[Afour, sageapa, times]{sagej}
+% setting document class according to SAGE guidelines
+\documentclass[Royal,sageapa,times, doublespace]{sagej}
 
-% lay-out related packages and functions
-\usepackage{fullpage}
-\usepackage{indentfirst}
-\linespread{2}
+\usepackage{moreverb,url}
+\usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
 
-% table related packages
+% mathematical packages
+\usepackage{amsmath}
+
+% table-related packages
 \usepackage{multirow,booktabs,setspace,caption}
 \usepackage{tikz}
 
-% apa-style table set-up
-\DeclareCaptionLabelSeparator*{spaced}{\\[2ex]}
-\captionsetup[table]{textfont=it,format=plain,justification=justified,
-  singlelinecheck=false,labelsep=spaced,skip=0pt}
+\newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
-% citation related packages
-\usepackage[american]{babel}
-\usepackage{csquotes}
-\usepackage[style=apa, backend=biber]{biblatex}
+\def\volumeyear{2023}
 
-% adding the citation bib file
-\addbibresource{reportref.bib}
-
-% creating the title page
-\title{%
-	Designing and Evaluating a Likelihood-Ratio Test for IRT models \\
-	\large \textit{Methodology and Statistics for the Behavioural, \\
-	Biomedical and Social Sciences}}
-\author{Nina van Gerwen (1860852) \\ 
-	Supervisor: Dave Hessen \\ 
-	\small {Candidate Journal: \textit{Applied Psychological Measurement}} \\
-	\small {FETC Approval: 22-1818} \\
-	\small {Word Count: 746}}
-\date{13th of October, 2022}
 
 \begin{document}
+
+\runninghead{van Gerwen and Hessen}
+
+\title{Designing and Evaluating a Goodness-of-Fit Test for IRT models}
+
+\author{Nina van Gerwen \affilnum{1} and Dave Hessen\affilnum{2}}
+
+\affiliation{\affilnum{1}Utrecht University, NL \\
+\affilnum{2}Utrecht University, NL}
+
+\corrauth{Nina van Gerwen, Utrecht University,
+Faculty of Social Sciences, Department of Methodology and Statistics,
+Padualaan 14, Utrecht, 3584 CH, NL.}
+
+\email{n.l.vangerwen@uu.nl}
+
+\begin{abstract}
+Abstract text.
+\end{abstract}
+
+\keywords{IRT, Goodness-of-fit test, fit indices}
+
 \maketitle
 
-\newpage
-
-\section{\centering{Introduction}}
-\indent If in practice an item response model from Item Response Theory (IRT) is used, it is of vital importance that the model correctly describes the scores on the test items. If a wrong model is used, it can lead to dire consequences such as faults in the validity of your measurement \autocite{consq1, consq2, consq3} and by extension your conclusion. Hence, it is important to test the appropriateness of the model (i.e., model-fit). \\
-\indent At present, there are mainly two procedures that can be applied to measure model-fit. Namely, a $\chi^2$-difference test and Pearson's $\chi^2$-test. These tests both suffer from issues. Pearson's test, for example, will not follow a $\chi^2$-distribution when many score pattern frequencies are missing or low. The $\chi^2$-difference test instead is difficult to use for the three-parameter (3PL) model. This is because generalisations of the 3PL model tend to suffer from consistency and estimation issues \autocite{4plconsist1, 4plconsist2}. Another concern with the $\chi^2$-difference test is power. When sample size increases, the power to reject any reasonable model that does not perfectly fit, also increases \autocite{chi2sens}. Therefore, fit indices have been introduced to investigate whether a model is reasonable. For an overview of fit indices in IRT and their limitations, see \textcite{ref1}. Fit indices from Structural Equation Modeling can also be used in IRT. However, hardly any research has been done towards the use of the Tucker-Lewis Index (TLI; \cite{tli}) and the Comparative Fit Index (CFI; \cite{cfi}) in IRT. We found only one paper examining the CFI \autocite{yangfitindex} and two papers investigating the TLI \autocite{yangfitindex, tliirt}. However, we believe that the calculations for the CFI and TLI by Yang are incorrect due to a wrong baseline model, affecting the results. To summarise, there are (a) too few goodness-of-fit tests available in IRT to test the 3PL model and (b) scarce studies investigating the CFI and TLI, which we will address. \\
-\indent Our proposed research would (a) develop and test the performance of a goodness-of-fit Likelihood Ratio (LR) test applicable to all IRT models and (b) test the performance of the CFI and TLI with a complete-independence baseline model. More specifically, we will answer three research questions:
-
-\newpage
-
+\section{Introduction}
+This part will contain information about: IRT, fit indices, goodness of fit tests, issues, etc.
+\subsection{The present study}
+In order to create a goodness-of-fit test to use for the 3PL in IRT and to better understand the possible uses of the CFI and TLI in an IRT setting, the present study answered the following three research questions through simulation studies:
 \begin{enumerate}
-\item What sample size is necessary at different test lengths for the $\chi^2$-test associated with our LR to perform well?
-\item How does performance of our test compare to performance of a $\chi^2$-difference and Pearson's $\chi^2$-test?
-\item What is the performance of the TLI and CFI with a complete-independence baseline model in IRT?
+\item{What sample size is necessary at different test lengths for the Randomisation test to perform well?}
+\item{How does the performance of the Randomisation test compare to the performance of a $\chi^2$-difference and Pearson's $\chi^2$-test?}
+\item{What is the performance of the TLI and CFI with a complete-independence baseline model in IRT?}
 \end{enumerate}
 
-\section{\centering{Analytic strategy}}
-In order to answer the research questions, we shall conduct a simulation study, varying four factors: test length, sample size, model types and number of groups. For an overview of the conditions we will use for the different factors, see \textit{Table 1}. \\
+\section{Methods}
+
+\subsection{Statistical theory}
+\subsubsection{Item response functions}
+The below defined item response functions were used in the current study: \\
+1PL:
+\begin{equation}
+P(X_i = 1 | \theta, \beta_{i}) = \frac{e^{\theta - \beta_{i}}}{1 + e^{\theta - \beta_{i}}}
+\end{equation}
+
+where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 1PL model depends on the latent
+variable, $\theta$, that you are trying to measure and the difficulty of the item, $\beta_i$.
+
+2PL:
+\begin{equation}
+P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}) = \frac{e^{\alpha_{i}\theta + \beta_{i}}}{1 + e^{\alpha_{i}\theta + \beta_{i}}}
+\end{equation}
+
+where the probability of scoring a 1 now also depends on an item-dependent intercept term $\alpha_i$, which shows how well an item discriminates
+between individuals who score a 0 and individuals who score a 1,
+
+3PL:
+\begin{equation}
+P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}, \gamma_{i}) = \gamma_{i} + (1 - \gamma_{i}) \cdot 
+\frac{e^{\alpha_{i}\theta - \beta_{i}}}{1 + e^{\alpha_{i}\theta - \beta_{i}}}
+\end{equation}
+
+where the probability of scoring a 1 on item $i$ is also dependent on an item-specific lower asymptote $\gamma_i$, which indicates whether there is
+a baseline probability of scoring a 1 (e.g., a multiple choice test with 4 options has a .25 baseline probability of scoring a 1).
+
+Complete independence:
+\begin{equation}
+P(X_i = 1 | \beta_{i}) = \frac{e^{\beta_{i}}}{1 + e^{\beta_{i}}}
+\end{equation}
+
+In the complete independence model, the probability of scoring a 1 on item $i$ is dependent only on the difficulty of the item and no longer on
+a latent variable. This entails that the joint probability distribution is simply the product of the marginal probability distributions and therefore the
+items will no longer correlate with one another (i.e., they are independent).
+
+Saturated model:
+\begin{equation}
+P(X_i = 1) = \frac{n_{X_i = 1}}{N}
+\end{equation}
+\subsubsection{Fit indices} 
+The current study investigated the CFI and TLI, which can be calculated through the following formulae: \\
+
+CFI:
+\begin{equation}
+CFI = 1 - \frac{\chi^{2} - df}{\chi^{2}_{0} - df_0}
+\end{equation}
+TLI:
+\begin{equation}
+TLI = 1 - \frac{\chi^{2}/df}{\chi^{2}_{0}/df_0}
+\end{equation}
+where the numerator is a $\chi^2$-difference test between the tested model and the saturated model with $df$ degrees of freedom 
+and the denominator is a $\chi^2$-difference test between the tested model and the complete independence model with $df_0$ degrees of freedom.
+
+To measure the performance of the TLI and CFI, we calcualted the proportion of times that the fit indices improved when the correct model was used compared to another model.
+
+\subsubsection{Goodness-of-fit tests}
+
+We compared the performance of the following three goodness-of-fit tests.
+\begin{itemize}
+\item{$\chi^2$-difference test}
+	\begin{itemize}
+	\item{The 1PL model was tested under the 2PL model. The 2PL model was tested under the 3PL model. For the 3PL model, this test was not used.}
+	\end{itemize}
+\item{Pearson's $\chi^2$-test}
+	\begin{itemize}
+	\item{Calculated through observing the differences in the observed and expected frequency of score patterns: $\sum_{i = 1}^{n}\frac{(Obs_i - Exp_i)^2}{Exp_i}$}
+	\end{itemize}
+\item{Randomisation test}
+	\begin{itemize}
+	\item{This is the test that we have developed and tested in the current study. The formula of the test statistic is:
+	\begin{equation}
+		\frac{max(L_0)}{\prod_{j = 1}^g max(L_j)}
+	\end{equation} where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for each group, gained by randomly assigning the observations to $g$ grouops. According to Wilk's theorem \cite{willkth}, this LR will then asymptotically follow a $\chi^2$-distribution. This allows the Randomisation test to be used for Null Hypothesis Significance testing.} 
+	\end{itemize}
+\end{itemize}
+
+Performance of the three tests can be studied by estimating both type I error and power. Power was estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error was estimated when fitting and testing the model that was used to generate the data. With these values, we compared the different type of tests with one another, where a test with lower power was noted as performing worse.
+
+\subsection{Simulation study}
+In order to answer the research questions, we conducted a simulation study, varying four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}.
 
 \begin{table}[htpb]
 \caption{Overview of Simulation Conditions for Each Factor}
@@ -65,32 +147,27 @@ Factor & Conditions & Description \\
 \multicolumn{1}{l}{Test length} & 5 - 10 - 20 & \multicolumn{1}{l}{\shortstack{The total number of items that the test \\ will consist of}} \\ \\ 
 \multicolumn{1}{l}{Sample size} & 20 - 50 - 100 - 200 - 500 & \multicolumn{1}{l}{\shortstack{The total number of observations that \\ will be available for each item}} \\ \\
 \multicolumn{1}{l}{Model type} & 1PL - 2PL - 3PL & \multicolumn{1}{l}{\shortstack{The models that we will use as the basis for \\ both data generation and model-fitting}} \\ \\
-\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the total dataset \\ gets divided into for the LR calculations}} \\
+\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the total dataset \\ gets divided into for the \\ Randomisation test calculations}} \\
 
 \bottomrule
 \end{tabular}
 
 \bigskip
 \small\textit{Note}. 1PL = one-parameter logistic model; 2PL = two-parameter logistic model; 3PL = \\ three-parameter logistic model.
+\label{tab:1}
 \end{table}
 
-Each condition will be replicated 500 times and the following LR will be calculated:
+Every condition will be replicated 500 times and in every replication, model-fit will be assessed from the different tests and the different fit indices. 
 
-\begin{equation}
-\frac{max(L_0)}{\prod_{j = 1}^g max(L_j)}
-\end{equation}
+\section{Results}
 
-where $L_0$ is the likelihood for the whole dataset and $L_j$ is the likelihood for each group, gained by randomly assigning the observations to $g$ groups. According to Wilk's theorem \autocite{wilkth}, this LR will then asymptotically follow a $\chi^2$-distribution. This allows the LR to be used for Null Hypothesis Significance testing. Performance of the test can be studied by investigating both type I error and power. Power can be estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error is estimated when fitting and testing the model that was used to generate the data. With these values, we can study what sample size is necessary at each test length for our $\chi^2$-test to have enough power. Furthermore, we can compare the different type of tests with one another, where a test with lower power will be noted as performing worse. To measure the performance of the TLI and CFI, we can calculate the proportion of times that the fit indices improve when the correct model is used compared to other models. Finally, we will provide an empirical example by testing our $\chi^2$-test, CFI and TLI on the LSAT dataset from \textcite{dataset}. \\
-\indent The proposed research would be conducted in R \autocite{R} through the use of RStudio \autocite{Rstudio} with the \textit{MASS} \autocite{mass}, \textit{lavaan} \autocite{lavaan} and \textit{ltm} \autocite{ltmpack} packages. Ethical approval for the example dataset has been requested.
+\subsection{Empirical example}
+Besides testing
 
+\section{Discussion}
 
 \nocite{*}
-
-\newpage
-\begingroup
-\center{
-\printbibliography
-}
-\endgroup
+\bibliographystyle{apalike}
+\bibliography{reportref}
 
 \end{document}
