@@ -1,5 +1,5 @@
 % setting document class according to SAGE guidelines
-\documentclass[Royal,sageapa,times, doublespace]{sagej}
+\documentclass[Royal,sageapa,times,doublespace]{sagej}
 
 \usepackage{moreverb,url}
 \usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
@@ -10,6 +10,9 @@
 % table-related packages
 \usepackage{multirow,booktabs,setspace,caption}
 \usepackage{tikz}
+
+%layout-related packages
+\usepackage{indentfirst}
 
 \newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
 T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -52,9 +55,7 @@ In order to create a goodness-of-fit test to use for the 3PL in IRT and to bette
 \item{What is the performance of the TLI and CFI with a complete-independence baseline model in IRT?}
 \end{enumerate}
 
-\section{Methods}
-
-\subsection{Statistical theory}
+\subsection{Statistical background}
 \subsubsection{Item response functions}
 The below defined item response functions were used in the current study: \\
 1PL:
@@ -109,8 +110,6 @@ TLI = 1 - \frac{\chi^{2}/df}{\chi^{2}_{0}/df_0}
 where the numerator is a $\chi^2$-difference test between the tested model and the saturated model with $df$ degrees of freedom 
 and the denominator is a $\chi^2$-difference test between the tested model and the complete independence model with $df_0$ degrees of freedom.
 
-To measure the performance of the TLI and CFI, we calcualted the proportion of times that the fit indices improved when the correct model was used compared to another model.
-
 \subsubsection{Goodness-of-fit tests}
 
 We compared the performance of the following three goodness-of-fit tests.
@@ -132,10 +131,14 @@ We compared the performance of the following three goodness-of-fit tests.
 	\end{itemize}
 \end{itemize}
 
-Performance of the three tests can be studied by estimating both type I error and power. Power was estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error was estimated when fitting and testing the model that was used to generate the data. With these values, we compared the different type of tests with one another, where a test with lower power was noted as performing worse.
+\section{Methods}
+\subsection{Data generation}
+Data generation was done by first sampling person parameters (i.e., $\theta$) from a standard normal distribution. Then, a model was chosen as basis for the data generation. We chose to keep item parameters static over all simulations. For an overview of the chosen item parameters per model, see \textit{Table 2}. Then, probabilities were calculated for all items on a test, given $\theta$ and the chosen model's item parameters. Finally, a matrix of 0's and 1's was created by sampling from a binomial distribution for every item, given each person. We replicated each simulation condition (see below) 500 times. Each replication, the item parameters remained the same and only new person parameters were sampled.
 
-\subsection{Simulation study}
-In order to answer the research questions, we conducted a simulation study, varying four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}.
+\subsection{Simulation design}
+In order to answer the research questions, we conducted a simulation study that varied four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}. This resulted in a total of 3 (test length) x 5 (sample size) x 3 (model type) x 3 (number of groups) = 135 conditions. \\
+\indent In each replication of each condition, we calculated the three goodness-of-fit tests and two fit indices. Performance of the three tests was then studied by estimating both type I error and power. Power was estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error was estimated when fitting and testing the model that was used to generate the data. With these values, we compared the different type of tests with one another, where a test with lower power or higher type I error was noted as performing worse.
+To measure the performance of the TLI and CFI, we calculated the proportion of times that the fit indices improved when the correct model was used compared to another model.
 
 \begin{table}[htpb]
 \caption{Overview of Simulation Conditions for Each Factor}
@@ -157,13 +160,11 @@ Factor & Conditions & Description \\
 \label{tab:1}
 \end{table}
 
-Every condition will be replicated 500 times and in every replication, model-fit will be assessed from the different tests and the different fit indices. 
+\newpage
 
 \section{Results}
 
 \subsection{Empirical example}
-Besides testing
-
 \section{Discussion}
 
 \nocite{*}
