@@ -55,33 +55,51 @@ In order to create a goodness-of-fit test to use for the 3PL in IRT and to bette
 \item{What is the performance of the TLI and CFI with a complete-independence baseline model in IRT?}
 \end{enumerate}
 
+\section{Methods}
 \subsection{Statistical background}
-\subsubsection{Item response functions}
-The below defined item response functions were used in the current study: \\
-1PL:
+Before we share the methodology of the current study, let us first examine a brief summary on the statistical theory associated with our study. In IRT, the goal is to find the model that best describes scores on test items. To achieve this, IRT presupposes three assumptions: (1) conditional independence of items given the latent trait, denoted by $\theta$, (2) independence of observations and (3) the response to an item can be modeled by an item response function (IRF). Note that $\theta$ tends to be unidimensional, however it can be generalised to a multidimensional setting. An IRF is a mathematical equation that calculates the probability to score a certain category on an item given $\theta$. In the present study, we considered IRT with unidimensional $\theta$, dichotomous test items and the following three IRF:
+
 \begin{equation}
 P(X_i = 1 | \theta, \beta_{i}) = \frac{e^{\theta - \beta_{i}}}{1 + e^{\theta - \beta_{i}}}
 \end{equation}
 
-where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 1PL model depends on the latent
-variable, $\theta$, that you are trying to measure and the difficulty of the item, $\beta_i$.
+which is known as the one-parameter logistic model (1PL), where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 1PL model depends on the latent variable, $\theta$, that you are trying to measure and the difficulty of the item, $\beta_i$.
 
-2PL:
 \begin{equation}
 P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}) = \frac{e^{\alpha_{i}\theta + \beta_{i}}}{1 + e^{\alpha_{i}\theta + \beta_{i}}}
 \end{equation}
 
-where the probability of scoring a 1 now also depends on an item-dependent intercept term $\alpha_i$, which shows how well an item discriminates
-between individuals who score a 0 and individuals who score a 1,
+this is a generalisation of the 1PL, known as the two-parameter logistic model (2PL), where the probability of scoring a 1 now also depends on an item-dependent intercept term $\alpha_i$, which shows how well an item discriminates between individuals who score a 0 and individuals who score a 1. This IRF can be generalised even further to the three-parameter logistic model (3PL):
 
-3PL:
 \begin{equation}
 P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}, \gamma_{i}) = \gamma_{i} + (1 - \gamma_{i}) \cdot 
-\frac{e^{\alpha_{i}\theta - \beta_{i}}}{1 + e^{\alpha_{i}\theta - \beta_{i}}}
+\frac{e^{\alpha_{i}\theta + \beta_{i}}}{1 + e^{\alpha_{i}\theta + \beta_{i}}}
 \end{equation}
 
-where the probability of scoring a 1 on item $i$ is also dependent on an item-specific lower asymptote $\gamma_i$, which indicates whether there is
+where the probability of scoring a 1 on item $i$ is further dependent on an item-specific lower asymptote $\gamma_i$, which indicates whether there is
 a baseline probability of scoring a 1 (e.g., a multiple choice test with 4 options has a .25 baseline probability of scoring a 1).
+
+Then, due to the assumption of conditional independence, we can model the probability of a complete score pattern to $k$ items simply by factoring the probability for each item:
+
+\begin{equation}
+P(\boldsymbol{X_a} = \boldsymbol{x_a} | \theta_a, \boldsymbol{\nu}) = \prod_{i=1}^{k} P(X_i = 1 | \theta_a, \boldsymbol{\nu})
+\end{equation}
+
+where $\boldsymbol{X}$ is now a random variable indicating a scorepattern (i.e., a vector of 0's and 1's) and $\boldsymbol{x_a}$ is the realisation of $\boldsymbol{X_a}$ for person $a$. Note that $\boldsymbol{\nu}$ is a vector containing item parameters for all $k$ items. We can take this even further by taking into account the assumption of independence of observations and the assumption that persons are randomly sampled from a population. Then, the joint marginal probability of all score patterns in a given sample will become:
+
+\begin{equation}
+\int \prod_{i=1}^{k} \{ P(\boldsymbol{X_a} = \boldsymbol{x_a} | \theta_a, \boldsymbol{\nu}) \} \,d\phi(\theta)\,d\theta
+\end{equation}
+
+where $\phi(\theta)$ is the univariate density of the latent variable $\theta$. In order to solve this equation, the density of $\theta$ has to be specified. In the current study, we assume $\theta$ to always be a standard normal distribution. \\
+\indent With the joint marginal probability, we can construct a likelihood function and estimate $\boldsymbol{\nu}$ through marginal maximum likelihood estimation. 
+
+
+-- perhaps talk about conditional independence now and maximum likelihood estimation --
+
+then talk about model fit testing and fit indices
+
+For the calculation of fit indices, two more IRF are considered...
 
 Complete independence:
 \begin{equation}
@@ -131,7 +149,6 @@ We compared the performance of the following three goodness-of-fit tests.
 	\end{itemize}
 \end{itemize}
 
-\section{Methods}
 \subsection{Data generation}
 Data generation was done by first sampling person parameters (i.e., $\theta$) from a standard normal distribution. Then, a model was chosen as basis for the data generation. We chose to keep item parameters static over all simulations. For an overview of the chosen item parameters per model, see \textit{Table 2}. Then, probabilities were calculated for all items on a test, given $\theta$ and the chosen model's item parameters. Finally, a matrix of 0's and 1's was created by sampling from a binomial distribution for every item, given each person. We replicated each simulation condition (see below) 500 times. Each replication, the item parameters remained the same and only new person parameters were sampled.
 
