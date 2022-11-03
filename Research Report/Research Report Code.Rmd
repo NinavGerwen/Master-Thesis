@@ -34,7 +34,7 @@ Now we create the function for data generation, where the input is
 sample size, test length and the true model.
 
 ```{r Data generation functions}
-data.gen <- function(n, k, model){
+data.gen <- function(n, k, model = "1PL"){
   theta <- matrix(data = rep(rnorm(n), k), ncol = k)
   
   beta <- matrix(data = rep(c(-2, -1, 0, 1, 2), k), nrow = n, ncol = k, byrow = TRUE)
@@ -72,9 +72,48 @@ return(data)
 
 To fit the 1PL model, we can use the rasch() function.
 To fit the 2PL model, we can use the ltm() function.
-To fit the 3PL model, we can use the tpm() fucntion.
+To fit the 3PL model, we can use the tpm() function.
 
-```{r Power/Alpha functions}
+```{r model fit calculation functions}
+
+LR.test <- function(data, model = "1PL", g = 2){
+
+  temp_data <- as.data.frame(data)
+  temp_data$split <- sample(1:g, nrow(data), replace = TRUE)
+
+  if(model == "1PL"){
+    whole_log <- rasch(data = data)$log.Lik
+  }
+  if(model == "2PL"){
+    whole_log <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+  }
+  if(model == "3PL"){
+    whole_log <- tpm(data)$log.Lik
+  }
+  
+  split_LR_values <- rep(NA, g)
+  for(j in 1:g) {
+    if(model == "1PL"){
+      
+      
+      split_LR_values[j] <- rasch(subset(temp_data, split == j, select = -split))$log.Lik
+    }
+    
+    if(model == "2PL"){
+      
+      
+      split_LR_values[j] <- ltm(subset(temp_data, split == j, select = -split) ~ z1, IRT.param = TRUE)$log.Lik
+    }
+    if(model == "3PL"){
+      
+      
+      split_LR_values[j] <- tpm(subset(temp_data, split == j, select = -split))$log.Lik
+    }
+  }
+
+  LR_value <- whole_log / prod(split_LR_values, na.rm = TRUE)
+  return(LR_value)
+}
 
 ```
 
