@@ -85,10 +85,11 @@ LR.test <- function(data, model = "1PL", g = 2){
     whole_log <- rasch(data = data)$log.Lik
   }
   if(model == "2PL"){
-    whole_log <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+    whole_log <- ltm(data ~ z1)$log.Lik
   }
   if(model == "3PL"){
-    whole_log <- tpm(data)$log.Lik
+    ## safeguard voor convergeren
+    whole_log <- tpm(data, start.val = "random")$log.Lik
   }
   
   split_LR_values <- rep(NA, g)
@@ -107,7 +108,8 @@ LR.test <- function(data, model = "1PL", g = 2){
     if(model == "3PL"){
       
       
-      split_LR_values[j] <- tpm(subset(temp_data, split == j, select = -split))$log.Lik
+      split_LR_values[j] <- tpm(subset(temp_data, split == j, select = -split),
+                                start.val = "random")$log.Lik
     }
   }
 
@@ -116,6 +118,20 @@ LR.test <- function(data, model = "1PL", g = 2){
 }
 
 ```
+
+voor calculatie van de pchisq moet het 1 - pchisq() zijn, en we hebben
+functie nodig voor calculeren van DF.
+
+BOVENDIEN:
+
+als je een model dat genest is onder een ander model test, dan wil je niet
+dat het verworpen wordt (je test nog steeds alpha).
+
+VOORBEELD:
+
+Power is als: data onder 3PL gecreerd, en je test het 1PL/2PL model.
+
+Alpha is als: data onder 1PL gecreerd, en je test het 1/2/3PL.
 
 ## Functions for TFI/CLI calculatoins
 
