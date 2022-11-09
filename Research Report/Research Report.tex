@@ -24,7 +24,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \runninghead{van Gerwen and Hessen}
 
-\title{Designing and Evaluating a Goodness-of-Fit Test for IRT models}
+\title{Assessing Fit of IRT models using a Randomisation LR Test and Fit Indices}
 
 \author{Nina van Gerwen \affilnum{1} and Dave Hessen\affilnum{2}}
 
@@ -57,101 +57,78 @@ In order to create a goodness-of-fit test to use for the 3PL in IRT and to bette
 
 \section{Methods}
 \subsection{Statistical background}
-Before we share the methodology of the current study, let us first examine a brief summary on the statistical theory associated with our study. In IRT, the goal is to find the model that best describes scores on test items. To achieve this, IRT presupposes three assumptions: (1) conditional independence of items given the latent trait, denoted by $\theta$, (2) independence of observations and (3) the response to an item can be modeled by an item response function (IRF). Note that $\theta$ tends to be unidimensional, however it can be generalised to a multidimensional setting. An IRF is a mathematical equation that calculates the probability to score a certain category on an item given $\theta$. In the present study, we considered IRT with unidimensional $\theta$, dichotomous test items and the following three IRF:
+Before we share the methodology of the current study, let us first examine a brief summary on the statistical theory associated with our study. In IRT, the goal is to find the model that best describes scores on test items. To achieve this, IRT presupposes three assumptions: (1) conditional independence of items given the latent trait, denoted by $\theta$, (2) independence of observations and (3) the response to an item can be modeled by an item response function (IRF). Note that $\theta$ tends to be unidimensional, however it can be generalised to a multidimensional setting. An IRF is a mathematical equation that relates the probability to score a certain category on an item given $\theta$. In the present study, we considered IRT with unidimensional $\theta$, dichotomous test items and the following three IRF:
 
 \begin{equation}
 P(X_i = 1 | \theta, \beta_{i}) = \frac{e^{\theta - \beta_{i}}}{1 + e^{\theta - \beta_{i}}},
 \end{equation}
 
-which is known as the one-parameter logistic model (1PL), where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 1PL model depends on the latent variable, $\theta$, that you are trying to measure and the difficulty of the item, $\beta_i$.
+which is known as the one-parameter logistic model (1PL), where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 1PL model depends on the latent variable, $\theta$, that you are trying to measure and the difficulty of the item, $\beta_i$. The two-parameter logistic model (2PL) is a generalisation of the 1PL:
 
 \begin{equation}
-P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}) = \frac{e^{\alpha_{i}\theta + \beta_{i}}}{1 + e^{\alpha_{i}\theta + \beta_{i}}},
+P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}) = \frac{e^{\alpha_{i}\theta - \beta_{i}}}{1 + e^{\alpha_{i}\theta - \beta_{i}}},
 \end{equation}
 
-this is a generalisation of the 1PL, known as the two-parameter logistic model (2PL), where the probability of scoring a 1 now also depends on an item-dependent intercept term $\alpha_i$, which shows how well item $i$ discriminates between individuals who score a 0 and individuals who score a 1. This IRF can be generalised even further to the three-parameter logistic model (3PL):
+where the probability of scoring a 1 now also depends on an item-dependent slope term $\alpha_i$, which shows how well item $i$ discriminates between individuals who score a 0 and individuals who score a 1. This IRF can be generalised even further to the three-parameter logistic model (3PL):
 
 \begin{equation}
 P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}, \gamma_{i}) = \gamma_{i} + (1 - \gamma_{i}) \cdot 
-\frac{e^{\alpha_{i}\theta + \beta_{i}}}{1 + e^{\alpha_{i}\theta + \beta_{i}}},
+\frac{e^{\alpha_{i}\theta - \beta_{i}}}{1 + e^{\alpha_{i}\theta - \beta_{i}}},
 \end{equation}
 
 where the probability of scoring a 1 on item $i$ is further dependent on an item-specific lower asymptote $\gamma_i$, which indicates whether there is
-a baseline probability of scoring a 1 (e.g., a multiple choice test with 4 options has a .25 baseline probability of scoring a 1).
-
-Then, due to the assumption of conditional independence, we can model the probability of a complete score pattern to $k$ items simply by factoring the probability for each item:
+a baseline probability of scoring a 1 (e.g., a multiple choice test with 4 options has a .25 baseline probability of scoring a 1). Then, due to the assumption of conditional independence, we can model the probability of a complete score pattern to $k$ items simply by factoring the probabilities for each item:
 
 \begin{equation}
-P(\boldsymbol{X_a} = \boldsymbol{x_a} | \theta_a, \boldsymbol{\nu}) = \prod_{i=1}^{k} P(X_i = 1 | \theta_a, \boldsymbol{\nu}),
+P(\boldsymbol{X} = \boldsymbol{x_a} | \theta_a, \boldsymbol{\nu}) = \prod_{i=1}^{k} \{P(X_i = 1 | \theta_a, \boldsymbol{\nu})\}^{x_i} \cdot  \{1 - P(X_i = 1 | \theta_a, \boldsymbol{\nu}) \}^{1 - x_i},
 \end{equation}
 
-where $\boldsymbol{X}$ is now a random variable indicating a scorepattern (i.e., a vector of 0's and 1's) and $\boldsymbol{x_a}$ is the realisation of $\boldsymbol{X_a}$ for person $a$. Note that $\boldsymbol{\nu}$ is a vector containing item parameters for all $k$ items. We can take this even further by taking into account the assumption of independence of observations and the assumption that persons are randomly sampled from a population. Then, the joint marginal probability of all score patterns in a given sample will become:
+where $\boldsymbol{X}$ is now a random vector indicating a scorepattern and $\boldsymbol{x_a}$ is the realisation of $\boldsymbol{X}$ for person $a$. Note that $\boldsymbol{\nu}$ is a vector containing item parameters for all $k$ items. We can take this even further by taking into account the assumption of independence of observations and the assumption that persons are randomly sampled from a population. The joint marginal probability of all score patterns in a given sample will then become:
 
 \begin{equation}
-\int \prod_{i=1}^{k} \{ P(\boldsymbol{X_a} = \boldsymbol{x_a} | \theta_a, \boldsymbol{\nu}) \} \,d\phi(\theta)\,d\theta,
+P(\boldsymbol{X} = \boldsymbol{x_a}) = \int \prod_{i=1}^{k} \{ P(\boldsymbol{X_a} = \boldsymbol{x_a} | \theta_a, \boldsymbol{\nu}) \} \,\phi(\theta)\,d\theta,
 \end{equation}
 
-where $\phi(\theta)$ is the univariate density of the latent variable $\theta$. In order to solve this equation, the density of $\theta$ has to be specified. In the current study, we assume $\theta$ to always be a standard normal distribution. \\
-\indent With the joint marginal probability, we can construct a likelihood function and estimate $\boldsymbol{\nu}$ through marginal maximum likelihood estimation. 
+where $\phi(\theta)$ is the univariate density of the latent variable $\theta$. In order to solve this equation, the density of $\theta$ has to be specified. In the current study, we assume $\theta$ to always be a standard normal distribution. With the joint marginal probability, we can construct a likelihood function and estimate $\boldsymbol{\nu}$ through marginal maximum likelihood estimation. In the current study, models were fitted using functions from the \textit{ltm} package in R \cite{ltmpack}, which approximates marginal maximum likelihood estimation through the Gauss-Hermite quadrature rule.
 
-then talk about model fit testing and fit indices
+\subsection{Assessing Model Fit}
+\indent After a model has been fitted as described above, the next step is usually to test how well the model fits the data. There are multiple options to assess model fit. Most commonly, both goodness-of-fit tests and fit indices are used. The present study compared the performance of three goodness-of-fit tests: (1) a $\chi^2$-difference test, (2) Pearson's $\chi^2$-test and our own developed test (3) a Randomsation LR test with the following formula:
 
-For the calculation of fit indices, two more IRF are considered...
-
-Complete independence:
 \begin{equation}
-P(X_i = 1 | \beta_{i}) = \frac{e^{\beta_{i}}}{1 + e^{\beta_{i}}},
+	\frac{max(L_0)}{\prod_{j = 1}^g max(L_j)},
 \end{equation}
 
-In the complete independence model, the probability of scoring a 1 on item $i$ is dependent only on the difficulty of the item and no longer on
-a latent variable. This entails that the joint probability distribution is simply the product of the marginal probability distributions and therefore the
-items will no longer correlate with one another (i.e., they are independent).
+where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for each group, gained by randomly assigning the observations to $g$ grouops. According to Wilk's theorem \cite{wilkth}, this LR will then asymptotically follow a $\chi^2$-distribution. This allows the test to be used for Null Hypothesis Significance testing. 
 
-Saturated model:
+The $\chi^2$-difference test was calculated in the following ways: the 1PL model was tested underthe 2PL model, the 2PL model was tested under the 3PL model and for the 3PL model, the test was not used due to the limitations mentioned before. Finally, the Pearson's $\chi^2$-test is calculated through aggregating score patterns from the data and comparing the observed score pattern frequencies to the expected score pattern frequencies under the model. As for fit indices, we researched the performance of the TLI and CFI in an IRT context. These models make use of a baseline model, our baseline model is a complete-independence model with the following IRF:
+
 \begin{equation}
-P(X_i = 1) = \frac{n_{X_i = 1}}{N},
+P(X_i = 1 | \beta_{i}) = \frac{e^{- \beta_{i}}}{1 + e^{- \beta_{i}}},
 \end{equation}
-\subsubsection{Fit indices} 
-The current study investigated the CFI and TLI, which can be calculated through the following formulae: \\
 
-CFI:
+where the probability of scoring a 1 on item $i$ is dependent only on the difficulty of the item and no longer on a latent variable. We argue that this is a correct baseline model, because the IRF entails that the joint probability distribution is simply the product of the marginal probability distributions and therefore the items will no longer correlate with one another (i.e., they are independent). Furthermore, the models also make use of a saturated model, where there are as many parameters as data points, leading to a perfect fit:
+
 \begin{equation}
-CFI = 1 - \frac{\chi^{2} - df}{\chi^{2}_{0} - df_0}
+P(\boldsymbol{X} = \boldsymbol{x_a}) = \pi_{\boldsymbol{X}}.
 \end{equation}
-TLI:
+
+In the saturated model, there is no longer an IRF. Instead, perfect model fit is gained by allowing each score pattern to have their own parameter ($\pi_{\boldsymbol{X}}$), which is equal to the frequency of the scorepattern. Using these two models, the fit indices can be calculated through the following formulae:
+
 \begin{equation}
-TLI = 1 - \frac{\chi^{2}/df}{\chi^{2}_{0}/df_0}
+\text{CFI} = 1 - \frac{\chi^{2} - df}{\chi^{2}_{0} - df_0},
 \end{equation}
-where the numerator is a $\chi^2$-difference test between the tested model and the saturated model with $df$ degrees of freedom 
-and the denominator is a $\chi^2$-difference test between the tested model and the complete independence model with $df_0$ degrees of freedom.
+\begin{equation}
+\text{TLI} = 1 - \frac{\chi^{2}/df}{\chi^{2}_{0}/df_0},
+\end{equation}
 
-\subsubsection{Goodness-of-fit tests}
-
-We compared the performance of the following three goodness-of-fit tests.
-\begin{itemize}
-\item{$\chi^2$-difference test}
-	\begin{itemize}
-	\item{The 1PL model was tested under the 2PL model. The 2PL model was tested under the 3PL model. For the 3PL model, this test was not used due to the limitations named in the Introduction.}
-	\end{itemize}
-\item{Pearson's $\chi^2$-test}
-	\begin{itemize}
-	\item{Calculated through observing the differences in the observed and expected frequency of score patterns: $\sum_{i = 1}^{n}\frac{(Obs_i - Exp_i)^2}{Exp_i}$}
-	\end{itemize}
-\item{LR randomisation test}
-	\begin{itemize}
-	\item{This is the test that we have developed and tested in the current study. The formula of the test statistic is:
-	\begin{equation}
-		\frac{max(L_0)}{\prod_{j = 1}^g max(L_j)}
-	\end{equation} where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for each group, gained by randomly assigning the observations to $g$ grouops. According to Wilk's theorem \cite{willkth}, this LR will then asymptotically follow a $\chi^2$-distribution. This allows the Randomisation test to be used for Null Hypothesis Significance testing.} 
-	\end{itemize}
-\end{itemize}
+where in both equations, the numerator is a $\chi^2$-difference test between the tested model and the saturated model with $df$ degrees of freedom, and the denominator is a $\chi^2$-difference test between the tested model and the complete independence model with $df_0$ degrees of freedom.
 
 \subsection{Data generation}
-Data generation was done by first sampling person parameters, $\theta$, from a standard normal distribution. Then, a model was chosen as basis for the data generation. We chose to keep item parameters static over all simulations. For the difficulty parameter $\beta$, we chose the values -2, -1, 0, 1 and 2 for every repetition of five items. As for the discrimination parameter $\alpha$, we chose repetitions of the values 0.7, 0.85, 1, 1.15 and 1.3 per five items. Finally, for the pseudo-guessing parameter $\gamma$, we chose XXX. Then, probabilities were calculated for all items on a test, given $\theta$ and the chosen model's item parameters. Finally, a matrix of 0's and 1's was created by sampling from a binomial distribution for every item, given each person. We replicated each simulation condition (see below) 500 times. Each replication, the item parameters remained the same and only new person parameters were sampled.
+Data generation was done by first sampling person parameters, $\theta$, from a standard normal distribution. Then, a model was chosen as basis for the data generation. We chose to keep item parameters static over all simulations. For the difficulty parameter $\beta$, we chose the values -2, -1, 0, 1 and 2 for every repetition of five items. As for the discrimination parameter $\alpha$, we chose repetitions of the values 0.7, 0.85, 1, 1.15 and 1.3 per five items. Finally, for the pseudo-guessing parameter $\gamma$, we chose XXX. Then, probabilities were calculated for all items on a test, given $\theta$ and the chosen model's item parameters. Finally, a matrix of simulated responses to a test was created by sampling from a binomial distribution for every item, given each person. We replicated each simulation condition (see below) 500 times.
 
 \subsection{Simulation design}
-In order to answer the research questions, we conducted a simulation study that varied four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}. This resulted in a total of 3 (test length) x 5 (sample size) x 3 (model type) x 3 (number of groups) = 135 conditions. \\
-\indent In each replication of each condition, we calculated the three goodness-of-fit tests and two fit indices. Performance of the three tests was then studied by estimating both type I error and power. Power was estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error was estimated when fitting and testing the model that was used to generate the data. With these values, we compared the different type of tests with one another, where a test with lower power or higher type I error was noted as performing worse.
+In order to answer the research questions, we conducted a simulation study that varied four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}. This resulted in a total of 3 (test length) x 5 (sample size) x 3 (model type) = 45 conditions. \\
+\indent In each replication of each condition, we calculated five goodness-of-fit tests (3 of which are different versions of the Randomisation LR test) and the two fit indices. Performance of the three tests was then studied by estimating both type I error and power. Power was estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error was estimated when fitting and testing the model that was used to generate the data. With these values, we compared the different type of tests with one another, where a test with lower power or higher type I error was noted as performing worse.
 To measure the performance of the TLI and CFI, we calculated the proportion of times that the fit indices improved when the correct model was used compared to another model.
 
 \begin{table}[htpb]
@@ -164,7 +141,7 @@ Factor & Conditions & Description \\
 \multicolumn{1}{l}{Test length} & 5 - 10 - 20 & \multicolumn{1}{l}{\shortstack{The total number of items that the test \\ will consist of}} \\ \\ 
 \multicolumn{1}{l}{Sample size} & 20 - 50 - 100 - 200 - 500 & \multicolumn{1}{l}{\shortstack{The total number of observations that \\ will be available for each item}} \\ \\
 \multicolumn{1}{l}{Model type} & 1PL - 2PL - 3PL & \multicolumn{1}{l}{\shortstack{The models that we will use as the basis for \\ both data generation and model-fitting}} \\ \\
-\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the total dataset \\ gets divided into for the \\ Randomisation test calculations}} \\
+\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the total dataset \\ gets divided into for the \\ Randomisation LR test calculations}} \\
 
 \bottomrule
 \end{tabular}
