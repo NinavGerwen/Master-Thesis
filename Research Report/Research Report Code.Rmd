@@ -122,6 +122,14 @@ LR.test <- function(data, model = "1PL", g = 2){
 voor calculatie van de pchisq moet het 1 - pchisq() zijn, en we hebben
 functie nodig voor calculeren van DF.
 
+```{r degree of freedom function}
+degree.function <- function(model.1 = ..., model.2 = ...){
+  ...
+}
+
+```
+
+
 BOVENDIEN:
 
 als je een model dat genest is onder een ander model test, dan wil je niet
@@ -160,5 +168,68 @@ mml3 <- tpm(test_dat)
 
 anova(mml1, mml2)
 anova(mml2, mml3)
+```
+
+```{r Final run}
+factor_1 <- as.factor(c(20, 50, 100, 200, 500))
+factor_2 <- as.factor(c(5, 10, 20))
+factor_3 <- as.factor(c("1PL", "2PL", "3PL"))
+
+n_sim <- 200
+
+### Result matrix:
+
+power.alpha <- list()
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+## factor 1 is sample size
+for(a in levels(factor_1)){
+  ## factor 2 is test length
+  for(b in levels(factor_2)){
+    ## factor 3 is model used as basis of data generation
+    for(c in levels(factor_3)){
+      
+      power.alpha[[c]] <- matrix(data = NA, nrow = ..., ncol = ...)
+      
+      prop_1 <- rep(NA, n_sim)
+      
+      prop_2 <- rep(NA, n_sim)
+      
+      prop_3 <- rep(NA, n_sim)
+      
+      for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+        temp_data <- data.gen(n = as.numeric(a), 
+                              k = as.numeric(b), 
+                              model = as.character(c))
+        
+        
+        p_value_1 <- 1 - pchisq(q = LR.test(data = temp_data, model = as.character(c),
+                             g = 2), df = ...)
+        
+        p_value_2 <- 1 - pchisq(q = LR.test(data = temp_data, model = as.character(c),
+                             g = 3), df = ...)
+        
+        p_value_3 <- 1 - pchisq(q = LR.test(data = temp_data, model = as.character(c),
+                             g = 4), df = ...)
+        
+        prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+        
+        prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+        
+        prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+      }
+      
+      power.alpha <- mean(prop_1)
+      
+      power.alpha <- mean(prop_2)
+      
+      power.alpha <- mean(prop_3)
+    }
+  }
+}
 ```
 
