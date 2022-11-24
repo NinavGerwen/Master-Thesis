@@ -10,11 +10,12 @@ output: html_document
 These are necessary in data generation as we will vary the data generating model.
 
 ```{r IRF calculation functions}
+## Data generation is based on three models, therefore we created functions for
+## the calculations of every model (1PL - 2PL - 3PL)
 one.pl <- function(theta, beta){
   prob <- exp(theta - beta) / (1 + exp(theta - beta))
   return(prob)
 }
-## Question Dave: is er een probleem met ene functie - beta en andere + beta
 
 two.pl <- function(theta, alpha, beta){
   prob <- exp((alpha * theta) + beta) / (1 + exp((alpha * theta) + beta))
@@ -151,6 +152,13 @@ degree.function <- function(model = "1PL", k, g = NULL){
   return(df)
 }
 
+deltadf <- function(model.1, model.2) {
+  
+  d_df <- degree.function(model.1) - degree.function(model.2)
+  
+  return(d_df)
+}
+
 ```
 
 
@@ -168,7 +176,47 @@ Alpha is als: data onder 1PL gecreerd, en je test het 1/2/3PL.
 ## Functions for TFI/CLI calculatoins
 
 ```{r TLI/CLI functions}
+base.model <- function(data) {
+  
+  k <- ncol(data)
+  n <- nrow(data)
+  
+  pi <- rep(NA, k)
+  
+  for(i in 1:k) {
+    
+    n_i <- sum(data[, i] == 1)
+    
+    pi_i <- mean(data[, i])
+    
+    pi[i] <- (pi_i)^n_i * (1 - (pi_i))^(n - n_i)
+    
+  }
+  
+  loglik <- log(prod(pi))
+  
+  return(loglik)
+  
+}
 
+sat.model <- function(agg_data) {
+  
+  n <- nrow(agg_data)
+  
+  pi <- rep(NA, n)
+  
+  for(i in 1:n) {
+    n_x <- agg_data$frequency
+    
+    pi[i] <- n_x / n
+    
+  }
+  
+  loglik <- log(prod(pi))
+  
+  return(loglik)
+  
+}
 ```
 
 CONVERGENCE IS EEN GROOT PROBLEEM. Wellicht een eigen 'control' opzetten
