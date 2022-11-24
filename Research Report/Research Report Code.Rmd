@@ -56,7 +56,8 @@ data.gen <- function(n, k, model = "1PL"){
     alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
                     nrow = n, byrow = TRUE)
   
-    gamma <- 0.15 + rnorm(1, 0, 0.05)
+    gamma <- matrix(data = rep(c(0.05, 0.08, 0.11, 0.14, 0.17), k), ncol = k, 
+                    nrow = n, byrow = TRUE)
   
     Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
   }
@@ -186,10 +187,10 @@ for(i in 1:100){
 }
 
 library(ltm)
-test_dat <- data.gen(2000, 20, "3PL")
+test_dat <- data.gen(50, 15, "3PL")
 mml1 <- rasch(test_dat)
 mml2 <- ltm(test_dat ~ z1, IRT.param = TRUE)
-mml3 <- tpm(test_dat, start.val = "random", control = control)
+mml3 <- tpm(test_dat, start.val = "random")
 
 anova(mml1, mml2)
 anova(mml2, mml3)
