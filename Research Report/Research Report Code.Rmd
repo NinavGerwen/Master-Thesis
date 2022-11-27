@@ -173,6 +173,8 @@ Power is als: data onder 3PL gecreerd, en je test het 1PL/2PL model.
 
 Alpha is als: data onder 1PL gecreerd, en je test het 1/2/3PL.
 
+wellicht met predict kan je expected score patterns frequency krijgen
+
 ## Functions for TFI/CLI calculatoins
 
 ```{r TLI/CLI functions}
@@ -206,7 +208,7 @@ sat.model <- function(agg_data) {
   pi <- rep(NA, n)
   
   for(i in 1:n) {
-    n_x <- agg_data$frequency
+    n_x <- agg_data$frequency[i]
     
     pi[i] <- n_x / n
     
@@ -235,10 +237,21 @@ for(i in 1:100){
 }
 
 library(ltm)
-test_dat <- data.gen(50, 15, "3PL")
+test_dat <- data.gen(100, 15, "1PL")
 mml1 <- rasch(test_dat)
 mml2 <- ltm(test_dat ~ z1, IRT.param = TRUE)
-mml3 <- tpm(test_dat, start.val = "random")
+
+control <- list(iter.qN = 5000, GHk = 50)
+  
+mml3 <- tpm(test_dat, start.val = "random", max.guessing = .3,
+            control = control)
+
+r <- cbind(1:15, rep(1, 15), rep(.25, 15))
+
+mml4 <- tpm(test_dat, start.val = "random",
+            constraint = r, control = control)
+
+mml4
 
 anova(mml1, mml2)
 anova(mml2, mml3)
@@ -246,10 +259,10 @@ anova(mml2, mml3)
 
 ```{r Final run}
 test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(200, 500, 1000, 1500, 2000))
+sample_size <- as.factor(c(100, 200, 500, 1000, 1500))
 true_model <- as.factor(c("1PL", "2PL", "3PL"))
 
-n_sim <- 5
+n_sim <- 1
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
