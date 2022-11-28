@@ -50,16 +50,16 @@ Abstract text.
 Item Response Theory (IRT) is an often used tool for measuring and analysing tests or questionnaires in psychological, educational and organisational practices due to the advantages it holds compared to Classical Test Theory (CTT). For example, compared to CTT, IRT has been shown to be better at individual change detection when using larger tests (Ruslan et al., 2016). Furthermore, IRT allows for more flexibility in analysing tests, where you can investigate all items separately instead of the test-level approach in CTT. The models used in IRT measure latent traits - constructs that are not directly observable (e.g., attitudes, intelligence, etc.) - through analysing answers to a test/questionnaire. The goal in IRT is to find the model that best describes the scores on the test items. To achieve this, the model must show a good fit. If a wrong model is used, it can lead to dire consequences such as faults in the validity of your measurement (Cri\c{s}an et al., 2017; Jiao \& Lau, 2003; Zhao \& Hambleton, 2017) and by extension your conclusion. Therefore, model-fit should be assessed after fitting an IRT model to the data gained from a questionnaire. \\
 \indent There are mainly two procedures that can be applied to measure model-fit. First, model-fit can be assessed through goodness-of-fit tests. Commonly used goodness-of-fit tests are a $\chi^2$-difference test and Pearson's $\chi^2$-test. These tests, however, both suffer from issues. Pearson's test, for example, will not follow a $\chi^2$-distribution when many score pattern frequencies are missing or low, which is often the case - especially when test length increases. 
 
-The $\chi^2$-difference test instead is difficult to use for both the two- (2PL) and three-parameter (3PL) model. This is because the 3PL and generalisations of the model tend tend to suffer from consistency and estimation issues (Barton \& Lord, 1981; Loken \& Rulison, 2010). 
+The $\chi^2$-difference test instead is difficult to use for both the two- (2PL) and three-parameter (3PL) model. This is because the 3PL and its generalisations tend tend to suffer from consistency and estimation issues (Barton \& Lord, 1981; Loken \& Rulison, 2010). 
 
 Another concern with the $\chi^2$-difference test is power, which can be viewed as both a blessing and a curse. This is because many goodness-of-fit tests suffer from a lack of power when sample size is low. However, when sample size increases, the power to reject any reasonable model that does not perfectly fit, also increases (Curran et al., 1996). \\
 
 
 \indent Therefore, fit indices were introduced as a second procedure to assess model-fit. Fit indices are mathematical descriptives that indicate how well a model fits to the data. Note, however, that fit indices alone are not sufficient to infer whether a model fits well as they are not an inferential statistic and only describe the overall fit. Taken together with goodness-of-fit tests, fit indices do allow researchers to have a more comprehensive overview of model-fit. For example, when due to a lot of power, a goodness-of-fit test shows that the model should be rejected, fit indices can indicate whether the model is still reasonable. Previous research in IRT has seen the development of multiple fit indices. (e.g., $Y\text{-}Q_1$; Yen, 1981, $\text{RMSEA}_n$; Maydeu-Olivares \& Joe, 2014). For an overview of the use and limitations of some of the IRT fit indices, see Nye et al. (2020). Fit indices from Structural Equation Modeling can also be used in IRT, such as the SRMR. Although research has been done to examine the performance of some the Structural Equation Modeling fit indices in IRT (e.g., RMSEA \& SRMR; Maydeu-Olivares \& Joe, 2014), hardly any research has been done towards the use of the Tucker-Lewis Index (TLI; Tucker \& Lewis, 1973) and the Comparative Fit Index (CFI; Bentler, 1990) in an IRT context. Only one paper examines the CFI (Yang, 2020) and two papers investigate the TLI (Cai et al., 2021; Yang, 2020) in an IRT setting. The added value of the present study lies within the calculations of the fit indices. The calculations will be based on a complete-independence baseline model, which we argue is a more accurate baseline model. Furthermore, compared to Cai et al., we base the calculations on the $\chi^2$ information statistic and not a limited information statistic. Both of these factors can influence the performance and therefore should be investigated further. \\
-\indent To summarise, in the field of IRT there are (a) not enough usable goodness-of-fit tests available to test the 3PL model and (b) scarce studies investigating the performance of the CFI and TLI, which we address.
+\indent To summarise, in the field of IRT there are (a) not enough usable goodness-of-fit tests available to test the 2- and 3PL model and (b) scarce studies investigating the performance of the CFI and TLI, which we address.
 
 \subsection{The present study}
-In order to create a goodness-of-fit test to use for the 2PL and 3PL in IRT and to better understand the possible uses of the CFI and TLI in an IRT setting, the present study answers the following three research questions through a simulation study:
+In order to create a goodness-of-fit test to use for the 2- and 3PL in IRT and to better understand the possible uses of the CFI and TLI in an IRT setting, the present study answers the following three research questions through a simulation study:
 \begin{enumerate}
 \item{What sample size is necessary at different test lengths for the Likelihood Ratio (LR) Randomisation test to perform well?}
 \item{How does the performance of the LR Randomisation test compare to the performance of a $\chi^2$-difference and Pearson's $\chi^2$-test?}
@@ -110,11 +110,14 @@ where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j
 P(X_i = 1 | \beta_{i}) = \frac{e^{- \beta_{i}}}{1 + e^{- \beta_{i}}},
 \end{equation}
 
-where the probability of scoring a 1 on item $i$ is dependent only on the difficulty of the item and no longer on a latent variable. We argue that this is an appropriate baseline model, because the IRF entails that the joint probability distribution is simply the product of the marginal probability distributions and therefore the items will no longer correlate with one another (i.e., they are independent). 
+where the probability of scoring a 1 on item $i$ is dependent only on the difficulty of the item and no longer on a latent variable. We argue that this is an appropriate baseline model, because the IRF entails that the joint probability distribution is simply the product of the marginal probability distributions and therefore the items will no longer correlate with one another (i.e., they are independent). In this base model, the probability of scoring a 1 on item $i$ is simply the proportion of people who score a 1 on item $i$. From this, the maximum likelihood estimate of $\beta_{i}$, denoted by $\hat{\beta_{i}}$, can then mathematically be derived to:
 
--- misschien hier nog toevoegen wat de m.l.e. is van $\beta_{i}$ -- 
 
-Furthermore, to estimate the indices, a saturated model is also required. In a saturated model there are as many parameters as data points, which leads to a perfect fit. We obtained a saturated model with the following formula:
+\begin{equation*}
+\hat{\beta_{i}} = ln(\frac{n - n_i}{n_i}), 
+\end{equation*}
+
+where $n_i$ is the number of observations who scored a 1 on item $i$ and $n$ is the total number of observations. To estimate the indices, a saturated model is also required. In a saturated model there are as many parameters as data points, which leads to a perfect fit. We chose for the following saturated model:
 
 \begin{equation}
 P(\boldsymbol{X} = \boldsymbol{x}) = \pi_{\boldsymbol{x}},
@@ -132,12 +135,14 @@ where there no longer is an IRF. Instead, perfect model fit is gained by allowin
 where in both equations, the numerator is a $\chi^2$-difference test between the tested model and the saturated model with $df$ degrees of freedom, and the denominator is a $\chi^2$-difference test between the tested model and the complete independence model with $df_0$ degrees of freedom.
 
 \subsection{Data generation}
-Data generation starts by first sampling the person parameters $\theta$ from a standard normal distribution. Then a model is chosen as basis for the data generation. We choose to keep item parameters static over all simulations. For the difficulty parameter $\beta_i$, we choose the values -2, -1, 0, 1 and 2 for every repetition of five items. As for the discrimination parameter $\alpha_i$, we choose repetitions of the values 0.7, 0.85, 1, 1.15 and 1.3 per five items. Finally, for the pseudo-guessing parameter $\gamma_i$, we chose XXX. Then, probabilities are calculated for all items on a test, given $\theta$ and the chosen model's item parameters. Finally, a matrix of simulated responses to a test is created by sampling from a binomial distribution for every item, given each person. We replicated each simulation condition (see below) 500 times.
+Data generation starts by first sampling the person parameters $\theta$ from a standard normal distribution. Then a model is chosen as basis for the data generation. We choose to keep item parameters static over all simulations. For the difficulty parameter $\beta_i$, we choose the values [-2, -1, 0, 1, 2] for every repetition of five items. As for the discrimination parameter $\alpha_i$, we choose repetitions of the values [0.7, 0.85, 1, 1.15, 1.3] per five items. Finally, for the pseudo-guessing parameter $\gamma_i$, we choose values [.09, 0.12, 0.15, 0.18, 0.21] per five items. Then, probabilities are estimated for all items on a test, given $\theta$ and the chosen model's item parameters. Finally, a matrix of simulated responses to a test is created by sampling from a binomial distribution for every item, given each person. We replicate each simulation condition (see below) 500 times.
 
-\subsection{Simulation design}
-In order to answer the research questions, we conduct a simulation study that varies four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}. This resulted in a total of 3 (test length) x 5 (sample size) x 3 (model type) = 45 conditions. \\
-\indent In each replication of each condition, we obtain the results of the five goodness-of-fit tests (of which three are different versions of the LR Randomisation test) and the two fit indices. Performance of the different goodness-of-fit tests is then studied by estimating both type I error and power. Power is estimated when fitting and testing a different model to the data than the model used to generate the data. Type I error is estimated when fitting and testing the model that was used to generate the data. With these values, we compare the different type of tests with one another, where a test with lower power or higher type I error is noted as performing worse.
-To measure the performance of the TLI and CFI, we calculate the proportion of times that the fit indices improve when the correct model is used compared to another model.
+\subsection{Simulation study}
+\subsubsection{Simulation design}
+In order to answer the research questions, we conduct a simulation study that varies four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}. This resulted in a total of 3 (test length) x 5 (sample size) x 2 (model type) = 30 conditions. In each replication of each condition, we fit the 2PL model and then obtain the results of the five goodness-of-fit tests (of which three are different versions of the LR Randomisation test) and the two fit indices. 
+\subsubsection{Performance metrics}
+We study performance of the different goodness-of-fit tests by estimating both type I error and power. Power is estimated when generating data under the 3PL, and fitting the 2PL model. Type I error is estimated when generating data under the 2PL and fitting the 2PL model. With these values, we compare the different type of tests with one another, where a test with lower power or higher type I error is noted as performing worse. \\
+\indent To measure the performance of the TLI and CFI, we estimate the mean and 95\% confidence interval (C.I.) of each fit index under every condition. Then, we can inspect whether the average TLI and CFI values decrease in the conditions where the data generating model is the 3PL compared to when the data generation model is the 2PL. 
 
 \begin{table}[htpb]
 \caption{Overview of Simulation Conditions for Each Factor}
@@ -146,21 +151,21 @@ To measure the performance of the TLI and CFI, we calculate the proportion of ti
 Factor & Conditions & Description \\
  \\
 \midrule
-\multicolumn{1}{l}{Test length} & 5 - 10 - 20 & \multicolumn{1}{l}{\shortstack{The total number of items that the test \\ will consist of}} \\ \\ 
-\multicolumn{1}{l}{Sample size} & 20 - 50 - 100 - 200 - 500 & \multicolumn{1}{l}{\shortstack{The total number of observations that \\ will be available for each item}} \\ \\
-\multicolumn{1}{l}{Model type} & 1PL - 2PL - 3PL & \multicolumn{1}{l}{\shortstack{The models that we will use as the basis for \\ both data generation and model-fitting}} \\ \\
-\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the total dataset \\ gets divided into for the \\ LR Randomisation test calculations}} \\
+\multicolumn{1}{l}{Test length} & 5 - 10 - 20 & \multicolumn{1}{l}{\shortstack{The total number of items that \\ the test will consist of}} \\ \\ 
+\multicolumn{1}{l}{Sample size} & \shortstack{100 - 200 - 500 \\ 1000 - 1500} & \multicolumn{1}{l}{\shortstack{The total number of observations \\ that are available for each item}} \\ \\
+\multicolumn{1}{l}{Model type} & 2PL - 3PL & \multicolumn{1}{l}{\shortstack{The models that we will use as \\ the basis for data generation}} \\ \\
+\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the data \\ gets divided into for the LR \\ Randomisation test calculations}} \\
 
 \bottomrule
 \end{tabular}
 
 \bigskip
-\small\textit{Note}. 1PL = one-parameter logistic model; 2PL = two-parameter logistic model; 3PL = \\ three-parameter logistic model.
+\small\textit{Note}. 2PL = two-parameter logistic model; 3PL = \\ three-parameter logistic model.
 \label{tab:1}
 \end{table}
 
 \subsection{Empirical example}
-To examine the possible use of our LR Randomisation test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
+To examine the possible uses of our LR Randomisation test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
 
 %\newpage
 
