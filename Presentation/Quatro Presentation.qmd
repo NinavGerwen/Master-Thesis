@@ -1,0 +1,125 @@
+---
+title: "Assessing Fit of IRT Models"
+title-slide-attributes: 
+  data-background-color: "beige"
+  data-background-opacity: ".5"
+author: "Nina van Gerwen"
+format: 
+  revealjs:
+    logo: logo.png
+    incremental: FALSE
+    theme: serif
+    slide-number: TRUE
+    show-slide-number: print
+editor: source
+---
+
+## Outline
+<smaller>
+<ol>
+  <li> Background information
+  <li> The issue
+  <li> The current study
+    <ul> 
+      <li> Research questions
+    </ul>
+  <li> Simulation study
+    <ul>
+      <li> Data generation
+      <li> Simulation design
+      <li> Performance metrics
+    </ul>
+  <li> Questions
+  <li> References
+</ol>
+</smaller>
+
+## 1. Background information
+
+- IRT
+  - Latent constructs
+  - Tests/questionnaires
+  - Assessing model fit
+    - Goodness-of-fit tests
+    - Fit indices
+    
+::: footer
+references
+:::
+
+## 2. The Issue
+
+- Few goodness-of-fit tests
+  - Issues with current tests
+- Scarce studies for TLI and CFI
+
+::: footer
+references
+:::
+
+## 3. The Current Study
+
+- New goodness-of-fit test
+- TLI and CFI
+
+### Research Questions
+
+::: {.incremental}
+
+1. Required sample size?
+2. Comparing performance
+3. Performance of TLI and CFI?
+
+:::
+
+::: footer
+references
+:::
+
+## 4. Simulation Study
+
+\n
+
+### Data generation
+
+- Dichotomous items
+- Static item parameters
+- Two models
+- Varying four factors
+
+## Simulation Design
+
+Here the table.
+
+## Performance Metrics
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Goodness-of-fit test
+
+- Power
+- Empirical Alpha
+:::
+
+::: {.column width="50%"}
+Fit indices
+
+- Two conditions
+- Mean (SE)
+:::
+
+::::
+
+## 5. Questions
+
+Thank you for listening!
+
+<center>
+
+![](questions.png){width=60%}
+
+</center>
+
+
+## 6. References
