@@ -1,22 +1,26 @@
 \documentclass[aspectratio=169]{beamer}
 
-\usetheme{default}
-\usecolortheme{beaver}
+\usetheme{Madrid}
+\usecolortheme{rose}
 
 \usepackage{amsmath}
+\usepackage{multirow,booktabs,setspace,caption}
+\usepackage{tikz}
+\usepackage{animate}
 
 %Specifying title dia
 \title{Assessing Fit of IRT Models}
 \author{Nina van Gerwen}
 \date{\vspace{2cm} \\ 14th of December, 2022 \\
 \small{Methodology \& Statistics for the Behavioural, Biomedical and Social Sciences}}
+\logo{\includegraphics[width = 2 cm, height = 1 cm]{images/logo.png}}
 
 \begin{document}
 
 % Title dia
 \maketitle
 
-% Dia 1
+% Dia 1 -----------------------------------------------------------
 \begin{frame}{Outline}
 
 \begin{enumerate}
@@ -38,8 +42,8 @@
 
 \end{frame}
 
-%Dia 2
-\begin{frame}
+%Dia 2 -----------------------------------------------------------
+\begin{frame}{1. Background information}
 
 \begin{itemize}
 	\item{IRT}
@@ -54,7 +58,145 @@
 		\end{itemize}
 \end{itemize}
 
+\end{frame}
 
+%Dia 3 -----------------------------------------------------------
+\begin{frame}{2. The issue}
+
+\begin{itemize}
+	\item{Esimation and consistency issues}
+	\item{Few goodness-of-fit tests}
+		\begin{itemize}
+			\item{Issues with current tests}
+		\end{itemize}
+	\item{Scarce studies for TLI and CFI}
+\end{itemize}
+
+\end{frame}
+
+%Dia 4 -----------------------------------------------------------
+\begin{frame}{3. The current study}
+
+\begin{itemize}
+	\item{New goodness-of-fit test}
+	\item{TLI and CFI}
+\end{itemize}
+
+\vspace{1cm}
+
+
+\begin{block}{\textbf{3.1. Research questions}}
+
+% do this in incremental
+
+\begin{enumerate}
+	\item{Required sample size?}
+	\item{Comparing performance}
+	\item{Performance of TLI and CFI?}
+\end{enumerate}
+
+\end{block}
+
+\end{frame}
+
+%Dia 5 -----------------------------------------------------------
+\begin{frame}{4. Simulation study}
+
+\begin{block}{\textbf{4.1. Data generation}}
+\begin{itemize}
+	\item{Dichotomous items}
+	\item{Static item parameters}
+	\item{Two models: 2PL, 3PL}
+	\item{Varying four factors}
+\end{itemize}
+
+\end{block}
+
+\end{frame}
+
+%Dia 6 -----------------------------------------------------------
+\begin{frame}{4.2. Simulation Design}
+
+\begin{table}[htpb]
+\caption{Overview of Simulation Conditions for Each Factor}
+\begin{tabular}{ c c c }
+\toprule
+\textbf{Factor} & \textbf{Conditions} & \textbf{Description} \\
+ \\
+\midrule
+\multicolumn{1}{l}{Test length} & 5 - 10 - 20 & \multicolumn{1}{l}{\shortstack{The total number of items that \\ the test will consist of}} \\ \\ 
+\multicolumn{1}{l}{Sample size} & \shortstack{100 - 200 - 500 \\ 1000 - 1500} & \multicolumn{1}{l}{\shortstack{The total number of observations \\ that are available for each item}} \\ \\
+\multicolumn{1}{l}{Model type} & 2PL - 3PL & \multicolumn{1}{l}{\shortstack{The models that we will use as \\ the basis for data generation}} \\ \\
+\multicolumn{1}{l}{Number of groups} & 2 - 3 - 4 & \multicolumn{1}{l}{\shortstack{The number of groups that the data \\ gets divided into for the LR \\ Randomisation test calculations}} \\
+
+\bottomrule
+\end{tabular}
+
+\label{tab:1}
+\end{table}
+
+\end{frame}
+
+%Dia 7 -----------------------------------------------------------
+\begin{frame}[t]{4.3. Performance metrics}
+
+\begin{columns}
+
+\begin{column}{0.5\textwidth}
+	\begin{center}
+\textbf{Goodness-of-fit tests}
+	\end{center}
+	
+\begin{itemize}
+	\item{Power}
+	\item{Empirical $\alpha$}
+\end{itemize}
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+	\begin{center}
+\textbf{Fit indices}
+	\end{center}
+
+\begin{itemize}
+	\item{Mean (SE)}
+\end{itemize}
+
+\end{column}
+
+\end{columns}
+\vspace{1cm}
+\includegraphics[width = 0.5\textwidth]{images/power.png}
+
+\end{frame}
+
+%Dia 8 -----------------------------------------------------------
+\begin{frame}[c]{Thank you for listening!}
+
+\begin{center}
+
+\includegraphics[width=8cm, height=5cm]{images/questions.png}
+
+\end{center}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+\node[left = 6cm, below = 1 cm] at (current page.east){
+
+\animategraphics[loop, width = 3cm]{7}{images/corgif-}{0}{5}
+
+};
+
+\end{tikzpicture}
+
+
+\end{frame}
+
+%Dia 9 -----------------------------------------------------------
+\begin{frame}{References}
+
+%\bibliography
 
 \end{frame}
 
