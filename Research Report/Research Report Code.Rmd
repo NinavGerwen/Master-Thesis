@@ -87,7 +87,7 @@ LR.test <- function(data, model = "1PL", g = 2){
     whole_log <- rasch(data = data)$log.Lik
   }
   if(model == "2PL"){
-    whole_log <- ltm(data ~ z1)$log.Lik
+    whole_log <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
   }
   if(model == "3PL"){
     ## safeguard voor convergeren
@@ -222,23 +222,14 @@ sat.model <- function(agg_data) {
 ```
 
 CONVERGENCE IS EEN GROOT PROBLEEM. Wellicht een eigen 'control' opzetten
-(zie ?tpm)? Wellicht deze hele these weggooien?
+(zie ?tpm)?
 
 ## Testing the functions
 
 ```{r}
-
-space <- list()
-
-for(i in 1:100){
-  temp_data <- data.gen(100, 5, "1PL")
-  
-  
-}
-
 library(ltm)
-test_dat <- data.gen(100, 15, "1PL")
-mml1 <- rasch(test_dat)
+test_dat <- data.gen(50, 15, "2PL")
+
 mml2 <- ltm(test_dat ~ z1, IRT.param = TRUE)
 
 control <- list(iter.qN = 5000, GHk = 50)
@@ -246,6 +237,8 @@ control <- list(iter.qN = 5000, GHk = 50)
 mml3 <- tpm(test_dat, start.val = "random", max.guessing = .3,
             control = control)
 
+## Setting constraings: how to make gamma all equal, but not to
+## a certain value??
 r <- cbind(1:15, rep(1, 15), rep(.25, 15))
 
 mml4 <- tpm(test_dat, start.val = "random",
@@ -257,28 +250,23 @@ anova(mml1, mml2)
 anova(mml2, mml3)
 ```
 
-```{r Final run}
+```{r Final first run}
+library(ltm)
+## This is for empirical alpha estimation
 test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(100, 200, 500, 1000, 1500))
-true_model <- as.factor(c("1PL", "2PL", "3PL"))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 1
+n_sim <- 10
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
 
-## TUPLES
-
-results <- data.frame(test_length = NA, sample_size = NA,
-                      true_model = NA, LR2 = NA,
+alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
                       LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
 
 for(a in levels(test_length)){
 
   for(b in levels(sample_size)){
-      
-    for(c in levels(true_model)){
-      
       
       prop_1 <- rep(NA, n_sim)
       prop_2 <- rep(NA, n_sim)
@@ -291,19 +279,19 @@ for(a in levels(test_length)){
         ## current condition
           temp_data <- data.gen(n = as.numeric(as.character(b)), 
                                 k = as.numeric(as.character(a)), 
-                                model = as.character(c))
+                                model = "2PL")
         
         
           p_value_1 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
-                                              model = "3PL", g = 2), 
-                   df = 1)
+                                              model = "2PL", g = 2), 
+                              df = 1)
  
           p_value_2 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
-                                              model = "3PL", g = 3),
+                                              model = "2PL", g = 3),
                               df = 1)
         
           p_value_3 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
-                                              model = "3PL", g = 4), 
+                                              model = "2PL", g = 4), 
                               df = 1)
           
           p_value_4 <- 1
@@ -318,18 +306,85 @@ for(a in levels(test_length)){
           prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
         }
       
-      results <- rbind(results, c(a, b, c, mean(prop_1), mean(prop_2), 
+      alpha_results <- rbind(alpha_results, c(a, b, mean(prop_1), mean(prop_2), 
                                   mean(prop_3), mean(prop_4), mean(prop_5)))
 
-    }
   }
   
 }
 
-results <- results[-1 ,]
-rownames(results) <- NULL
+alpha_results <- alpha_results[-1 ,]
+rownames(alpha_results) <- NULL
 
 ```
+
+```{r Final second run}
+## This is for power estimation
+
+n_sim <- 5
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+## TUPLES
+
+power_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+      
+      
+      prop_1 <- rep(NA, n_sim)
+      prop_2 <- rep(NA, n_sim)
+      prop_3 <- rep(NA, n_sim)
+      prop_4 <- rep(NA, n_sim)
+      prop_5 <- rep(NA, n_sim)
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+          temp_data <- data.gen(n = as.numeric(as.character(b)), 
+                                k = as.numeric(as.character(a)), 
+                                model = "3PL")
+        
+        
+          p_value_1 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+                                              model = "2PL", g = 2), 
+                   df = 1)
+ 
+          p_value_2 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+                                              model = "2PL", g = 3),
+                              df = 1)
+        
+          p_value_3 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+                                              model = "2PL", g = 4), 
+                              df = 1)
+          
+          p_value_4 <- 1
+          
+          p_value_5 <- 1
+          
+        
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
+          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
+        }
+      
+      results <- rbind(results, c(a, b, mean(prop_1), mean(prop_2), 
+                                  mean(prop_3), mean(prop_4), mean(prop_5)))
+
+  }
+  
+}
+
+power_results <- power_results[-1 ,]
+rownames(power_results) <- NULL
+```
+
 
       
 
