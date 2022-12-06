@@ -7,11 +7,14 @@
 \usepackage{multirow,booktabs,setspace,caption}
 \usepackage{tikz}
 \usepackage{animate}
+\usepackage{graphicx}
+
+\usepackage{apacite}
 
 %Specifying title dia
 \title{Assessing Fit of IRT Models}
-\author{Nina van Gerwen}
-\date{\vspace{2cm} \\ 14th of December, 2022 \\
+\author{Nina van Gerwen \& Dave Hessen}
+\date{\vspace{0.5cm} \\ 14th of December, 2022 \\ \vspace{0.5cm}
 \small{Methodology \& Statistics for the Behavioural, Biomedical and Social Sciences}}
 \logo{\includegraphics[width = 2 cm, height = 1 cm]{images/logo.png}}
 
@@ -21,6 +24,18 @@
 \maketitle
 
 % Dia 1 -----------------------------------------------------------
+
+% Local background:
+{\usebackgroundtemplate{%
+\begin{tikzpicture}[remember picture, overlay]
+
+\node[left = 1 cm] at (current page.east){
+\includegraphics[width = 8.5 cm, height = 8.5 cm]{images/roadhouse.png}
+
+};
+
+\end{tikzpicture}}
+
 \begin{frame}{Outline}
 
 \begin{enumerate}
@@ -36,40 +51,62 @@
 			\item{Simulation design}
 			\item{Performance metrics}
 		\end{enumerate}
+	\item{Results preview}
 	\item{Questions}
 	\item{References}
 \end{enumerate}
 
-\end{frame}
+\end{frame}}
 
 %Dia 2 -----------------------------------------------------------
 \begin{frame}{1. Background information}
 
 \begin{itemize}
-	\item{IRT}
+	\item{Item Response Theory}
 		\begin{itemize}
 			\item{Latent constructs}
 			\item{Tests/questionnaires}
-			\item{Assessing model fit}
-				\begin{itemize}
-					\item{Goodness-of-fit tests}
-					\item{Fit indices}
-				\end{itemize}
+		\end{itemize}
+	\item{Assessing model fit}
+		\begin{itemize}
+			\item{Goodness-of-fit tests}
+			\item{Fit indices}
 		\end{itemize}
 \end{itemize}
+
+\begin{tikzpicture}[remember picture, overlay]
+
+\node[left = 3.5cm, below = 2 cm] at (current page.north east){
+
+\includegraphics[width = 4 cm, height = 4 cm]{images/irt.png}
+
+};
+
+\end{tikzpicture}
 
 \end{frame}
 
 %Dia 3 -----------------------------------------------------------
 \begin{frame}{2. The issue}
 
+\begin{tikzpicture}[remember picture, overlay]
+
+\node[below = 0.8 cm] at (current page.north){
+
+\includegraphics[width = 8cm, height = 4 cm]{images/issue.png}
+
+};
+
+\end{tikzpicture}
+
+\vspace{1cm}
+
 \begin{itemize}
-	\item{Esimation and consistency issues}
 	\item{Few goodness-of-fit tests}
 		\begin{itemize}
-			\item{Issues with current tests}
+			\item{Multiple issues with current tests \footnote[frame]{\cite{chi2sens, 4plconsist1}}}
 		\end{itemize}
-	\item{Scarce studies for TLI and CFI}
+	\item{Scarce studies for TLI\footnote[frame]{\cite{tli}} and CFI\footnote[frame]{\cite{cfi}}}
 \end{itemize}
 
 \end{frame}
@@ -87,15 +124,24 @@
 
 \begin{block}{\textbf{3.1. Research questions}}
 
-% do this in incremental
-
-\begin{enumerate}
+\begin{enumerate}[<+(1)->]
 	\item{Required sample size?}
 	\item{Comparing performance}
 	\item{Performance of TLI and CFI?}
 \end{enumerate}
 
 \end{block}
+
+\end{frame}
+
+\begin{frame}{How will we research this?}
+
+\begin{center}
+Through a simulation study of course!
+
+\includegraphics[width = 3.5 cm, height = 4 cm]{images/plan.png}
+
+\end{center}
 
 \end{frame}
 
@@ -106,7 +152,6 @@
 \begin{itemize}
 	\item{Dichotomous items}
 	\item{Static item parameters}
-	\item{Two models: 2PL, 3PL}
 	\item{Varying four factors}
 \end{itemize}
 
@@ -171,6 +216,22 @@
 
 \end{frame}
 
+\begin{frame}{5. Preview of the results}
+
+\begin{columns}
+
+\begin{column}{0.5\textwidth}
+\includegraphics[width = \textwidth]{images/table2.png}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\includegraphics[width = \textwidth]{images/table3.png}
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
 %Dia 8 -----------------------------------------------------------
 \begin{frame}[c]{Thank you for listening!}
 
@@ -195,8 +256,8 @@
 
 %Dia 9 -----------------------------------------------------------
 \begin{frame}{References}
-
-%\bibliography
+\bibliographystyle{apacite}
+\bibliography{reportref}
 
 \end{frame}
 
