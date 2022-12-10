@@ -383,6 +383,25 @@ for(a in levels(test_length)){
 
 power_results <- power_results[-1 ,]
 rownames(power_results) <- NULL
+
+## TO GET NA IN DATA:
+testing <- data.gen(900, 7, model = "2PL")
+
+for(i in 1:900) {
+  for(j in 1:7) {
+    
+    value <- runif(n = 1, min = 0, max = 1)
+    
+    if(value < .20){
+      testing[i, j] <- NA
+    } else {
+      testing[i, j] <- testing[i, j]
+    }
+ 
+    
+  }
+  
+}
 ```
 
 
