@@ -89,16 +89,25 @@ where $\phi(\theta)$ is the univariate density of the latent variable $\theta$. 
 \end{equation}
 
 where $n_{\boldsymbol{x}}$ is the frequency of score pattern $\boldsymbol{x}$. Maximisation of $\mathcal{L}(\boldsymbol{\nu})$ would then lead to the estimation of the item parameters $\boldsymbol{\hat{\nu}}$. This is generally how in IRT a model is fitted to data. \\
-\indent After a model has been fitted as described above, the next step is usually to test how well the model fits the data. There are multiple options to assess model fit. Commonly, both goodness-of-fit tests and fit indices are used. The goodness-of-fit test we develop and test in the present study has the following formula: 
+\indent After a model has been fitted as described above, the next step is usually to test how well the model fits the data. There are multiple options to assess model fit. Usually, both goodness-of-fit tests and fit indices are used. Commonly used goodness-of-fit tests are the $\chi^2$-difference test and the Pearson's $\chi^2$-test. The $\chi^2$-difference test uses the following likelihood statistic:
+
+\begin{equation}
+\frac{\mathcal{L}_0}{\mathcal{L}_a},
+\end{equation}
+
+where $\mathcal{L}_0$ is the likelihood of the null model and $\mathcal{L}_a$ is the likelihood of an alternative model, under which the null model has to be nested. The goodness-of-fit test that we develop and test in the present study is based on the hereunder likelihood statistic: 
 
 \begin{equation}
 \frac{max(\mathcal{L}_0)}{\prod_{j = 1}^g max(\mathcal{L}_j)},
 \end{equation}
+ 
+where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for group $j$, which is gained by randomly assigning the observations to $g$ groups. According to Willks' theorem (Wilks, 1938), both likelihood statistic will asymptotically follow a $\chi^2$ distribution as sample size increases. Alternatively, Pearson's $\chi^2$-test is based on the statistic below: 
 
-where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for group $j$, which is gained by randomly assigning the observations to $g$ groups. According to Wilks' theorem (Wilks, 1938), this LR will then asymptotically follow a $\chi^2$-distribution. This allows the test to be used for Null Hypothesis Significance testing. 
+\begin{equation}
+\sum_{\boldsymbol{x}} \frac{(O_{\boldsymbol{x}} - E_{\boldsymbol{x}})^2}{E_{\boldsymbol{x}}}
+\end{equation}
 
--- OPTIONAL: here discuss chi2 diff and pearson's chi2 test --
-
+where $O_{\boldsymbol{x}}$ is the observed frequency for score pattern $\boldsymbol{x}$ and $E_{\boldsymbol{x}}$ is the expected frequency for score pattern $\boldsymbol{x}$ given a model. This statistic also asymptotically follows a $\chi^2$ distribution. Because all three aforementioned tests asymptotically follow a $\chi^2$ distribution, they can be used for Null Hypothesis Significance testing. \\
 \indent For fit indices, we research the performance of the TLI and CFI. These indices are estimated through the use of a baseline model. Our baseline model is a complete-independence model, which has the following IRF:
 
 \begin{equation}
@@ -118,7 +127,7 @@ where $n_i$ is the number of observations who scored a 1 on item $i$ and $n$ is 
 P(\boldsymbol{X} = \boldsymbol{x}) = \pi_{\boldsymbol{x}},
 \end{equation}
 
-where there no longer is an IRF. Instead, perfect model fit is gained by allowing each score pattern to have their own parameter ($\pi_{\boldsymbol{x}}$). The maximum likelihood estimate of $\pi_{\boldsymbol{x}}$, denoted by $\hat{\pi_{\boldsymbol{x}}}$, is then be the relative frequency of the score pattern:
+where there no longer is an IRF. Instead, perfect model fit is gained by allowing each score pattern to have their own parameter ($\pi_{\boldsymbol{x}}$). The maximum likelihood estimate of $\pi_{\boldsymbol{x}}$, denoted by $\hat{\pi_{\boldsymbol{x}}}$, is then the relative frequency of the score pattern:
 
 \begin{equation*}
 \hat{\pi_{\boldsymbol{x}}} = \frac{n_{\boldsymbol{x}}}{n}
@@ -141,7 +150,15 @@ In the present study, we consider IRT with unidimensional $\theta$, dichotomous 
 
 In order to evaluate the performance of the LR Randomisation test and the TLI and CFI in an IRT setting, we conduct a simulation study. Specifically, for the LR Randomisation test, we investigate whether whether the LR Randomisation test is robust and at which rate the test is able to reject a misspecified model under different conditions. Furthermore, we research how well the LR Randomisation test performs compared to a $\chi^2$-difference test and Pearson's $\chi^2$-test. For the TLI and CFI, we investigate their values under correct and incorrect model specification.
 \subsection{Data generation}
-For simulating data, we only consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. Data generation starts by first sampling the person parameters $\theta$ from a standard normal distribution. Then, either the 2PL or 3PL is chosen as basis for the data generation (see below). We choose to keep item parameters static over all simulations, because we believe that varying the item parameters will not influence the performance of the goodness-of-fit tests and fit indices. For the difficulty parameter $\beta_i$, we choose the values [-2, -1, 0, 1, 2] for every repetition of five items. As for the discrimination parameter $\alpha_i$, we choose repetitions of the values [0.7, 0.85, 1, 1.15, 1.3] per five items. Finally, when the data generating model is the 3PL, we choose the values [.09, 0.12, 0.15, 0.18, 0.21] per five items for the pseudo-guessing parameter $\gamma_i$. Then, probabilities are estimated for all items on a test, given $\theta$ and the chosen model and the item parameters. Finally, a matrix of simulated responses to a dichotomous test is created by sampling from a binomial distribution for every cell. 
+For simulating data, we only consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. Data generation starts by first sampling the person parameters $\theta$ from a standard normal distribution. Then, either the 2PL or 3PL is chosen as basis for the data generation (see below). 
+
+-- HIER MOET IETS VERANDERD WORDEN WELLICHT--
+
+We choose to keep item parameters static over all simulations, because we believe that varying the item parameters will not influence the performance of the goodness-of-fit tests and fit indices. For the difficulty parameter $\beta_i$, we choose the values [-2, -1, 0, 1, 2] for every repetition of five items. As for the discrimination parameter $\alpha_i$, we choose repetitions of the values [0.7, 0.85, 1, 1.15, 1.3] per five items. Finally, when the data generating model is the 3PL, we choose the values [.09, 0.12, 0.15, 0.18, 0.21] per five items for the pseudo-guessing parameter $\gamma_i$.
+
+
+
+Then, probabilities are estimated for all items on a test, given $\theta$ and the chosen model and the item parameters. Finally, a matrix of simulated responses to a dichotomous test is created by sampling from a binomial distribution for every cell. 
 \subsection{Simulation design}
 In the simulation study, we vary four factors: test length, sample size, model types and number of groups. For an overview of the conditions we used for the factors, see \textit{Table \ref{tab:1}}. The simulation design results in a total of 3 (test length) x 5 (sample size) x 2 (model type) = 30 conditions. In each replication of each condition, we fit the 2PL model. Models are fitted using functions from the \textit{ltm} package in R (Rizopoulos, 2006), which approximates marginal maximum likelihood estimation through the Gauss-Hermite quadrature rule. Then we obtain the results of the TLI, CFI and the three different types of goodness-of fit tests: (1) a $\chi^2$-difference test, which is obtained by testing the 2PL under the 3PL with no constraints, (2) Pearson's $\chi^2$-test, which is estimated through aggregating score patterns from the data and comparing the observed score pattern frequencies to the expected score pattern frequencies under the given model, and (3) the LR Randomisation test with a varying number of groups. We replicate each simulation condition 300 times.
 \subsection{Performance metrics}
@@ -168,12 +185,9 @@ Factor & Conditions & Description \\
 \label{tab:1}
 \end{table}
 
-\section{Empirical example}
-To examine the possible uses of our LR Randomisation test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
-
 \section{(Temporary) Results}
 
-\subsection{Simulation study}
+\newpage
 
 Here create the table of results.
 % Table for Empirical Alpha results
@@ -207,7 +221,7 @@ Here create the table of results.
 \label{tab:2}
 \end{table}
 
-\begin{table}[b!]
+\begin{table}[]
 \caption{Temporary Results for Power}
 \begin{tabular}{ r r | c c c c c }
 \toprule
@@ -238,7 +252,7 @@ Here create the table of results.
 \end{table}
 
 
-\begin{table}[b!]
+\begin{table}[]
 \caption{Fit indices values for correct model specification}
 \begin{tabular}{ r r | c c }
 \toprule
@@ -268,7 +282,7 @@ Here create the table of results.
 \label{tab:4}
 \end{table}
 
-\begin{table}[b!]
+\begin{table}[]
 \caption{Fit indices values for incorrect model specification}
 \begin{tabular}{ r r | c c }
 \toprule
@@ -300,7 +314,8 @@ Here create the table of results.
 
 \newpage
 
-\subsection{Empirical example}
+\section{Empirical example}
+To examine the possible uses of our LR Randomisation test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
 
 \section{Discussion}
 
