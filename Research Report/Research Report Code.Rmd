@@ -81,7 +81,7 @@ To fit the 3PL model, we can use the tpm() function.
 LR.test <- function(data, model = "1PL", g = 2){
 
   temp_data <- as.data.frame(data)
-  temp_data$split <- sample(1:g, nrow(data), replace = TRUE)
+  temp_data$split <- sample(1:g, nrow(temp_data), replace = TRUE)
 
   if(model == "1PL"){
     whole_log <- rasch(data = data)$log.Lik
@@ -96,21 +96,21 @@ LR.test <- function(data, model = "1PL", g = 2){
   
   split_LR_values <- rep(NA, g)
   for(j in 1:g) {
+      split_set <- subset(temp_data, split == as.numeric(j), select = -split)
     if(model == "1PL"){
       
-      
-      split_LR_values[j] <- rasch(subset(temp_data, split == j, select = -split))$log.Lik
+      split_LR_values[j] <- rasch(split_set)$log.Lik
     }
     
     if(model == "2PL"){
       
       
-      split_LR_values[j] <- ltm(subset(temp_data, split == j, select = -split) ~ z1, IRT.param = TRUE)$log.Lik
+      split_LR_values[j] <- ltm(split_set ~ z1, IRT.param = TRUE)$log.Lik
     }
     if(model == "3PL"){
       
       
-      split_LR_values[j] <- tpm(subset(temp_data, split == j, select = -split),
+      split_LR_values[j] <- tpm(split_set,
                                 start.val = "random")$log.Lik
     }
   }

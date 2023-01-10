@@ -1,0 +1,13 @@
+![](profpic.png){fig-align="center" width="265"}
+
+# Nina van Gerwen {.center}
+
+## Budding Statistician[^index-1] {.center}
+
+[^index-1]: This site was made using [Quarto](https://quarto.org/).
+
+::: centertext
+[\[GITHUB\]](https://github.com/NinavGerwen) - [\[LINKEDIN\]](https://www.linkedin.com/in/nina-van-gerwen-946aa31b4/)
+:::
+
+To contact me, you can email me at: n.l.vangerwen\@uu.nl.

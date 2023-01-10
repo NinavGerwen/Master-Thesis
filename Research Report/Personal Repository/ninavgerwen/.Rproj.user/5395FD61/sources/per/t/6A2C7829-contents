@@ -1,0 +1,13 @@
+/* css styles */
+
+.center h1 {
+	text-align: center;
+}
+
+.center h2 {
+	text-align: center;
+}
+
+.centertext {
+  text-align: center;
+}
