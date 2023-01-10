@@ -256,13 +256,15 @@ library(ltm)
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 10
+n_sim <- 50
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
 
 alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
                       LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+
+set.seed(1248)
 
 for(a in levels(test_length)){
 
@@ -274,25 +276,28 @@ for(a in levels(test_length)){
       prop_4 <- rep(NA, n_sim)
       prop_5 <- rep(NA, n_sim)
       
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
         for(i in 1:n_sim){
         ## Then, for every condition, generate data according to the
         ## current condition
-          temp_data <- data.gen(n = as.numeric(as.character(b)), 
-                                k = as.numeric(as.character(a)), 
+
+          temp_data <- data.gen(n = temp_n, k = temp_k, 
                                 model = "2PL")
         
         
           p_value_1 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
                                               model = "2PL", g = 2), 
-                              df = 1)
+                              df = k)
  
           p_value_2 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
                                               model = "2PL", g = 3),
-                              df = 1)
+                              df = 2 * k)
         
           p_value_3 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
                                               model = "2PL", g = 4), 
-                              df = 1)
+                              df = 3 * k)
           
           p_value_4 <- 1
           
@@ -321,7 +326,7 @@ rownames(alpha_results) <- NULL
 ```{r Final second run}
 ## This is for power estimation
 
-n_sim <- 5
+n_sim <- 50
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -342,25 +347,29 @@ for(a in levels(test_length)){
       prop_4 <- rep(NA, n_sim)
       prop_5 <- rep(NA, n_sim)
       
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
         for(i in 1:n_sim){
         ## Then, for every condition, generate data according to the
         ## current condition
-          temp_data <- data.gen(n = as.numeric(as.character(b)), 
-                                k = as.numeric(as.character(a)), 
+
+          temp_data <- data.gen(n = temp_n, 
+                                k = temp_k, 
                                 model = "3PL")
         
         
           p_value_1 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
                                               model = "2PL", g = 2), 
-                   df = 1)
+                              df = k)
  
           p_value_2 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
                                               model = "2PL", g = 3),
-                              df = 1)
+                              df = 2 * k)
         
           p_value_3 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
                                               model = "2PL", g = 4), 
-                              df = 1)
+                              df = 3 * k)
           
           p_value_4 <- 1
           
@@ -374,7 +383,7 @@ for(a in levels(test_length)){
           prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
         }
       
-      results <- rbind(results, c(a, b, mean(prop_1), mean(prop_2), 
+      power_results <- rbind(power_results, c(a, b, mean(prop_1), mean(prop_2), 
                                   mean(prop_3), mean(prop_4), mean(prop_5)))
 
   }
