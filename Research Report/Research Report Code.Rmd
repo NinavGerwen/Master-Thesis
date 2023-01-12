@@ -95,6 +95,7 @@ LR.test <- function(data, model = "1PL", g = 2){
   }
   
   split_LR_values <- rep(NA, g)
+  
   for(j in 1:g) {
       split_set <- subset(temp_data, split == as.numeric(j), select = -split)
     if(model == "1PL"){
