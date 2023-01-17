@@ -38,7 +38,7 @@ sample size, test length and the true model.
 data.gen <- function(n, k, model = "1PL"){
   theta <- matrix(data = rep(rnorm(n), k), ncol = k)
   
-  beta <- matrix(data = rep(c(-2, -1, 0, 1, 2), k), nrow = n, ncol = k, byrow = TRUE)
+  beta <- matrix(data = rep(c(-1, -0.5, 0, 0.5, 1), k), nrow = n, ncol = k, byrow = TRUE)
   
   if(model == "1PL"){
     Z <- one.pl(theta = theta, beta = beta)
@@ -54,10 +54,10 @@ data.gen <- function(n, k, model = "1PL"){
   }
   if(model == "3PL"){
     
-    alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
+    alpha <- matrix(data = rep(c(0.8, 0.9, 1, 1.1, 1.2), k), ncol = k,
                     nrow = n, byrow = TRUE)
   
-    gamma <- matrix(data = rep(c(0.05, 0.08, 0.11, 0.14, 0.17), k), ncol = k, 
+    gamma <- matrix(data = rep(c(0.6, 0.08, 0.1, 0.12, 0.14), k), ncol = k, 
                     nrow = n, byrow = TRUE)
   
     Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
@@ -116,7 +116,7 @@ LR.test <- function(data, model = "1PL", g = 2){
     }
   }
 
-  LR_value <- whole_log / prod(split_LR_values, na.rm = TRUE)
+  LR_value <- 2 * ((sum(split_LR_values, na.rm =  TRUE)) - whole_log)
   return(LR_value)
 }
 
@@ -124,43 +124,6 @@ LR.test <- function(data, model = "1PL", g = 2){
 
 voor calculatie van de pchisq moet het 1 - pchisq() zijn, en we hebben
 functie nodig voor calculeren van DF.
-
-```{r degree of freedom function}
-degree.function <- function(model = "1PL", k, g = NULL){
-  if(is.null(g)){
-    if(model == "1PL"){
-      df <- k
-    }
-    if(model == "2PL"){
-      df <- 2 * k
-    }
-    if(model == "3PL"){
-      df <- 3 * k
-    }
-    
-  } else {
-    if(model == "1PL"){
-      df <- g * k
-    }
-    if(model == "2PL"){
-      df <- 2 * g * k
-    }
-    if(model == "3PL"){
-      df <- 3 * g * k
-    }
-    
-  }
-  return(df)
-}
-
-deltadf <- function(model.1, model.2) {
-  
-  d_df <- degree.function(model.1) - degree.function(model.2)
-  
-  return(d_df)
-}
-
-```
 
 
 BOVENDIEN:
@@ -257,7 +220,7 @@ library(ltm)
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 50
+n_sim <- 300
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -288,17 +251,17 @@ for(a in levels(test_length)){
                                 model = "2PL")
         
         
-          p_value_1 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+          p_value_1 <- 1 - pchisq(q = LR.test(data = temp_data, 
                                               model = "2PL", g = 2), 
-                              df = k)
+                              df = temp_k)
  
-          p_value_2 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+          p_value_2 <- 1 - pchisq(q = LR.test(data = temp_data, 
                                               model = "2PL", g = 3),
-                              df = 2 * k)
+                              df = 2 * temp_k)
         
-          p_value_3 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+          p_value_3 <- 1 - pchisq(q = LR.test(data = temp_data, 
                                               model = "2PL", g = 4), 
-                              df = 3 * k)
+                              df = 3 * temp_k)
           
           p_value_4 <- 1
           
@@ -324,10 +287,18 @@ rownames(alpha_results) <- NULL
 
 ```
 
+Resultaten lijken niet helemaal oke voor alpha. Bijna alsof pchisq andersom moet.
+Bovendien lijkt er iets raars te gebeuren bij 20 items en LR4... (gooit het
+model nooit weg).
+Dit was met alpha values 0.7 - 0.85 - 1 - 1.15 - 1.3, beta values van -1 tot 1
+en gamma values horen hier niet uit te maken (maar waren 0.05 - 0.13).
+Er waren ongeveer 60 errors in totaal (van de 300 x 5 x 3 x 3 tests).
+
 ```{r Final second run}
 ## This is for power estimation
+set.seed(1248)
 
-n_sim <- 50
+n_sim <- 300
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -360,17 +331,17 @@ for(a in levels(test_length)){
                                 model = "3PL")
         
         
-          p_value_1 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+          p_value_1 <- 1 - pchisq(q = LR.test(data = temp_data, 
                                               model = "2PL", g = 2), 
-                              df = k)
+                              df = temp_k)
  
-          p_value_2 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+          p_value_2 <- 1 - pchisq(q = LR.test(data = temp_data, 
                                               model = "2PL", g = 3),
-                              df = 2 * k)
+                              df = 2 * temp_k)
         
-          p_value_3 <- 1 - pchisq(q = -2 * LR.test(data = temp_data, 
+          p_value_3 <- 1 - pchisq(q = LR.test(data = temp_data, 
                                               model = "2PL", g = 4), 
-                              df = 3 * k)
+                              df = 3 * temp_k)
           
           p_value_4 <- 1
           
@@ -398,6 +369,7 @@ rownames(power_results) <- NULL
 testing <- data.gen(900, 7, model = "2PL")
 
 for(i in 1:900) {
+  
   for(j in 1:7) {
     
     value <- runif(n = 1, min = 0, max = 1)
@@ -413,6 +385,9 @@ for(i in 1:900) {
   
 }
 ```
+
+Bij deze, 1000+ errors ongeveer, aanzienlijk meer. Niet alleen bij lage sample
+size ook. Resultaten ook weer beetje raar.
 
 
       
