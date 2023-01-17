@@ -1,0 +1,32 @@
+project:
+  type: website
+
+website:
+  title: "Home"
+  navbar:
+    title: FALSE
+    background: dark
+    left:
+      - href: index.qmd
+        text: Home
+    right:
+      - href: CV.pdf
+        text: Curriculum Vitae
+  page-footer:
+    left: "N.L. van Gerwen, MSc"
+    right:
+      - icon: github
+        href: https://github.com/ninavgerwen
+      - icon: linkedin
+        href: https://www.linkedin.com/in/nina-van-gerwen-946aa31b4/
+      - icon: OSF
+        href: https://osf.io/nrud6/
+format:
+  html:
+    theme: [lux, theme-dark.scss]
+    css: styles.css
+    toc: true
+    link-external-newwindow: TRUE
+
+editor: visual
+
