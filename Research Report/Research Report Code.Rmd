@@ -139,80 +139,10 @@ Alpha is als: data onder 1PL gecreerd, en je test het 1/2/3PL.
 
 wellicht met predict kan je expected score patterns frequency krijgen
 
-## Functions for TFI/CLI calculatoins
-
-```{r TLI/CLI functions}
-base.model <- function(data) {
-  
-  k <- ncol(data)
-  n <- nrow(data)
-  
-  pi <- rep(NA, k)
-  
-  for(i in 1:k) {
-    
-    n_i <- sum(data[, i] == 1)
-    
-    pi_i <- mean(data[, i])
-    
-    pi[i] <- (pi_i)^n_i * (1 - (pi_i))^(n - n_i)
-    
-  }
-  
-  loglik <- log(prod(pi))
-  
-  return(loglik)
-  
-}
-
-sat.model <- function(agg_data) {
-  
-  n <- nrow(agg_data)
-  
-  pi <- rep(NA, n)
-  
-  for(i in 1:n) {
-    n_x <- agg_data$frequency[i]
-    
-    pi[i] <- n_x / n
-    
-  }
-  
-  loglik <- log(prod(pi))
-  
-  return(loglik)
-  
-}
-```
-
 CONVERGENCE IS EEN GROOT PROBLEEM. Wellicht een eigen 'control' opzetten
-(zie ?tpm)?
+(zie ?tpm)? e.g., control <- list(iter.qN = 5000, GHk = 50)
 
-## Testing the functions
-
-```{r}
-library(ltm)
-test_dat <- data.gen(50, 15, "2PL")
-
-mml2 <- ltm(test_dat ~ z1, IRT.param = TRUE)
-
-control <- list(iter.qN = 5000, GHk = 50)
-  
-mml3 <- tpm(test_dat, start.val = "random", max.guessing = .3,
-            control = control)
-
-## Setting constraings: how to make gamma all equal, but not to
-## a certain value??
-r <- cbind(1:15, rep(1, 15), rep(.25, 15))
-
-mml4 <- tpm(test_dat, start.val = "random",
-            constraint = r, control = control)
-
-mml4
-
-anova(mml1, mml2)
-anova(mml2, mml3)
-```
+## Getting results
 
 ```{r Final first run}
 library(ltm)
