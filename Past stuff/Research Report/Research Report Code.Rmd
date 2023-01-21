@@ -1,0 +1,329 @@
+---
+title: "Master Thesis Code"
+author: "Nina van Gerwen (1860852)"
+date: "2022-10-28"
+output: html_document
+---
+
+## Functions for IRF calculations
+
+These are necessary in data generation as we will vary the data generating model.
+
+```{r IRF calculation functions}
+## Data generation is based on three models, therefore we created functions for
+## the calculations of every model (1PL - 2PL - 3PL)
+one.pl <- function(theta, beta){
+  prob <- exp(theta - beta) / (1 + exp(theta - beta))
+  return(prob)
+}
+
+two.pl <- function(theta, alpha, beta){
+  prob <- exp((alpha * theta) + beta) / (1 + exp((alpha * theta) + beta))
+  return(prob)
+}
+
+three.pl <- function(theta, alpha, beta, gamma){
+  prob <- gamma + (1 - gamma) * (exp((alpha * theta) + beta) / (1 + exp((alpha + theta) + beta)))
+  return(prob)
+}
+
+```
+
+## Function for data generation
+
+Now we create the function for data generation, where the input is 
+sample size, test length and the true model.
+
+```{r Data generation functions}
+data.gen <- function(n, k, model = "1PL"){
+  theta <- matrix(data = rep(rnorm(n), k), ncol = k)
+  
+  beta <- matrix(data = rep(c(-1, -0.5, 0, 0.5, 1), k), nrow = n, ncol = k, byrow = TRUE)
+  
+  if(model == "1PL"){
+    Z <- one.pl(theta = theta, beta = beta)
+  
+  }
+  if(model == "2PL"){
+      
+    alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
+                    nrow = n, byrow = TRUE)
+  
+    Z <- two.pl(theta = theta, alpha = alpha, beta = beta)
+    
+  }
+  if(model == "3PL"){
+    
+    alpha <- matrix(data = rep(c(0.8, 0.9, 1, 1.1, 1.2), k), ncol = k,
+                    nrow = n, byrow = TRUE)
+  
+    gamma <- matrix(data = rep(c(0.6, 0.08, 0.1, 0.12, 0.14), k), ncol = k, 
+                    nrow = n, byrow = TRUE)
+  
+    Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
+  }
+  
+data <- matrix(data = rbinom(n = n * k, size = 1, prob = Z), ncol = k, nrow = n)
+  
+return(data)
+
+}
+```
+
+## Functions for model fit calculations
+
+To fit the 1PL model, we can use the rasch() function.
+To fit the 2PL model, we can use the ltm() function.
+To fit the 3PL model, we can use the tpm() function.
+
+```{r model fit calculation functions}
+
+LR.test <- function(data, model = "1PL", g = 2){
+
+  temp_data <- as.data.frame(data)
+  temp_data$split <- sample(1:g, nrow(temp_data), replace = TRUE)
+
+  if(model == "1PL"){
+    whole_log <- rasch(data = data)$log.Lik
+  }
+  if(model == "2PL"){
+    whole_log <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+  }
+  if(model == "3PL"){
+    ## safeguard voor convergeren
+    whole_log <- tpm(data, start.val = "random")$log.Lik
+  }
+  
+  split_LR_values <- rep(NA, g)
+  
+  for(j in 1:g) {
+      split_set <- subset(temp_data, split == as.numeric(j), select = -split)
+    if(model == "1PL"){
+      
+      split_LR_values[j] <- rasch(split_set)$log.Lik
+    }
+    
+    if(model == "2PL"){
+      
+      
+      split_LR_values[j] <- ltm(split_set ~ z1, IRT.param = TRUE)$log.Lik
+    }
+    if(model == "3PL"){
+      
+      
+      split_LR_values[j] <- tpm(split_set,
+                                start.val = "random")$log.Lik
+    }
+  }
+
+  LR_value <- 2 * ((sum(split_LR_values, na.rm =  TRUE)) - whole_log)
+  return(LR_value)
+}
+
+```
+
+voor calculatie van de pchisq moet het 1 - pchisq() zijn, en we hebben
+functie nodig voor calculeren van DF.
+
+
+BOVENDIEN:
+
+als je een model dat genest is onder een ander model test, dan wil je niet
+dat het verworpen wordt (je test nog steeds alpha).
+
+VOORBEELD:
+
+Power is als: data onder 3PL gecreerd, en je test het 1PL/2PL model.
+
+Alpha is als: data onder 1PL gecreerd, en je test het 1/2/3PL.
+
+wellicht met predict kan je expected score patterns frequency krijgen
+
+CONVERGENCE IS EEN GROOT PROBLEEM. Wellicht een eigen 'control' opzetten
+(zie ?tpm)? e.g., control <- list(iter.qN = 5000, GHk = 50)
+
+## Getting results
+
+```{r Final first run}
+library(ltm)
+## This is for empirical alpha estimation
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+
+n_sim <- 300
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+
+set.seed(1248)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+      
+      prop_1 <- rep(NA, n_sim)
+      prop_2 <- rep(NA, n_sim)
+      prop_3 <- rep(NA, n_sim)
+      prop_4 <- rep(NA, n_sim)
+      prop_5 <- rep(NA, n_sim)
+      
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- data.gen(n = temp_n, k = temp_k, 
+                                model = "2PL")
+        
+        
+          p_value_1 <- 1 - pchisq(q = LR.test(data = temp_data, 
+                                              model = "2PL", g = 2), 
+                              df = temp_k)
+ 
+          p_value_2 <- 1 - pchisq(q = LR.test(data = temp_data, 
+                                              model = "2PL", g = 3),
+                              df = 2 * temp_k)
+        
+          p_value_3 <- 1 - pchisq(q = LR.test(data = temp_data, 
+                                              model = "2PL", g = 4), 
+                              df = 3 * temp_k)
+          
+          p_value_4 <- 1
+          
+          p_value_5 <- 1
+          
+        
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
+          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
+        }
+      
+      alpha_results <- rbind(alpha_results, c(a, b, mean(prop_1), mean(prop_2), 
+                                  mean(prop_3), mean(prop_4), mean(prop_5)))
+
+  }
+  
+}
+
+alpha_results <- alpha_results[-1 ,]
+rownames(alpha_results) <- NULL
+
+```
+
+Resultaten lijken niet helemaal oke voor alpha. Bijna alsof pchisq andersom moet.
+Bovendien lijkt er iets raars te gebeuren bij 20 items en LR4... (gooit het
+model nooit weg).
+Dit was met alpha values 0.7 - 0.85 - 1 - 1.15 - 1.3, beta values van -1 tot 1
+en gamma values horen hier niet uit te maken (maar waren 0.05 - 0.13).
+Er waren ongeveer 60 errors in totaal (van de 300 x 5 x 3 x 3 tests).
+
+```{r Final second run}
+## This is for power estimation
+set.seed(1248)
+
+n_sim <- 300
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+## TUPLES
+
+power_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+      
+      
+      prop_1 <- rep(NA, n_sim)
+      prop_2 <- rep(NA, n_sim)
+      prop_3 <- rep(NA, n_sim)
+      prop_4 <- rep(NA, n_sim)
+      prop_5 <- rep(NA, n_sim)
+      
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- data.gen(n = temp_n, 
+                                k = temp_k, 
+                                model = "3PL")
+        
+        
+          p_value_1 <- 1 - pchisq(q = LR.test(data = temp_data, 
+                                              model = "2PL", g = 2), 
+                              df = temp_k)
+ 
+          p_value_2 <- 1 - pchisq(q = LR.test(data = temp_data, 
+                                              model = "2PL", g = 3),
+                              df = 2 * temp_k)
+        
+          p_value_3 <- 1 - pchisq(q = LR.test(data = temp_data, 
+                                              model = "2PL", g = 4), 
+                              df = 3 * temp_k)
+          
+          p_value_4 <- 1
+          
+          p_value_5 <- 1
+          
+        
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
+          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
+        }
+      
+      power_results <- rbind(power_results, c(a, b, mean(prop_1), mean(prop_2), 
+                                  mean(prop_3), mean(prop_4), mean(prop_5)))
+
+  }
+  
+}
+
+power_results <- power_results[-1 ,]
+rownames(power_results) <- NULL
+
+## TO GET NA IN DATA:
+testing <- data.gen(900, 7, model = "2PL")
+
+for(i in 1:900) {
+  
+  for(j in 1:7) {
+    
+    value <- runif(n = 1, min = 0, max = 1)
+    
+    if(value < .20){
+      testing[i, j] <- NA
+    } else {
+      testing[i, j] <- testing[i, j]
+    }
+ 
+    
+  }
+  
+}
+```
+
+Bij deze, 1000+ errors ongeveer, aanzienlijk meer. Niet alleen bij lage sample
+size ook. Resultaten ook weer beetje raar.
+
+
+      
+
+      
+
+        
+        
+
