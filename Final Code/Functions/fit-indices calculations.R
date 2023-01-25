@@ -121,3 +121,51 @@ CFI <- function(testedlog, dataset, agg_data, n, k){
   return(fit_value)
   
 }
+
+TLI.Yang <- function(testedlog, dataset, agg_data, n, k){
+  
+  ## First, calculate the chisquare statistic between
+  ## the saturated and hypothesized model
+  chi_tested <- (2 * ((sat.model(agg_data, n_r = n) - testedlog)))
+  
+  ## And the degrees of freedom of the hypothesized model
+  df_tested <- 2*k
+  
+  ## And the chisquare statistic between the saturated and baseline model
+  chi_base <- (2 * ((sat.model(agg_data, n_r = n) - base.model(dataset))))
+  
+  ## And the degrees of freedom of the baseline model
+  df_base <- k
+  
+  ## Then, calculate the TLI according to the right formula
+  numerator <- (chi_base/df_base) - (chi_tested/df_tested)
+  
+  denominator <- (chi_base / df_base) -  1
+  
+  fit_value <- (numerator/denominator)
+  
+  ## And return this value
+  return(fit_value)
+  
+  
+}
+
+CFI.Yang <- function(testedlog, dataset, agg_data, n, k){
+  
+  chi_tested <- (2 * ((sat.model(agg_data, n_r = n) - testedlog)))
+  
+  df_tested <- 2 * k
+  
+  chi_base <- (2 * ((sat.model(agg_data, n_r = n) - base.model(dataset))))
+  
+  df_base <- k
+  
+  numerator <- max(c((chi_tested - df_tested), 0))
+  
+  denominator <- max(c(chi_tested - df_tested), (chi_base - df_base), 0)
+  
+  fit_value <- 1 - (numerator/denominator)
+  
+  return(fit_value)
+  
+}

@@ -1,0 +1,208 @@
+---
+title: "Master Thesis Code"
+author: "Nina van Gerwen (1860852)"
+date: "2022-10-28"
+output: html_document
+---
+
+## Functions for IRF calculations
+
+These are necessary in data generation as we will vary the data generating model.
+
+```{r}
+source("Functions/model-calculations.R")
+source("Functions/data-generation.R")
+source("Functions/missingness.R")
+source("Functions/data-aggregation.R")
+source("Functions/lr-test-calculation.R")
+```
+
+## Functions for model fit calculations
+
+To fit the 1PL model, we can use the rasch() function.
+To fit the 2PL model, we can use the ltm() function.
+To fit the 3PL model, we can use the tpm() function.
+
+## Empirical alpha analysis
+
+```{r Final first run}
+library(ltm)
+## This is for empirical alpha estimation
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+
+n_sim <- 10
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+
+set.seed(1248)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+      
+      prop_1 <- rep(NA, n_sim)
+      prop_2 <- rep(NA, n_sim)
+      prop_3 <- rep(NA, n_sim)
+      prop_4 <- rep(NA, n_sim)
+      prop_5 <- rep(NA, n_sim)
+      
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- data.gen(n = temp_n, k = temp_k, 
+                                model = "2PL")
+          
+          l_0 <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+        
+        
+          p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
+                                              model = "2PL", g = 2), 
+                              df = temp_k)
+ 
+          p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
+                                              model = "2PL", g = 3),
+                              df = 2 * temp_k)
+        
+          p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
+                                              model = "2PL", g = 4), 
+                              df = 3 * temp_k)
+          
+          p_value_4 <- 1
+          
+          p_value_5 <- 1
+          
+        
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
+          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
+        }
+      
+      alpha_results <- rbind(alpha_results, c(a, b, mean(prop_1), mean(prop_2), 
+                                  mean(prop_3), mean(prop_4), mean(prop_5)))
+
+  }
+  
+}
+
+alpha_results <- alpha_results[-1 ,]
+rownames(alpha_results) <- NULL
+
+```
+
+Resultaten lijken niet helemaal oke voor alpha. Bijna alsof pchisq andersom moet.
+Bovendien lijkt er iets raars te gebeuren bij 20 items en LR4... (gooit het
+model nooit weg).
+Dit was met alpha values 0.7 - 0.85 - 1 - 1.15 - 1.3, beta values van -1 tot 1
+en gamma values horen hier niet uit te maken (maar waren 0.05 - 0.13).
+Er waren ongeveer 60 errors in totaal (van de 300 x 5 x 3 x 3 tests).
+
+## Power analysis
+
+```{r Final second run}
+## This is for power estimation
+set.seed(1248)
+
+n_sim <- 300
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+## TUPLES
+
+power_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+      
+      
+      prop_1 <- rep(NA, n_sim)
+      prop_2 <- rep(NA, n_sim)
+      prop_3 <- rep(NA, n_sim)
+      prop_4 <- rep(NA, n_sim)
+      prop_5 <- rep(NA, n_sim)
+      
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- data.gen(n = temp_n, 
+                                k = temp_k, 
+                                model = "3PL")
+        
+          l_0 <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+        
+          p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
+                                              model = "2PL", g = 2), 
+                              df = temp_k)
+ 
+          p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
+                                              model = "2PL", g = 3),
+                              df = 2 * temp_k)
+        
+          p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
+                                              model = "2PL", g = 4), 
+                              df = 3 * temp_k)
+          
+          p_value_4 <- 1
+          
+          p_value_5 <- 1
+          
+        
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
+          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
+        }
+      
+      power_results <- rbind(power_results, c(a, b, mean(prop_1), mean(prop_2), 
+                                  mean(prop_3), mean(prop_4), mean(prop_5)))
+
+  }
+  
+}
+
+power_results <- power_results[-1 ,]
+rownames(power_results) <- NULL
+```
+
+Bij deze, 1000+ errors ongeveer, aanzienlijk meer. Niet alleen bij lage sample
+size ook. Resultaten ook weer beetje raar.
+
+## Testing
+
+```{r}
+alpha <- rep(c(0.7, 0.85, 1, 1.15, 1.3), 4)
+
+sample(alpha)
+
+beta <- rep(c(-1, -0.5, 0, 0.5, 1), 4)
+
+data.frame(beta = beta, alpha = sample(alpha, length(alpha)))
+
+combinations <- expand.grid(alpha, beta)
+
+combinations
+```
+
+      
+
+        
+        
+
