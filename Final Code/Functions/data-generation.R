@@ -23,8 +23,25 @@ data.gen <- function(n, k, model = "1PL"){
     
     ## The 2PL also has alphas in the equation (scaling parameter)
     ## Therefore, these also need to be created
-    alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
-                    nrow = n, byrow = TRUE)
+    if(k == 5){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    if(k == 10){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7), ncol = k, nrow = n,
+                      byrow = TRUE)
+    }
+    if(k == 20){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7, 1.15, 1.3, 0.7, 0.85, 1,
+                               1, 0.7, 1.3, 0.85, 1.15), ncol = k, nrow = n,
+                      byrow = TRUE)
+    } else {
+      alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    
     
     Z <- two.pl(theta = theta, alpha = alpha, beta = beta)
     
@@ -33,8 +50,24 @@ data.gen <- function(n, k, model = "1PL"){
   ## properly calculate the probabilities for every person given every item
   if(model == "3PL"){
     
-    alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
-                    nrow = n, byrow = TRUE)
+    if(k == 5){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    if(k == 10){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7), ncol = k, nrow = n,
+                      byrow = TRUE)
+    }
+    if(k == 20){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7, 1.15, 1.3, 0.7, 0.85, 1,
+                               1, 0.7, 1.3, 0.85, 1.15), ncol = k, nrow = n,
+                      byrow = TRUE)
+    } else {
+      alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
     
     ## The 3PL has gammas in the equation (pseudo-guessing parameter),
     ## therefore we create these.

@@ -15,6 +15,7 @@ source("Functions/data-generation.R")
 source("Functions/missingness.R")
 source("Functions/data-aggregation.R")
 source("Functions/lr-test-calculation.R")
+source("Functions/chi-square-diff-test.R")
 ```
 
 ## Functions for model fit calculations
@@ -31,7 +32,7 @@ library(ltm)
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 10
+n_sim <- 300
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -61,22 +62,22 @@ for(a in levels(test_length)){
           temp_data <- data.gen(n = temp_n, k = temp_k, 
                                 model = "2PL")
           
-          l_0 <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+          l_0 <- ltm(temp_data ~ z1, IRT.param = TRUE)$log.Lik
         
         
           p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 2), 
-                              df = temp_k)
+                              df = 2 * temp_k)
  
           p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 3),
-                              df = 2 * temp_k)
+                              df = 2 * (2 *  temp_k))
         
           p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 4), 
-                              df = 3 * temp_k)
+                              df = 3 * (2 * temp_k))
           
-          p_value_4 <- 1
+          p_value_4 <- diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
           
           p_value_5 <- 1
           
@@ -145,21 +146,21 @@ for(a in levels(test_length)){
                                 k = temp_k, 
                                 model = "3PL")
         
-          l_0 <- ltm(data ~ z1, IRT.param = TRUE)$log.Lik
+          l_0 <- ltm(temp_data ~ z1, IRT.param = TRUE)$log.Lik
         
           p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 2), 
-                              df = temp_k)
+                              df = 2 * temp_k)
  
           p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 3),
-                              df = 2 * temp_k)
+                              df = 2 * (2 *temp_k))
         
           p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 4), 
-                              df = 3 * temp_k)
+                              df = 3 * (2 *temp_k))
           
-          p_value_4 <- 1
+          p_value_4 <- diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
           
           p_value_5 <- 1
           

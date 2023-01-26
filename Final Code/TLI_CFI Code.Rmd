@@ -38,7 +38,7 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 5
+n_sim <- 300
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
@@ -133,7 +133,7 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 5
+n_sim <- 300
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
@@ -190,9 +190,9 @@ for(a in levels(test_length)){
       ## Then, after the values have been calculated n_sim times, 
       ## we can get their mean and standard deviation and add these
       ## to the result dataframe through rbind()
-      miss_results <- rbind(miss_results, c(a, b, mean(tli_values), sd(tli_values),
-                                          mean(cfi_values), sd(cfi_values),
-                                          mean(tli_yang), mean(cfi_yang)))
+      miss_results <- rbind(miss_results, c(a, b, mean(tli_values, na.rm = TRUE), sd(tli_values, na.rm = TRUE),
+                                          mean(cfi_values, na.rm = TRUE), sd(cfi_values, na.rm = TRUE),
+                                          mean(tli_yang, na.rm = TRUE), mean(cfi_yang, na.rm = TRUE)))
 
   }
   
