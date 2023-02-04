@@ -1,29 +1,22 @@
 
-pearson.test <- function(agg_data, k){
+pearson.test <- function(temp_model, k){
   
-  all_obs <- FALSE
-  ## sample until nrow(unique(test)) == 2^k
-  extra_data <- data.gen(100000, k = k)
+  scorepatterns <- matrix(NA, nrow = 2, ncol = k)
   
-  while(all_obs == FALSE){
-    
-    extra_data <- rbind(extra_data, data.gen(100000, k = k))
-    
-    score_patterns <- nrow(unique(extra_data))
-    
-    if(score_patterns == 2^k){
-      all_obs <- TRUE
-    } 
-    next
+  for(d in 1:k){
+    scorepatterns[1:2, d] <- c(0, 1)
   }
   
+    scorepatterns <- scorepatterns %>%
+    as.data.frame(.) %>%
+    expand.grid(.)
+    
+    obs_exp <- factor.scores(temp_model, resp.patterns = scorepatterns)$score.dat[, (k+1):(k+2)]
   
-  ##obs <- ...
+    chisq_value <- sum( ( (obs_exp$Obs - obs_exp$Exp)^2 / obs_exp$Exp ) )
+    
+    p_value <- 1 - pchisq(q = chisq_value, df = 2^k - 1 - 2*k)
   
-  ##exp <- ...
-  
-  ## sum( ((obs - exp)^2 / exp) )
-  
-  return(extra_data)
+  return(p_value)
 }
 

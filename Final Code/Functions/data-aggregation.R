@@ -3,9 +3,6 @@
 ## We make a function, which takes the dataset and the total number of
 ## observations
 score.pattern.aggr <- function(data, n){
-  ## This function requires dplyr for mutate() and the pipe
-  require(dplyr)
-  
   ## Aggregated data will be data, where:
   agg_data <- data %>% 
     ## It is turned into a data frame

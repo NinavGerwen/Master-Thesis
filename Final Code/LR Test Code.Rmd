@@ -145,8 +145,9 @@ for(a in levels(test_length)){
           temp_data <- data.gen(n = temp_n, 
                                 k = temp_k, 
                                 model = "3PL")
-        
-          l_0 <- ltm(temp_data ~ z1, IRT.param = TRUE)$log.Lik
+          
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          l_0 <- temp_model$log.Lik
         
           p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 2), 
@@ -162,7 +163,7 @@ for(a in levels(test_length)){
           
           p_value_4 <- diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
           
-          p_value_5 <- 1
+          p_value_5 <- pearson.test()
           
         
           prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
@@ -189,32 +190,42 @@ size ook. Resultaten ook weer beetje raar.
 ## Testing
 
 ```{r}
-alpha <- rep(c(0.7, 0.85, 1, 1.15, 1.3), 4)
-
-sample(alpha)
-
-beta <- rep(c(-1, -0.5, 0, 0.5, 1), 4)
-
-data.frame(beta = beta, alpha = sample(alpha, length(alpha)))
-
-combinations <- expand.grid(alpha, beta)
-
-combinations
-
-test <- data.gen(500, 5, model = "2PL") %>%
-  missify(., .20)
-
+k <- 10
+test <- data.gen(500, k, model = "2PL")
 
 temp_model <- ltm(test ~ z1)
 
-save <- factor.scores(temp_model)
-
-frame <- matrix(NA, nrow = 2, ncol = 10)
-
-for(c in 1:10){
-  frame[1:2, c] <- c(0, 1)
+scorepatterns <- matrix(NA, nrow = 2, ncol = k)
+  
+for(d in 1:k){
+    scorepatterns[1:2, d] <- c(0, 1)
 }
-expand.grid(as.data.frame(frame))
+  
+scorepatterns <- scorepatterns %>%
+    as.data.frame(.) %>%
+    expand.grid(.) 
+
+testing <- factor.scores(temp_model, resp.patterns = scorepatterns)$score.dat[, (k+1):(k+2)]
+testing
+
+scorepatterns
+
+saved <- factor.scores(temp_model, resp.patterns = scorepatterns)
+saved$score.dat[, 11:12]
+
+saved$score.dat$Obs
+
+p_values <- rep(NA, 100)
+
+for(i in 1:100){
+  data <- data.gen(1500, 10, model = "3PL")
+  
+  model <- ltm(data ~ z1)
+  
+  p_values[i] <- pearson.test(model, 10)
+}
+
+sum(ifelse(p_values < 0.05, 1, 0))/100
 ```
 
       
