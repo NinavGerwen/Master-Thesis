@@ -1,5 +1,5 @@
 
-pearson.test <- function(temp_model, k){
+pearson.test <- function(model, k){
   
   scorepatterns <- matrix(NA, nrow = 2, ncol = k)
   
@@ -11,7 +11,7 @@ pearson.test <- function(temp_model, k){
     as.data.frame(.) %>%
     expand.grid(.)
     
-    obs_exp <- factor.scores(temp_model, resp.patterns = scorepatterns)$score.dat[, (k+1):(k+2)]
+    obs_exp <- factor.scores(model, resp.patterns = scorepatterns)$score.dat[, (k+1):(k+2)]
   
     chisq_value <- sum( ( (obs_exp$Obs - obs_exp$Exp)^2 / obs_exp$Exp ) )
     

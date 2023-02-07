@@ -3,10 +3,7 @@
 
 ## The loglikelihood of the base model can be calculated with the following 
 ## function, which only takes the data as input
-base.model <- function(data) {
-  
-  k <- ncol(data)
-  n <- nrow(data)
+base.model <- function(data, n, k) {
   
   ## Create an empty vector of length equal to test length
   pi <- rep(NA, k)
@@ -38,21 +35,21 @@ base.model <- function(data) {
 ## The loglikelihood of the saturated model can be calculated through
 ## the following function, which takes as input the 
 ## score-pattern frequency aggregrated data and the total number of observations
-sat.model <- function(agg_data, n_r) {
+sat.model <- function(agg_data, n) {
   
   ## Determine the number of observed score patterns
-  n <- nrow(agg_data)
+  n_r <- nrow(agg_data)
   
   ## Create an empty vector of length n
-  pi <- rep(NA, n)
+  pi <- rep(NA, n_r)
   
   ## Then, for every observed scorepattern
-  for(i in 1:n) {
+  for(i in 1:n_r) {
     ## get the number of times it has been observed
     n_x <- agg_data$fr[i]
     
     ## Get the relative frequency of the score pattern
-    pi[i] <- log((n_x / n_r)^n_x)
+    pi[i] <- log((n_x / n)^n_x)
     
   }
   
@@ -67,25 +64,33 @@ sat.model <- function(agg_data, n_r) {
   
 }
 
+chi.base <- function(agg_data, data, n, k){
+  
+  chi_val <- (2 * ((sat.model(agg_data, n)) - base.model(data, n = n, k = k)))
+    
+  return(chi_val)
+}
+
+df.base <- function(k){
+  return(k)
+}
+
+chi.tested <- function(l_0, agg_data, n){
+  
+  chi_val <- (2 * (sat.model(agg_data, n) - l_0))
+    
+  return(chi_val)
+}
+
+df.tested <- function(k){
+  return(2*k)
+}
 
 
 ## Then, to calculate the TLI and CFI, we have a function which takes as input:
 ## the loglikelihood of the tested model, the dataset,
 ## the aggregated dataset, number of observations and test length
-TLI <- function(testedlog, dataset, agg_data, n, k){
-
-  ## First, calculate the chisquare statistic between
-  ## the saturated and hypothesized model
-  chi_tested <- (2 * ((sat.model(agg_data, n_r = n) - testedlog)))
-  
-  ## And the degrees of freedom of the hypothesized model
-  df_tested <- 2*k
-  
-  ## And the chisquare statistic between the saturated and baseline model
-  chi_base <- (2 * ((sat.model(agg_data, n_r = n) - base.model(dataset))))
-  
-  ## And the degrees of freedom of the baseline model
-  df_base <- k
+TLI <- function(chi_base, df_base, chi_tested, df_tested){
   
   ## Then, calculate the TLI according to the right formula
   numerator <- chi_tested / df_tested
@@ -102,15 +107,7 @@ TLI <- function(testedlog, dataset, agg_data, n, k){
 
 ## Then, to calculate the CFI, the same is done with a slightly different
 ## formula
-CFI <- function(testedlog, dataset, agg_data, n, k){
-  
-  chi_tested <- (2 * ((sat.model(agg_data, n_r = n) - testedlog)))
-  
-  df_tested <- 2 * k
-  
-  chi_base <- (2 * ((sat.model(agg_data, n_r = n) - base.model(dataset))))
-  
-  df_base <- k
+CFI <- function(chi_base, df_base, chi_tested, df_tested){
   
   numerator <- chi_tested - df_tested
     
@@ -122,20 +119,7 @@ CFI <- function(testedlog, dataset, agg_data, n, k){
   
 }
 
-TLI.Yang <- function(testedlog, dataset, agg_data, n, k){
-  
-  ## First, calculate the chisquare statistic between
-  ## the saturated and hypothesized model
-  chi_tested <- (2 * ((sat.model(agg_data, n_r = n) - testedlog)))
-  
-  ## And the degrees of freedom of the hypothesized model
-  df_tested <- 2*k
-  
-  ## And the chisquare statistic between the saturated and baseline model
-  chi_base <- (2 * ((sat.model(agg_data, n_r = n) - base.model(dataset))))
-  
-  ## And the degrees of freedom of the baseline model
-  df_base <- k
+TLI.Yang <- function(chi_base, df_base, chi_tested, df_tested){
   
   ## Then, calculate the TLI according to the right formula
   numerator <- (chi_base/df_base) - (chi_tested/df_tested)
@@ -150,15 +134,7 @@ TLI.Yang <- function(testedlog, dataset, agg_data, n, k){
   
 }
 
-CFI.Yang <- function(testedlog, dataset, agg_data, n, k){
-  
-  chi_tested <- (2 * ((sat.model(agg_data, n_r = n) - testedlog)))
-  
-  df_tested <- 2 * k
-  
-  chi_base <- (2 * ((sat.model(agg_data, n_r = n) - base.model(dataset))))
-  
-  df_base <- k
+CFI.Yang <- function(chi_base, df_base, chi_tested, df_tested){
   
   numerator <- max(c((chi_tested - df_tested), 0))
   
@@ -168,4 +144,21 @@ CFI.Yang <- function(testedlog, dataset, agg_data, n, k){
   
   return(fit_value)
   
+}
+
+exp.obs.FI <- function(model, k){
+  
+  obs_exp <- factor.scores(model)$score.dat
+  
+  obs <- sum(obs_exp[, (k + 1)])
+  
+  exp <- sum(obs_exp[, (k + 2)])
+  
+  numerator <- 2 * (obs * exp)
+  
+  denominator <- (obs)^2 + (exp)^2
+  
+  value <- numerator / denominator
+  
+  return(value)
 }

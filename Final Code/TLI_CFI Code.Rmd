@@ -38,13 +38,13 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 5
+n_sim <- 100
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
 null_results <- data.frame(test_length = NA, sample_size = NA, TLI_M = NA,
                           TLI_SE = NA, CFI_M = NA, CFI_SE = NA, TLI_Yang = NA,
-                          CFI_Yang = NA)
+                          CFI_Yang = NA, New_FI = NA)
 
 ## Then set a seed for reproducibility
 set.seed(1248)
@@ -62,6 +62,7 @@ for(a in levels(test_length)){
       cfi_values <- rep(NA, n_sim)
       tli_yang <- rep(NA, n_sim)
       cfi_yang <- rep(NA, n_sim)
+      new_fi <- rep(NA, n_sim)
       
       ## You get the correct level of the factors as numerics
       temp_n <- as.numeric(as.character(b))
@@ -75,20 +76,37 @@ for(a in levels(test_length)){
           temp_data <- data.gen(n = temp_n, k = temp_k, model = "2PL")
                         
           ## Fitting the hypothesized model
-          l_0 <- ltm(temp_data ~ z1, IRT.param = TRUE)$log.Lik
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          
+          l_0 <- temp_model$log.Lik
           
           ## Aggregrating the data
           aggr_data <- score.pattern.aggr(temp_data, temp_n)
           
+          df_base <- df.base(k = temp_k)
+          
+          df_tested <- df.tested(k = temp_k)
+          
+          chi_base <- chi.base(agg_data = aggr_data, data = temp_data,
+                               n = temp_n, k = temp_k)
+          
+          chi_tested <- chi.tested(l_0 = l_0, agg_data = aggr_data, n = temp_n)
+          
           ## And then calculating the TLI and CFI values through our
           ## specialized functions
-          tli_values[j] <- TLI(l_0, temp_data, aggr_data, temp_n, temp_k)
+          tli_values[j] <- TLI(chi_base = chi_base, df_base = df_base, 
+                               chi_tested = chi_tested, df_tested = df_tested)
           
-          cfi_values[j] <- CFI(l_0, temp_data, aggr_data, temp_n, temp_k)
+          cfi_values[j] <- CFI(chi_base = chi_base, df_base = df_base, 
+                               chi_tested = chi_tested, df_tested = df_tested)
           
-          tli_yang[j] <- TLI.Yang(l_0, temp_data, aggr_data, temp_n, temp_k)
+          tli_yang[j] <- TLI.Yang(chi_base = chi_base, df_base = df_base, 
+                                  chi_tested = chi_tested, df_tested = df_tested)
           
-          cfi_yang[j] <- CFI.Yang(l_0, temp_data, aggr_data, temp_n, temp_k)
+          cfi_yang[j] <- CFI.Yang(chi_base = chi_base, df_base = df_base, 
+                                  chi_tested = chi_tested, df_tested = df_tested)
+          
+          new_fi[j] <- exp.obs.FI(temp_model, temp_k)
           
         }
       
@@ -97,7 +115,8 @@ for(a in levels(test_length)){
       ## to the result dataframe through rbind()
       null_results <- rbind(null_results, c(a, b, mean(tli_values), sd(tli_values),
                                           mean(cfi_values), sd(cfi_values),
-                                          mean(tli_yang), mean(cfi_yang)))
+                                          mean(tli_yang), mean(cfi_yang),
+                                          mean(new_fi)))
 
   }
   
@@ -133,13 +152,13 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 300
+n_sim <- 100
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
 miss_results <- data.frame(test_length = NA, sample_size = NA, TLI_M = NA,
                           TLI_SE = NA, CFI_M = NA, CFI_SE = NA, TLI_Yang = NA,
-                          CFI_Yang = NA)
+                          CFI_Yang = NA, New_FI = NA)
 
 ## Then set a seed for reproducibility
 set.seed(1248)
@@ -157,6 +176,7 @@ for(a in levels(test_length)){
       cfi_values <- rep(NA, n_sim)
       tli_yang <- rep(NA, n_sim)
       cfi_yang <- rep(NA, n_sim)
+      new_fi <- rep(NA, n_sim)
       
       ## You get the correct level of the factors as numerics
       temp_n <- as.numeric(as.character(b))
@@ -170,21 +190,38 @@ for(a in levels(test_length)){
           temp_data <- data.gen(n = temp_n, k = temp_k, model = "3PL")
                         
           ## Fitting the hypothesized model
-          l_0 <- ltm(temp_data ~ z1, IRT.param = TRUE)$log.Lik
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          
+          l_0 <- temp_model$log.Lik
           
           ## Aggregrating the data
           aggr_data <- score.pattern.aggr(temp_data, temp_n)
           
+          df_base <- df.base(k = temp_k)
+          
+          df_tested <- df.tested(k = temp_k)
+          
+          chi_base <- chi.base(agg_data = aggr_data, data = temp_data,
+                               n = temp_n, k = temp_k)
+          
+          chi_tested <- chi.tested(l_0 = l_0, agg_data = aggr_data, n = temp_n)
+          
           ## And then calculating the TLI and CFI values through our
           ## specialized functions
-          tli_values[j] <- TLI(l_0, temp_data, aggr_data, temp_n, temp_k)
+          tli_values[j] <- TLI(chi_base = chi_base, df_base = df_base, 
+                               chi_tested = chi_tested, df_tested = df_tested)
           
-          cfi_values[j] <- CFI(l_0, temp_data, aggr_data, temp_n, temp_k)
+          cfi_values[j] <- CFI(chi_base = chi_base, df_base = df_base, 
+                               chi_tested = chi_tested, df_tested = df_tested)
           
-          tli_yang[j] <- TLI.Yang(l_0, temp_data, aggr_data, temp_n, temp_k)
+          tli_yang[j] <- TLI.Yang(chi_base = chi_base, df_base = df_base, 
+                                  chi_tested = chi_tested, df_tested = df_tested)
           
-          cfi_yang[j] <- CFI.Yang(l_0, temp_data, aggr_data, temp_n, temp_k)
+          cfi_yang[j] <- CFI.Yang(chi_base = chi_base, df_base = df_base, 
+                                  chi_tested = chi_tested, df_tested = df_tested)
           
+          new_fi[j] <- exp.obs.FI(model = temp_model, k = temp_k)
+        
         }
       
       ## Then, after the values have been calculated n_sim times, 
@@ -192,7 +229,8 @@ for(a in levels(test_length)){
       ## to the result dataframe through rbind()
       miss_results <- rbind(miss_results, c(a, b, mean(tli_values, na.rm = TRUE), sd(tli_values, na.rm = TRUE),
                                           mean(cfi_values, na.rm = TRUE), sd(cfi_values, na.rm = TRUE),
-                                          mean(tli_yang, na.rm = TRUE), mean(cfi_yang, na.rm = TRUE)))
+                                          mean(tli_yang, na.rm = TRUE), mean(cfi_yang, na.rm = TRUE),
+                                          mean(new_fi, na.rm = TRUE)))
 
   }
   
@@ -209,3 +247,8 @@ miss_results
 
 Miss results zijn iig stukken lager nog!
 
+
+Voor efficienter maken:
+
+- niet meer in elke TLI/CFI de sat model calculaten, maak hier
+een aparte functie voor een gebruik deze later voor de TLI en CFI

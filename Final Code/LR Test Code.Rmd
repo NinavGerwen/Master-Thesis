@@ -16,6 +16,7 @@ source("Functions/missingness.R")
 source("Functions/data-aggregation.R")
 source("Functions/lr-test-calculation.R")
 source("Functions/chi-square-diff-test.R")
+source("Functions/pearson-chi-sq-test.R")
 ```
 
 ## Functions for model fit calculations
@@ -28,11 +29,13 @@ To fit the 3PL model, we can use the tpm() function.
 
 ```{r Final first run}
 library(ltm)
+library(dplyr)
+library(mirt)
 ## This is for empirical alpha estimation
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 300
+n_sim <- 60
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -62,8 +65,9 @@ for(a in levels(test_length)){
           temp_data <- data.gen(n = temp_n, k = temp_k, 
                                 model = "2PL")
           
-          l_0 <- ltm(temp_data ~ z1, IRT.param = TRUE)$log.Lik
-        
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          
+          l_0 <- temp_model$log.Lik
         
           p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
                                               model = "2PL", g = 2), 
@@ -77,11 +81,14 @@ for(a in levels(test_length)){
                                               model = "2PL", g = 4), 
                               df = 3 * (2 * temp_k))
           
-          p_value_4 <- diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
+          p_value_4 <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
           
+          if(temp_k == 20){
           p_value_5 <- 1
+          } else {
+          p_value_5 <- pearson.test(model = temp_model, k = temp_k)
+          }
           
-        
           prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
           prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
           prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
@@ -114,7 +121,7 @@ Er waren ongeveer 60 errors in totaal (van de 300 x 5 x 3 x 3 tests).
 ## This is for power estimation
 set.seed(1248)
 
-n_sim <- 300
+n_sim <- 100
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -147,6 +154,7 @@ for(a in levels(test_length)){
                                 model = "3PL")
           
           temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          
           l_0 <- temp_model$log.Lik
         
           p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, 
@@ -161,9 +169,13 @@ for(a in levels(test_length)){
                                               model = "2PL", g = 4), 
                               df = 3 * (2 *temp_k))
           
-          p_value_4 <- diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
+          p_value_4 <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
           
-          p_value_5 <- pearson.test()
+          if(temp_k == 20){
+          p_value_5 <- 1
+          } else {
+          p_value_5 <- pearson.test(model = temp_model, k = temp_k)
+          }
           
         
           prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
@@ -190,31 +202,6 @@ size ook. Resultaten ook weer beetje raar.
 ## Testing
 
 ```{r}
-k <- 10
-test <- data.gen(500, k, model = "2PL")
-
-temp_model <- ltm(test ~ z1)
-
-scorepatterns <- matrix(NA, nrow = 2, ncol = k)
-  
-for(d in 1:k){
-    scorepatterns[1:2, d] <- c(0, 1)
-}
-  
-scorepatterns <- scorepatterns %>%
-    as.data.frame(.) %>%
-    expand.grid(.) 
-
-testing <- factor.scores(temp_model, resp.patterns = scorepatterns)$score.dat[, (k+1):(k+2)]
-testing
-
-scorepatterns
-
-saved <- factor.scores(temp_model, resp.patterns = scorepatterns)
-saved$score.dat[, 11:12]
-
-saved$score.dat$Obs
-
 p_values <- rep(NA, 100)
 
 for(i in 1:100){
@@ -226,7 +213,131 @@ for(i in 1:100){
 }
 
 sum(ifelse(p_values < 0.05, 1, 0))/100
+
+personal.control <- list(iter.qN = 25000, GHk = 100)
+
+start_vals <- matrix(data = c(0.05, 0.08, 0.11, 0.14, 0.08, -1, -0.5, 0, 0.5, 1, 0.7, 0.85, 1, 1.15, 1.30), ncol = 3, nrow = 5)
+
+set.seed(1248)
+for(p in 1:100){
+  tpm(data = data.gen(n = 1500, k = 5, model = "3PL"), type = "latent.trait", start.val = start_vals,
+      control = personal.control)
+}
+
+library(mirt)
+
+set.seed(1248)
+test <- mirt(data = as.data.frame(data.gen(n = 300, k = 5, model = "3PL")),
+     model = 1, itemtype = "3PL", optimizer = "nlminb", TOL = .0001,
+     control = list(maxit = 1000), constrain = list(c(3, 7, 11, 15, 19)))
+
+test <- mirt(data = as.data.frame(data.gen(n = 300, k = 5, model = "3PL")),
+     model = 1, itemtype = "3PL", optimizer = "nlminb", TOL = .0001,
+     control = list(maxit = 1000))
+
+anova(test)$logLik
+
+coef(test, simplify = TRUE)
 ```
+
+n = 300, k = 5, model = 2PL:
+with 8000 iterations and 80 ghk: 33% fail rate
+with 10000 iterations and 100 ghk: 32%
+
+same but 3PL model: seems to converge even less??
+
+sidenotes: 100 ghk is max.
+
+```{r}
+temp.data.gen <- function(n, k, model = "1PL"){
+  
+  ## First, create a matrix of thetas (person parameters) by sampling
+  ## from a standard normal distribution
+  theta <- matrix(data = rep(rnorm(n), k), ncol = k)
+  
+  ## Then, create a matrix of betas (difficulty parameters) by
+  ## repeating the wanted values and making a matrix out of them
+  ## here, the beta values chosen are -1, -0.5, 0, etc.
+  beta <- matrix(data = rep(c(-1, -0.5, 0, 0.5, 1), k), nrow = n, ncol = k, byrow = TRUE)
+  
+  ## If the chosen model is the 1PL: use function one.pl to
+  ## properly calculate the probabilities for every person given every item
+  if(model == "1PL"){
+    Z <- one.pl(theta = theta, beta = beta)
+    
+  }
+  ## If the chosen model is the 2PL: use function two.pl to
+  ## properly calculate the probabilities for every person given every item
+  if(model == "2PL"){
+    
+    ## The 2PL also has alphas in the equation (scaling parameter)
+    ## Therefore, these also need to be created
+    if(k == 5){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    if(k == 10){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7), ncol = k, nrow = n,
+                      byrow = TRUE)
+    }
+    if(k == 20){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7, 1.15, 1.3, 0.7, 0.85, 1,
+                               1, 0.7, 1.3, 0.85, 1.15), ncol = k, nrow = n,
+                      byrow = TRUE)
+    } else {
+      alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    
+    
+    Z <- two.pl(theta = theta, alpha = alpha, beta = beta)
+    
+  }
+  ## If the chosen model is the 3PL: use function three.pl to
+  ## properly calculate the probabilities for every person given every item
+  if(model == "3PL"){
+    
+    if(k == 5){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    if(k == 10){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7), ncol = k, nrow = n,
+                      byrow = TRUE)
+    }
+    if(k == 20){
+      alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
+                               0.85, 0.7, 1.15, 1.3, 0.7, 0.85, 1,
+                               1, 0.7, 1.3, 0.85, 1.15), ncol = k, nrow = n,
+                      byrow = TRUE)
+    } else {
+      alpha <- matrix(data = rep(c(0.7, 0.85, 1, 1.15, 1.3), k), ncol = k,
+                      nrow = n, byrow = TRUE)
+    }
+    
+    ## The 3PL has gammas in the equation (pseudo-guessing parameter),
+    ## therefore we create these.
+    gamma <- matrix(data = 0.25, ncol = k, 
+                    nrow = n, byrow = TRUE)
+    
+    Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
+  }
+  
+  ## Finally, sample from a binomial distribution, given the probability
+  ## matrix that we had calculated earlier
+  data <- matrix(data = rbinom(n = n * k, size = 1, prob = Z), ncol = k, nrow = n)
+  
+  ## And return this matrix
+  return(data)
+  
+}
+
+```
+
+
 
       
 
