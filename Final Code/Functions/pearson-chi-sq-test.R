@@ -8,8 +8,8 @@ pearson.test <- function(model, k){
   }
   
     scorepatterns <- scorepatterns %>%
-    as.data.frame(.) %>%
-    expand.grid(.)
+      as.data.frame(.) %>%
+      expand.grid(.)
     
     obs_exp <- factor.scores(model, resp.patterns = scorepatterns)$score.dat[, (k+1):(k+2)]
   

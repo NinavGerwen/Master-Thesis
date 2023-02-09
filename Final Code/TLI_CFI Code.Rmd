@@ -38,7 +38,7 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 100
+n_sim <- 300
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
@@ -83,6 +83,7 @@ for(a in levels(test_length)){
           ## Aggregrating the data
           aggr_data <- score.pattern.aggr(temp_data, temp_n)
           
+          ## Getting the chisquare and df values for the tli and cfi values
           df_base <- df.base(k = temp_k)
           
           df_tested <- df.tested(k = temp_k)
@@ -152,7 +153,7 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 100
+n_sim <- 300
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
@@ -241,14 +242,8 @@ miss_results <- miss_results[-1 ,]
 ## And resetting the rownames
 rownames(miss_results) <- NULL
 
-## And tada! your results for the 'null-condition'
+## And tada! your results for the 'miss-condition'
 miss_results
 ```
 
 Miss results zijn iig stukken lager nog!
-
-
-Voor efficienter maken:
-
-- niet meer in elke TLI/CFI de sat model calculaten, maak hier
-een aparte functie voor een gebruik deze later voor de TLI en CFI

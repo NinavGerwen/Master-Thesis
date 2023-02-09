@@ -12,7 +12,7 @@ base.model <- function(data, n, k) {
   for(i in 1:k) {
     
     ## Determine the number of people who scored the item correctly
-    n_i <- sum(data[, i] == 1)
+    n_i <- sum(data[, i])
     
     ## Determine the proportion of people who scored the item correctly
     pi_i <- mean(data[, i])
@@ -27,7 +27,7 @@ base.model <- function(data, n, k) {
   loglik <- sum(pi)
   
   
-  ## Return the log of the likelihood
+  ## Return the loglikelihood
   return(loglik)
   
 }
