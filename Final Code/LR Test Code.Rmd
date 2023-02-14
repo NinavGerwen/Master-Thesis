@@ -36,7 +36,7 @@ library(mirt)
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 40
+n_sim <- 300
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
@@ -130,7 +130,7 @@ alpha_results
 ## This is for power estimation
 set.seed(1248)
 
-n_sim <- 10
+n_sim <- 300
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
