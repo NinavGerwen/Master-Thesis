@@ -17,6 +17,7 @@ source("Functions/data-aggregation.R")
 source("Functions/lr-test-calculation.R")
 source("Functions/chi-square-diff-test.R")
 source("Functions/pearson-chi-sq-test.R")
+source("Functions/start.values.R")
 ```
 
 ## Functions for model fit calculations
@@ -35,13 +36,14 @@ library(mirt)
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-n_sim <- 300
+n_sim <- 40
 
 ## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
 
 alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
-                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA,
+                      Obs_PChisq = NA, Alt_Chisq = NA)
 
 set.seed(1248)
 
@@ -54,9 +56,13 @@ for(a in levels(test_length)){
       prop_3 <- rep(NA, n_sim)
       prop_4 <- rep(NA, n_sim)
       prop_5 <- rep(NA, n_sim)
+      prop_6 <- rep(NA, n_sim)
+      prop_7 <- rep(NA, n_sim)
       
       temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
+      
+      start.vals <- start.values(temp_k)
       
         for(i in 1:n_sim){
         ## Then, for every condition, generate data according to the
@@ -65,95 +71,17 @@ for(a in levels(test_length)){
           temp_data <- data.gen(n = temp_n, k = temp_k, 
                                 model = "2PL")
           
-          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE, start.val = start.vals)
           
           l_0 <- temp_model$log.Lik
         
-          p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 2), 
+          p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 2, start.val = start.vals), 
                               df = 2 * temp_k)
  
-          p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 3),
-                              df = 2 * (2 *  temp_k))
-        
-          p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 4), 
-                              df = 3 * (2 * temp_k))
-          
-          p_value_4 <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
-          
-          if(temp_k == 20){
-          p_value_5 <- 1
-          } else {
-          p_value_5 <- pearson.test(model = temp_model, k = temp_k)
-          }
-          
-          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
-          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
-          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
-          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
-          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
-        }
-      
-      alpha_results <- rbind(alpha_results, c(a, b, mean(prop_1), mean(prop_2), 
-                                  mean(prop_3), mean(prop_4), mean(prop_5)))
-
-  }
-  
-}
-
-alpha_results <- alpha_results[-1 ,]
-rownames(alpha_results) <- NULL
-
-```
-
-## Power analysis
-
-```{r Final second run}
-## This is for power estimation
-set.seed(1248)
-
-n_sim <- 300
-
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
-
-## TUPLES
-
-power_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
-                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
-
-for(a in levels(test_length)){
-
-  for(b in levels(sample_size)){
-      
-      
-      prop_1 <- rep(NA, n_sim)
-      prop_2 <- rep(NA, n_sim)
-      prop_3 <- rep(NA, n_sim)
-      prop_4 <- rep(NA, n_sim)
-      prop_5 <- rep(NA, n_sim)
-      
-      temp_n <- as.numeric(as.character(b))
-      temp_k <- as.numeric(as.character(a))
-      
-        for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
-
-          temp_data <- data.gen(n = temp_n, 
-                                k = temp_k, 
-                                model = "3PL")
-          
-          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
-          
-          l_0 <- temp_model$log.Lik
-        
-          p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 2), 
-                              df = 2 * temp_k)
- 
-          p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 3),
+          p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 3, start.val = start.vals),
                               df = 2 * (2 *temp_k))
         
-          p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 4), 
+          p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 4, start.val = start.vals), 
                               df = 3 * (2 *temp_k))
           
           p_value_4 <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
@@ -164,16 +92,122 @@ for(a in levels(test_length)){
           p_value_5 <- pearson.test(model = temp_model, k = temp_k)
           }
           
+          if(temp_k == 20){
+          p_value_6 <- 1
+          } else {
+          p_value_6 <- obs.pearson.test(model = temp_model, k = temp_k)
+          }
+          
+          p_value_7 <- equal.mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
+          
+          
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+          prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
+          prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
+          prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
+          prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
+          prop_6[i] <- ifelse(p_value_6 < .05, 1, 0)
+          prop_7[i] <- ifelse(p_value_7 < .05, 1, 0)
+        }
+      
+      alpha_results <- rbind(alpha_results, c(a, b, mean(prop_1), mean(prop_2), 
+                                  mean(prop_3), mean(prop_4), mean(prop_5),
+                                  mean(prop_6), mean(prop_7)))
+
+  }
+  
+}
+
+alpha_results <- alpha_results[-1 ,]
+rownames(alpha_results) <- NULL
+
+alpha_results
+```
+
+## Power analysis
+
+```{r Final second run}
+## This is for power estimation
+set.seed(1248)
+
+n_sim <- 10
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+## TUPLES
+
+power_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
+                      LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA,
+                      Obs_PChisq = NA, Alt_Chisq = NA)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+      
+      prop_1 <- rep(NA, n_sim)
+      prop_2 <- rep(NA, n_sim)
+      prop_3 <- rep(NA, n_sim)
+      prop_4 <- rep(NA, n_sim)
+      prop_5 <- rep(NA, n_sim)
+      prop_6 <- rep(NA, n_sim)
+      prop_7 <- rep(NA, n_sim)
+      
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      
+      start.vals <- start.values(temp_k)
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- data.gen(n = temp_n, 
+                                k = temp_k, 
+                                model = "3PL")
+          
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE, start.val = start.vals)
+          
+          l_0 <- temp_model$log.Lik
+        
+          p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 2, start.val = start.vals), 
+                              df = 2 * temp_k)
+ 
+          p_value_2 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 3, start.val = start.vals),
+                              df = 2 * (2 *temp_k))
+        
+          p_value_3 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 4, start.val = start.vals), 
+                              df = 3 * (2 *temp_k))
+          
+          p_value_4 <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
+          
+          if(temp_k == 20){
+          p_value_5 <- 1
+          } else {
+          p_value_5 <- pearson.test(model = temp_model, k = temp_k)
+          }
+          
+          if(temp_k == 20){
+          p_value_6 <- 1
+          } else {
+          p_value_6 <- obs.pearson.test(model = temp_model, k = temp_k)
+          }
+          
+          p_value_7 <- equal.mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
         
           prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
           prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
           prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
           prop_4[i] <- ifelse(p_value_4 < .05, 1, 0)
           prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
-        }
+          prop_6[i] <- ifelse(p_value_6 < .05, 1, 0)
+          prop_7[i] <- ifelse(p_value_7 < .05, 1, 0)
+        
+          }
       
       power_results <- rbind(power_results, c(a, b, mean(prop_1), mean(prop_2), 
-                                  mean(prop_3), mean(prop_4), mean(prop_5)))
+                                  mean(prop_3), mean(prop_4), mean(prop_5),
+                                  mean(prop_6), mean(prop_7)))
 
   }
   
@@ -181,127 +215,21 @@ for(a in levels(test_length)){
 
 power_results <- power_results[-1 ,]
 rownames(power_results) <- NULL
+
+power_results
+
+power_results %>% arrange((as.numeric(test_length)))
 ```
 
 ## Testing
 
-```{r}
-p_values <- rep(NA, 100)
-
-for(i in 1:100){
-  data <- data.gen(300, 5, "2PL")
-  
-  l_0 <- ltm(data ~ z1)$log.Lik
-  
-  p_values[i] <- mirt.diff.test(l_0 = l_0, dataset = data, k = 5)
-}
-
-sum(ifelse(p_values < 0.05, 1, 0))/100
-
-set.seed(1248)
-system.time(
-
-for(i in 1:300){
-  data <- data.gen(300, 10, model = "3PL")
-  
-  model <- ltm(data ~ z1, control = list(iter.em = 100, 
-                                         iter.qN = 1000,
-                                         GHk = 40))
-}
-) ## time: 84.856, 3 errors
-
-set.seed(1248)
-system.time(
-for(i in 1:300){
-  data <- data.gen(300, 10, model = "2PL")
-  
-  model <- ltm(data ~ z1, control = list(iter.em = 300, 
-                                         iter.qN = 1000,
-                                         GHk = 100))
-}
-) ## time: 374.402, 5 errors
-
-set.seed(1248)
-system.time(
-for(i in 1:300){
-  data <- data.gen(300, 10, model = "3PL")
-  
-  model <- ltm(data ~ z1, control = list(iter.em = 50, 
-                                         iter.qN = 500,
-                                         GHk = 30))
-}
-) ## time: 54.091, 4 errors
-
-personal.control <- list(iter.qN = 25000, GHk = 100)
-
-start_vals <- matrix(data = c(0.05, 0.08, 0.11, 0.14, 0.08, -1, -0.5, 0, 0.5, 1, 0.7, 0.85, 1, 1.15, 1.30), ncol = 3, nrow = 5)
-
-set.seed(1248)
-for(p in 1:100){
-  tpm(data = data.gen(n = 1500, k = 5, model = "3PL"), type = "latent.trait", start.val = start_vals,
-      control = personal.control)
-}
-
-library(mirt)
-
-set.seed(1248)
-test <- mirt(data = as.data.frame(data.gen(n = 300, k = 5, model = "3PL")),
-     model = 1, itemtype = "3PL", optimizer = "nlminb", TOL = .0001,
-     control = list(maxit = 1000), constrain = list(c(3, 7, 11, 15, 19)))
-
-test <- mirt(data = as.data.frame(data.gen(n = 300, k = 5, model = "3PL")),
-     model = 1, itemtype = "3PL", optimizer = "nlminb", TOL = .0001,
-     control = list(maxit = 1000))
-
-anova(test)$logLik
-
-coef(test, simplify = TRUE)
-
-start_vals <- matrix( c(-1, -0.5, 0, -0.5, 1, 0.7, 0.85, 1, 1.15, 1.3), nrow = 5, ncol = 2)
-
-set.seed(1248)
-system.time(
-for(i in 1:300){
-ltm(data.gen(200, 5, "2PL") ~ z1, IRT.param = TRUE)
-}
-) ## .018 time, 300 loops: 5.906
-
-set.seed(1248)
-system.time(
-
-for(i in 1:300){
-ltm(data.gen(200, 5, "2PL") ~ z1, IRT.param = TRUE, start.val = start_vals)
-}
-) ## .013 time, 300 loops: 4.493
-
-set.seed(1248)
-system.time(
-for(i in 1:300){
-ltm(data.gen(200, 5, "3PL") ~ z1, IRT.param = TRUE, start.val = start_vals)
-}) ## 5.712 time, some errors
-
-set.seed(1248)
-system.time(
-for(i in 1:300){
-ltm(data.gen(200, 5, "3PL") ~ z1, IRT.param = TRUE)
-}) ## 7.105, same amount of errors
-```
-
-n = 300, k = 5, model = 2PL:
-with 8000 iterations and 80 ghk: 33% fail rate
-with 10000 iterations and 100 ghk: 32%
-
-same but 3PL model: seems to converge even less??
-
-sidenotes: 100 ghk is max.
-
-Hieronder: data generatie code voor equal gammas
+Hieronder: data generatie code voor equal gammas en -0.5 alpha
 ```{r}
 temp.data.gen <- function(n, k, model = "1PL"){
   
   ## First, create a matrix of thetas (person parameters) by sampling
   ## from a standard normal distribution
-  theta <- matrix(data = rep(rnorm(n), k), ncol = k)
+  theta <- matrix(data = rep((rnorm(n) - .5), k), ncol = k)
   
   ## Then, create a matrix of betas (difficulty parameters) by
   ## repeating the wanted values and making a matrix out of them
@@ -368,7 +296,7 @@ temp.data.gen <- function(n, k, model = "1PL"){
     
     ## The 3PL has gammas in the equation (pseudo-guessing parameter),
     ## therefore we create these.
-    gamma <- matrix(data = 0.25, ncol = k, 
+    gamma <- matrix(data = 0.15, ncol = k, 
                     nrow = n, byrow = TRUE)
     
     Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
@@ -386,9 +314,84 @@ temp.data.gen <- function(n, k, model = "1PL"){
 ```
 
 
+### Testing with 3PL
 
-      
+```{r}
+mirt.diff.test <- function(l_0, dataset, k){
+  l_a <- dataset %>% 
+            as.data.frame(.) %>%
+            mirt(data = ., model = 1, itemtype = "3PL", optimizer = "nlminb", 
+                 TOL = .0001, control = list(maxit = 1000),
+                 verbose = TRUE, constrain = list(c(3, 7, 11, 15, 19))) %>% logLik(.)
+  
+  chisqvalue <- 2 * (l_a - l_0)
+  
+  p.value <- 1 - pchisq(chisqvalue, df = 1)
+  
+  return(p.value)
+}
 
-        
+set.seed(1248)
+p_value_4 <- rep(NA, 100)
+for(i in 1:100){
+          temp_data <- temp.data.gen(n = 1000, 
+                                k = 5, 
+                                model = "2PL")
+          
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          
+          l_0 <- temp_model$log.Lik
+          
+          p_value_4[i] <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = 5)
+          
+          print(p_value_4[i])
+}
+
+sum(ifelse(p_value_4 < .05, 1, 0))
+
+set.seed(1248)
+for(i in 1:100){
+          temp_data <- temp.data.gen(n = 1000, 
+                                k = 5, 
+                                model = "3PL")
+          
+          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
+          
+          l_0 <- temp_model$log.Lik
+          
+          p_value_4[i] <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = 5)
+          
+          print(p_value_4[i])
+}
+
+sum(ifelse(p_value_4 < .05, 1, 0))
+```
+    
+
+
+## Testing with looping
+
+```{r}
+test <- data.frame(TL = NA, SS = NA)
+for(a in levels(test_length)){ 
+  for(b in levels(sample_size)){
+    
+    temp_n <- as.numeric(as.character(b)) 
+    temp_k <- as.numeric(as.character(a))
+  for(i in 1:10){
+    
+    temp_data <- data.gen(n = temp_n, k = temp_k, "2PL")
+    
+    print(dim(temp_data))
+    }
+    
+    test <- rbind(c(dim(temp_data)), test)
+
+  }
+  
+}
+test
+```
+
         
 
