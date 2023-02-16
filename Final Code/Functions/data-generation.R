@@ -4,7 +4,7 @@ data.gen <- function(n, k, model = "1PL"){
   
   ## First, create a matrix of thetas (person parameters) by sampling
   ## from a standard normal distribution
-  theta <- matrix(data = rep(rnorm(n), k), ncol = k)
+  theta <- matrix(data = rep((rnorm(n)), k), ncol = k)
   
   ## Then, create a matrix of betas (difficulty parameters) by
   ## repeating the wanted values and making a matrix out of them
