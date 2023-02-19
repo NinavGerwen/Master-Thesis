@@ -71,7 +71,7 @@ data.gen <- function(n, k, model = "1PL"){
     
     ## The 3PL has gammas in the equation (pseudo-guessing parameter),
     ## therefore we create these.
-    gamma <- matrix(data = rep(c(0.05, 0.08, 0.11, 0.14, 0.17), k), ncol = k, 
+    gamma <- matrix(data = 0.25, ncol = k, 
                     nrow = n, byrow = TRUE)
     
     Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)

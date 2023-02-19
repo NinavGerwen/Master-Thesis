@@ -7,20 +7,20 @@
 ## For the 1PL:
 one.pl <- function(theta, beta){
   ## Probabilities are calculated through the following formula
-  prob <- exp(theta - beta) / (1 + exp(theta - beta))
+  prob <- exp(theta + beta) / (1 + exp(theta + beta))
   return(prob)
 }
 
 ## For the 2PL:
 two.pl <- function(theta, alpha, beta){
   ## Probabilities are calculated through the following formula
-  prob <- exp((alpha * theta) + beta) / (1 + exp((alpha * theta) + beta))
+  prob <- exp((alpha*(theta + beta))) / (1 + exp(alpha*(theta + beta)))
   return(prob)
 }
 
 ## For the 3PL:
 three.pl <- function(theta, alpha, beta, gamma){
   ## Probabilities are calculated through the following formula
-  prob <- gamma + (1 - gamma) * (exp((alpha * theta) + beta) / (1 + exp((alpha + theta) + beta)))
+  prob <- gamma + (1 - gamma) * (exp((alpha * (theta + beta))) / (1 + exp(alpha * (theta + beta))))
   return(prob)
 }

@@ -38,7 +38,7 @@ test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 ## And you set the number of replications you want
-n_sim <- 300
+n_sim <- 20
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
