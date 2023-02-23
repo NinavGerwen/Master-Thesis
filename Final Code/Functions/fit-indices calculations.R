@@ -72,7 +72,7 @@ chi.base <- function(agg_data, data, n, k){
 }
 
 df.base <- function(k){
-  return(2^k - 1 - k)
+  return((k * (k + 1)) / 2)
 }
 
 chi.tested <- function(l_0, agg_data, n){
@@ -83,7 +83,7 @@ chi.tested <- function(l_0, agg_data, n){
 }
 
 df.tested <- function(k){
-  return(2^k - 1 - 2*k)
+  return(((k * (k + 1))/2) - k)
 }
 
 

@@ -9,14 +9,14 @@ LR.test <- function(l_0, data, g = 2, start.val = NULL){ ## for multiple models:
     split_set <- subset(temp_data, split == as.numeric(j), select = -split)
     ##if(model == "1PL"){
       
-      split_LR_values[j] <- rasch(split_set)$log.Lik
+    ##  split_LR_values[j] <- rasch(split_set)$log.Lik
     ##}
     
     ##if(model == "2PL"){
       
       
-    ##  split_LR_values[j] <- ltm(split_set ~ z1, IRT.param = TRUE, 
-    ##                            start.val = start.val)$log.Lik
+     split_LR_values[j] <- ltm(split_set ~ z1, IRT.param = TRUE, 
+                               start.val = start.val)$log.Lik
     ##}
     ##if(model == "3PL"){
       

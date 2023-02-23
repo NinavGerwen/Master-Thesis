@@ -34,11 +34,11 @@ library(dplyr)
 library(mirt)
 ## This is for empirical alpha estimation
 test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+sample_size <- as.factor(c(2000, 3000, 5000))
 
 n_sim <- 300
 
-## We vary three factors, and for the simulation study, we 
+0## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
 
 alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
@@ -190,61 +190,6 @@ rownames(power_results) <- NULL
 
 power_results
 ```
-
-### Testing with 3PL
-
-```{r}
-mirt.diff.test <- function(l_0, dataset, k){
-  l_a <- dataset %>% 
-            as.data.frame(.) %>%
-            mirt(data = ., model = 1, itemtype = "3PL", optimizer = "nlminb", 
-                 TOL = .0001, control = list(maxit = 1000),
-                 verbose = TRUE, constrain = list(c(3, 7, 11, 15, 19))) %>% logLik(.)
-  
-  chisqvalue <- 2 * (l_a - l_0)
-  
-  p.value <- 1 - pchisq(chisqvalue, df = 1)
-  
-  return(p.value)
-}
-
-set.seed(1248)
-p_value_4 <- rep(NA, 100)
-for(i in 1:100){
-          temp_data <- temp.data.gen(n = 1000, 
-                                k = 5, 
-                                model = "2PL")
-          
-          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
-          
-          l_0 <- temp_model$log.Lik
-          
-          p_value_4[i] <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = 5)
-          
-          print(p_value_4[i])
-}
-
-sum(ifelse(p_value_4 < .05, 1, 0))
-
-set.seed(1248)
-for(i in 1:100){
-          temp_data <- temp.data.gen(n = 1000, 
-                                k = 5, 
-                                model = "3PL")
-          
-          temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
-          
-          l_0 <- temp_model$log.Lik
-          
-          p_value_4[i] <- mirt.diff.test(l_0 = l_0, dataset = temp_data, k = 5)
-          
-          print(p_value_4[i])
-}
-
-sum(ifelse(p_value_4 < .05, 1, 0))
-```
-    
-
 
 ## Testing with looping
 
