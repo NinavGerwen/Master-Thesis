@@ -34,11 +34,11 @@ library(dplyr)
 library(mirt)
 ## This is for empirical alpha estimation
 test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(2000, 3000, 5000))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 n_sim <- 300
 
-0## We vary three factors, and for the simulation study, we 
+## We vary three factors, and for the simulation study, we 
 ## cross-examine them through a nested for loop
 
 alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
