@@ -1,4 +1,4 @@
-MG.LR.test <- function(l_0, data, g, start.val = NULL){
+MG.LR.test <- function(l_0, data, g, k, start.val = NULL){
   
   temp_data <- data %>% as.data.frame(.)
   

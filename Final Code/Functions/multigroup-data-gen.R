@@ -1,6 +1,6 @@
 ## method options are theta or param
 ## n is here group size, no longer total n
-multigroup.data.gen <- function(n, k, g, method = "theta"){
+multigroup.data.gen <- function(n, k, g, method = "theta", model = "2PL"){
   
   if(method == "theta"){
     
@@ -26,11 +26,25 @@ multigroup.data.gen <- function(n, k, g, method = "theta"){
                       byrow = TRUE)
     }
     
+    if(model == "3PL"){
+      gamma <- matrix(data = 0.25, ncol = k, nrow = n, byrow = TRUE)
+    }
+    
   for(i in 1:g){
 
       theta <- matrix(data = rep((rnorm(n) - (as.numeric(i) - 1)), k), ncol = k)
+      
+      if(model == "2PL"){
 
       Z <- two.pl(theta = theta, alpha = alpha, beta = beta)
+      
+      }
+      
+      if(model == "3PL"){
+        
+      Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
+      
+      }
     
       data[counter:(counter + n - 1) , 1:k] <- matrix(data = rbinom(n = n * k, size = 1, prob = Z), 
                                                 ncol = k, nrow = n)
@@ -70,7 +84,18 @@ multigroup.data.gen <- function(n, k, g, method = "theta"){
                         byrow = TRUE)
       }
       
+      if(model == "2PL"){
+      
       Z <- two.pl(theta = theta, alpha = alpha, beta = beta)
+      
+      }
+      
+      if(model == "3PL"){
+        
+      gamma <- matrix(data = 0.25, ncol = k, nrow = n, byrow = TRUE)
+        
+      Z <- three.pl(theta = theta, alpha = alpha, beta = beta, gamma = gamma)
+      }
       
       data[counter:(counter + n - 1) , 1:k] <- matrix(data = rbinom(n = n * k, size = 1, prob = Z), 
                                                       ncol = k, nrow = n)
