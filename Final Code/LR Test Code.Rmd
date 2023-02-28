@@ -106,14 +106,23 @@ for(a in levels(test_length)){
 alpha_results <- alpha_results[-1 ,]
 rownames(alpha_results) <- NULL
 
-round(alpha_results, digits = 3)
+alpha_results
 ```
+
+34 times non convergence. Proportion of < .001.
 
 
 ## Power analysis
 
 ```{r Final second run}
 ## This is for power estimation
+library(ltm)
+library(dplyr)
+library(mirt)
+## This is for empirical alpha estimation
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+
 set.seed(1248)
 
 n_sim <- 300

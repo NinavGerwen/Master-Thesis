@@ -208,22 +208,76 @@ rownames(power_results_two) <- NULL
 power_results_two
 
 
+```
+
+## Power with thetas
+
+```{r Final second run}
+library(ltm)
+library(dplyr)
+library(mirt)
+## This is for empirical alpha estimation
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300)/4)
+n_groups <- as.factor(c(2, 3, 4))
+
+n_sim <- 300
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+theta_power <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+
+set.seed(1248)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+    
+    for(d in levels(n_groups)){
+      
+      prop_1 <- rep(NA, n_sim)
+      
+      temp_n <- as.numeric(as.character(b))
+      temp_k <- as.numeric(as.character(a))
+      temp_g <- as.numeric(as.character(d))
+      
+      start.vals <- start.values(temp_k)
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- multigroup.data.gen(n = temp_n, k = temp_k, g = temp_g, 
+                                           method = "theta", model = "3PL")
+            
+          temp_model <- ltm(temp_data[ , 1:temp_k] ~ z1, IRT.param = TRUE)
+          
+          l_0 <- temp_model$log.Lik
+        
+          p_value_1 <- 1 - pchisq(q = MG.LR.test(l_0 = l_0, data = temp_data, g = temp_g, 
+                                                 k = temp_k, start.val = start.vals), 
+                              df = (temp_g - 1) * 2 * temp_k)
+ 
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+
+        }
+      
+        theta_power <- rbind(theta_power, c(a, as.numeric(as.character(b)) * 4, d, mean(prop_1)))
+      }
+      
+
+  }
+  
+}
+
+theta_power <- theta_power[-1 ,]
+rownames(theta_power) <- NULL
+
+theta_power
+
+
 ##round(alpha_results_two, digits = 3)
 ```
 
-## Testing
-
-```{r}
-library(magrittr)
-library(ltm)
-test <- multigroup.data.gen(n = 100, k = 20, g = 2, method = "theta", model = "2PL")
-
-test <- test %>% as.data.frame(.)
-
-colnames(test) <- c(1:20, "split")
-
-split_set <- test %>% subset(., split == 2, -split)
-
-ltm(split_set ~ z1, IRT.param = TRUE)
-```
 

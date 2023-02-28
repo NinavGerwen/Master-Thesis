@@ -182,19 +182,23 @@ Factor & Conditions & Description \\
 We study performance of the different goodness-of-fit tests by estimating both type I error and power. Both values are estimated by obtaining the detection rate, which is the number of times the null hypothesis is rejected divided by the total number of replications per condition. Power is estimated when generating data under the 3PL and fitting the 2PL model. Type I error is estimated when generating data under the 2PL and fitting the 2PL model. With these values, we compare the different type of tests with one another under every condition, where a test with lower power or higher type I error is noted as performing worse. For all tests, we chose a level of significance of $\alpha = .05$. \\
 \indent To measure the performance of the TLI and CFI, we estimate the mean and standard error (SE) of each fit index under every condition. Then, we can inspect whether the average TLI and CFI values decrease in the conditions where data is generated under the 3PL, compared to when data is generated under the 2PL. 
 
-\subsection{Results}
+\section{Results}
 
-To answer the three research questions related to the performance of the LR Randomisation test and the TLI and CFI in the IRT paradigm, we conducted the above described simulation study. The ...
+Below you will find four tables that give an indication of how the results will be shared. Please note that these results are synthetic and \textbf{not} the final results. 
+%
+%Below you will find four tables that 
+%
+%To answer the three research questions related to the performance of the LR Randomisation test and the TLI and CFI in the IRT paradigm, we conducted the above described simulation study. The ...
 
-\subsubsection{Goodness-of-fit tests}
-
-\textit{Table \ref{tab:2}} shows the empirical rejection rates at the .05 $\alpha$ level for the different $\chi^2$-based goodness-of-fit tests. For the LR Randomisation test, we can observe the asymptomatic clearly. As sample size increases, the empirical $\alpha$ decreases from .10 to around the nominal level .05. This also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution. For Pearson's $\chi^2$ test, we can also clearly see that as the number of items increases, the test strays further from a $\chi^2$ distribution, as demonstrated by the increasing empirical $\alpha$ values. This is in accordance with the issues described in the introduction.
-
-The rejection rates of the $\chi^2$ statistic seems to not deviate severely from the nominal level. Furthermore, there seem to be no large differences between the different sample size and test length conditions. Therefore, we can  state that the $\chi^2$ statistics approximately follow their supposed $\chi^2$ distribution. We can also take these results as a form of confirmation for the theory and design behind our study. Important to remember, however, is that empirical data might not be as polished.
-
-\textit{Table \ref{tab:3}} shows the rejection rates for when the data generating model is not the true model. In other words, this table shows the estimated statistical power values for the different goodness-of-fit tests. 
-
-\subsubsection{Fit indices}
+%\subsubsection{Goodness-of-fit tests}
+%
+%\textit{Table \ref{tab:2}} shows the empirical rejection rates at the .05 $\alpha$ level for the different $\chi^2$-based goodness-of-fit tests. For the LR Randomisation test, we can observe the asymptomatic clearly. As sample size increases, the empirical $\alpha$ decreases from .10 to around the nominal level .05. This also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution. For Pearson's $\chi^2$ test, we can also clearly see that as the number of items increases, the test strays further from a $\chi^2$ distribution, as demonstrated by the increasing empirical $\alpha$ values. This is in accordance with the issues described in the introduction.
+%
+%The rejection rates of the $\chi^2$ statistic seems to not deviate severely from the nominal level. Furthermore, there seem to be no large differences between the different sample size and test length conditions. Therefore, we can  state that the $\chi^2$ statistics approximately follow their supposed $\chi^2$ distribution. We can also take these results as a form of confirmation for the theory and design behind our study. Important to remember, however, is that empirical data might not be as polished.
+%
+%\textit{Table \ref{tab:3}} shows the rejection rates for when the data generating model is not the true model. In other words, this table shows the estimated statistical power values for the different goodness-of-fit tests. 
+%
+%\subsubsection{Fit indices}
 
 
 % Table for Empirical Alpha results
@@ -325,27 +329,27 @@ The rejection rates of the $\chi^2$ statistic seems to not deviate severely from
 \label{tab:5}
 \end{table}
 
-\newpage
+%\newpage
+%
+%\section{Simulation Study II}
+%
+%\subsection{Results}
 
-\section{Simulation Study II}
+%\section{Empirical example}
+%To examine the possible uses of our LR Randomisation test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
 
-\subsection{Results}
-
-\section{Empirical example}
-To examine the possible uses of our LR Randomisation test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
-
-\section{Discussion}
-
-\subsection{Limitations}
-
- - didn't test 3PL
-- didn't test multidimensional IRT
-- didn't test polytome IRT
-
-future research can do these, also the test can be used in any field of statistics. not just IRT. First findings show promise of the test and might be worth while. 
-
-
-\subsection{Conclusion}
+%\section{Discussion}
+%
+%\subsection{Limitations}
+%
+%- didn't test 3PL
+%- didn't test multidimensional IRT
+%- didn't test polytome IRT
+%
+%future research can do these, also the test can be used in any field of statistics. not just IRT. First findings show promise of the test and might be worth while. 
+%
+%
+%\subsection{Conclusion}
 
 \newpage
 
