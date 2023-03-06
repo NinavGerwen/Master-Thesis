@@ -19,18 +19,3 @@ pearson.test <- function(model, k){
   
   return(p_value)
 }
-
-
-obs.pearson.test <- function(model, k){
-  obs_exp <- factor.scores(model)$score.dat
-  
-  obs <- obs_exp[, (k + 1)]
-  
-  exp <- obs_exp[, (k + 2)]
-  
-  chisq_value <- sum( ( ( obs - exp)^2 / exp ) )
-  
-  p_value <- 1 - pchisq(q = chisq_value, df = 2^k - 1 - 2*k)
-  
-  return(p_value)
-}
