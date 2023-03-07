@@ -32,73 +32,88 @@ require(dplyr)
 ## MAGRITTR for the pipe
 require(magrittr)
 
-## Here, you can define the levels of the factors you want to investigate
+## Here, we define the levels of the factors we want to investigate
 ## for the simulation study,
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-## And you set the number of replications you want
+## And we set the number of replications you want
 n_sim <- 300
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
+## so that later we can put the results in here
 null_results <- data.frame(test_length = NA, sample_size = NA, TLI_M = NA,
                           TLI_SE = NA, CFI_M = NA, CFI_SE = NA, New_FI_M = NA,
                           New_FI_SE = NA)
 
-## Then set a seed for reproducibility
+## Set a seed for reproducibility
 set.seed(1248)
 
-## And now we start a nested for loop for the study
+## And to run the study, we start a nested for loop
 
 ## With first a for loop for both factors
 for(a in levels(test_length)){
 
   for(b in levels(sample_size)){
       
-      ## Then, in every condition, you create an empty vector of size
+      ## Then, in every condition, we want to get a vector that can 
+      ## contain the fit index values for every replication, so we 
+      ## create an empty vector of size
       ## equal to the number of replications for the fit indices
       tli_values <- rep(NA, n_sim)
       cfi_values <- rep(NA, n_sim)
       new_fi <- rep(NA, n_sim)
       
-      ## You get the correct level of the factors as numerics
+      ## To improve efficiency, we note the current levels of factors
+      ## so that we can refer to this in future function arguments
       temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
       
-        ## And then you get results for every condition by for every
-        ## replication, doing the following:
+        ## And now we can start the for loop by which we will get the
+        ## fit index value results
         for(j in 1:n_sim){
+          
+          ## Getting results is done in the following way:
     
-          ## Generating data according to the factors
+          ## First, generating data according to the factors
           temp_data <- data.gen(n = temp_n, k = temp_k, model = "2PL")
                         
-          ## Fitting the hypothesized model
+          ## Then fitting the hypothesized model
           temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
           
+    ## For efficiency purposes, we note all these values once instead
+    ## of for every single fit index 
+          
+          ## And obtaining the log likelihood
           l_0 <- temp_model$log.Lik
           
-          ## Aggregrating the data
+          ## For the saturated model, we require an aggregrated version 
+          ## of the data, therefore we note this 
           aggr_data <- score.pattern.aggr(temp_data, temp_n)
           
-          ## Getting the chisquare and df values for the tli and cfi values
+          ## We note the degrees of freedom for the different tested models
+          ## through pre-defined functions
           df_base <- df.base(k = temp_k)
           
           df_tested <- df.tested(k = temp_k)
           
+          ## And also note  the chi-square values
           chi_base <- chi.base(agg_data = aggr_data, data = temp_data,
                                n = temp_n, k = temp_k)
           
           chi_tested <- chi.tested(l_0 = l_0, agg_data = aggr_data, n = temp_n)
           
           ## And then calculating the TLI and CFI values through our
-          ## specialized functions
+          ## specialized functions using the earlier determined df and 
+          ## chi-square values
           tli_values[j] <- TLI.Yang(chi_base = chi_base, df_base = df_base, 
                                chi_tested = chi_tested, df_tested = df_tested)
           
           cfi_values[j] <- CFI.Yang(chi_base = chi_base, df_base = df_base, 
                                chi_tested = chi_tested, df_tested = df_tested)
           
+          ## And for the new fit index, we work 
           new_fi[j] <- exp.obs.FI(temp_model, temp_k)
           
         }
@@ -114,7 +129,7 @@ for(a in levels(test_length)){
   
 }
 
-## Now we just have to clean up the dataframe by removing the first row
+## Now we just have to clean up the dataframe by removing the first row of NAs
 null_results <- null_results[-1 ,]
 ## And resetting the rownames
 rownames(null_results) <- NULL

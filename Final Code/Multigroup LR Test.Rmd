@@ -25,9 +25,10 @@ source("Functions/multigroup-lr-test-calculation.R")
 library(ltm)
 library(dplyr)
 library(mirt)
+library(tidyr)
 ## This is for empirical alpha estimation
 test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(200, 300)/4)
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 n_groups <- as.factor(c(2, 3, 4))
 
 n_sim <- 300
@@ -47,9 +48,9 @@ for(a in levels(test_length)){
       
       prop_1 <- rep(NA, n_sim)
       
-      temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
       temp_g <- as.numeric(as.character(d))
+      temp_n <- round(as.numeric(as.character(b))/temp_g)
       
       start.vals <- start.values(temp_k)
       
@@ -72,7 +73,7 @@ for(a in levels(test_length)){
 
         }
       
-        alpha_results_two <- rbind(alpha_results_two, c(a, as.numeric(as.character(b)) * 4, d, mean(prop_1)))
+        alpha_results_two <- rbind(alpha_results_two, c(a, b, d, mean(prop_1)))
       }
       
 
@@ -80,9 +81,14 @@ for(a in levels(test_length)){
   
 }
 
-alpha_results_two <- alpha_results_two[-1 ,]
-rownames(alpha_results_two) <- NULL
 
+alpha_results_two <- alpha_results_two %>% 
+  pivot_wider(., names_from = G, values_from = MG.LR) %>%
+  .[-1, -3]
+
+rownames(alpha_results_two) <- NULL
+colnames(alpha_results_two) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
+  
 alpha_results_two
 
 
