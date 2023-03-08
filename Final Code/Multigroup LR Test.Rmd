@@ -154,7 +154,7 @@ library(dplyr)
 library(mirt)
 ## This is for empirical alpha estimation
 test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(200, 300)/4)
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 n_groups <- as.factor(c(2, 3, 4))
 
 n_sim <- 300
