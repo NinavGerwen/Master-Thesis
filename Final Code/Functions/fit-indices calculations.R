@@ -150,13 +150,13 @@ exp.obs.FI <- function(model, k){
   
   obs_exp <- factor.scores(model)$score.dat
   
-  obs <- sum(obs_exp[, (k + 1)])
+  obs <- obs_exp[, (k + 1)]
   
-  exp <- sum(obs_exp[, (k + 2)])
+  exp <- obs_exp[, (k + 2)]
   
-  numerator <- 2 * (obs * exp)
+  numerator <- 2 * t(obs) %*% exp
   
-  denominator <- (obs)^2 + (exp)^2
+  denominator <- (t(obs) %*% obs) + (t(exp) %*% exp)
   
   value <- numerator / denominator
   
