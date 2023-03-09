@@ -42,7 +42,7 @@ multigroup.data.gen <- function(n, k, g, method = "theta", model = "2PL"){
             
             ## Generate latent variables theta in a matrix with differences
             ## based on the group they are in (group 1 to g)
-            theta <- matrix(data = rep((rnorm(n) - (as.numeric(i) - 1)), k), ncol = k)
+            theta <- matrix(data = rep((rnorm(n) - (as.numeric(i) - 0.5)), k), ncol = k)
             
             
             if(model == "2PL"){

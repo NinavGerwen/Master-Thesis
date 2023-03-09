@@ -94,6 +94,8 @@ theta_alpha <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA
 
 set.seed(1248)
 
+## HIERVOOR THETA NAAR -0.5 VERANDERD, NIET MEER -1, VERANDER TERUG NINA
+
 for(a in levels(test_length)){
 
   for(b in levels(sample_size)){
@@ -102,9 +104,9 @@ for(a in levels(test_length)){
       
       prop_1 <- rep(NA, n_sim)
       
-      temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
       temp_g <- as.numeric(as.character(d))
+      temp_n <- round(as.numeric(as.character(b))/temp_g)
       
       start.vals <- start.values(temp_k)
       
@@ -152,7 +154,7 @@ theta_alpha
 library(ltm)
 library(dplyr)
 library(mirt)
-## This is for empirical alpha estimation
+
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 n_groups <- as.factor(c(2, 3, 4))
@@ -174,9 +176,9 @@ for(a in levels(test_length)){
       
       prop_1 <- rep(NA, n_sim)
       
-      temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
       temp_g <- as.numeric(as.character(d))
+      temp_n <- round(as.numeric(as.character(b))/temp_g)
       
       start.vals <- start.values(temp_k)
       
@@ -245,9 +247,9 @@ for(a in levels(test_length)){
       
       prop_1 <- rep(NA, n_sim)
       
-      temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
       temp_g <- as.numeric(as.character(d))
+      temp_n <- round(as.numeric(as.character(b))/temp_g)
       
       start.vals <- start.values(temp_k)
       
