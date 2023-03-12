@@ -165,7 +165,7 @@ n_sim <- 300
 ## results, and we pre-define the data frame here with some NAs
 miss_results <- data.frame(test_length = NA, sample_size = NA, TLI_M = NA,
                           TLI_SE = NA, CFI_M = NA, CFI_SE = NA, New_FI_M = NA,
-                          New_FI_SE = NA8)
+                          New_FI_SE = NA)
 
 ## Then set a seed for reproducibility
 set.seed(1248)
