@@ -58,20 +58,22 @@ Item Response Theory (IRT) is an often used tool for designing and analysing tes
 
 NIEUWE FIT INDEX HIER INTRODUCEREN ---
 
-\indent Furthermore, we research another possible fit index not investigated before in the field of IRT. This fit index is based on the identity coefficient by Zegers \& ten Berge (1985), which indicates the degree to which two variables of absolute scales are identical. \\
+\indent Furthermore, we research another possible fit index not investigated before in the field of IRT. This fit index is based on the identity coefficient by Zegers \& ten Berge (1985), which indicates the degree to which two variables of absolute scales are identical. Therefore, this coefficient can reflect the degree to which the observed score pattern frequencies are aligned with the expected score pattern frequencies under a given model. \\
+
+
 \indent To summarise, in the field of IRT there are not enough usable goodness-of-fit tests available to test the 2- and 3PL model and scarce studies investigating the performance of the TLI and CFI. We address these two issues by developing and evaluating a new Likelihood Ratio (LR) goodness-of-fit test based on multiple groups, named the Multiple Group LR (MG LR) test, and assessing the performance of the TLI and CFI based on calculations not researched before in an IRT setting. Finally, we also research the performance of a new fit index inspired by the identity coefficient by Zegers \& ten Berge (1985), named the identity coefficient fit index (ICFI), in the same setting.
 
 \subsection{The present study}
-In order to evaluate the MG LR test for the 2- and 3PL in IRT and to better understand the possible uses of the CFI and TLI in an IRT setting, the present study answers the following three research questions through multiple simulation studies:
+In order to evaluate the MG LR test for the 2- and 3PL in IRT and to better understand the possible uses of the CFI, TLI  and ICFI in an IRT setting, the present study answers the following five research questions through two simulation studies:
 \begin{enumerate}
 \item{What sample size is necessary at different test lengths for the MG LR test to approximately follow a $\chi^2$ distribution?}
 \item{What is the power of the MG LR test when groups are based on random assignment?}
-\item{How does the performance of the MG LR test compare to the performance of a $\chi^2$-difference and Pearson's $\chi^2$-test?}
-\item{What is the performance of the TLI, CFI and ICFI in detecting model mismatch in IRT?}
+\item{Under random assignment, how does the performance of the MG LR test compare to the performance of a $\chi^2$-difference and Pearson's $\chi^2$-test?}
+\item{What is the performance of the TLI, CFI and ICFI in detecting model mismatch between the 2PL and 3PL in IRT?}
 \item{What is the power of the MG LR test when groups are based on true differences?}
 \end{enumerate}
 
-Results from the simulation study are reported to answer the research questions. Furthermore, empirical data from ... are used to illustrate the value of the investigated model fit measures.
+Results from the simulation studies are reported to answer the research questions. Furthermore, empirical data from ... are used to illustrate the value of the investigated model fit measures.
 
 \section{Methods}
 Before we share the design of the simulation studies, let us first examine a brief summary on the statistical theory and methods associated with our study. In IRT, the goal is to find a model that best describes scores on test items. To achieve this, IRT presupposes three assumptions: (1) conditional independence of items given the latent trait, denoted by $\theta$, (2) independence of observations and (3) the response to an item can be modeled by an item response function (IRF). An IRF is a mathematical equation that relates the probability to score a certain category on an item to $\theta$. Below, you find the IRF for the 3PL (Birnbaum, 1968):
@@ -154,65 +156,32 @@ where $n_{\boldsymbol{x}}$ is the number of observations with score pattern $\bo
 \text{TLI} = \frac{\chi^2_0/df_0 - \chi^2_T/df_T}{\chi^2_0/df_0 - 1}.
 \end{equation}
 
-In both equations, $\chi^{2}_{T}$ is the result of a $\chi^2$-difference test between the tested model and the saturated model with $df_T$ degrees of freedom, and $\chi^{2}_{0}$ is the outcome of a $\chi^2$-difference test between the baseline model and the saturated model with $df_0$ degrees of freedom.
-
-Besides the TLI and CFI, we also research the performance of a new fit index based on the identity coefficient (ICFI). In a similar fashion to the Pearson's $\chi^2$ test, the NFI measures model-fit by comparing the observed score pattern frequencies to the expected score pattern frequencies under a given model. The NFI can be calculated through the following formula: 
+In both equations, $\chi^{2}_{T}$ is the result of a $\chi^2$-difference test between the tested model and the saturated model with $df_T$ degrees of freedom, and $\chi^{2}_{0}$ is the outcome of a $\chi^2$-difference test between the baseline model and the saturated model with $df_0$ degrees of freedom. Besides the TLI and CFI, we also research the performance of the identity coefficient (ICFI). In parallel to the Pearson's $\chi^2$ test, the ICFI measures model-fit by comparing the observed score pattern frequencies to the expected score pattern frequencies under a given model. The ICFI can be calculated through the following formula: 
 
 \begin{equation}
-\text{NFI} = \frac{2 \cdot \sum_{\boldsymbol{x}} O_{\boldsymbol{x}} \cdot \sum_{\boldsymbol{x}} E_{\boldsymbol{x}}}{  \sum_{\boldsymbol{x}} \{ O_{\boldsymbol{x}}\}^2 +  \sum_{\boldsymbol{x}} \{ E_{\boldsymbol{x}} \}^2 }
+\text{NFI} = \frac{2 \cdot \sum_{\boldsymbol{x}} O_{\boldsymbol{x}} \cdot \sum_{\boldsymbol{x}} E_{\boldsymbol{x}}}{  \sum_{\boldsymbol{x}} \{ O_{\boldsymbol{x}}\}^2 +  \sum_{\boldsymbol{x}} \{ E_{\boldsymbol{x}} \}^2 },
 \end{equation}
 
-where .. is ... and ... is ... .
+where $O_{\boldsymbol{x}}$ is the observed frequency for score pattern $\boldsymbol{x}$ and $E_{\boldsymbol{x}}$ is the expected frequency for score pattern $\boldsymbol{x}$ under a given model. 
 
 \section{Simulation study I}
 
-In this simulation study, we consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL.
-
-We investigate whether the
-
-Specifically, for the MG LR test we investigate whether whether the test is robust and at which rate the test is able to reject a misspecified model under different conditions given that groups are made by randomisation. We then compare this rate against the rejection rates of a $\chi^2$-difference test and Pearson's $\chi^2$-test. For the TLI, CFI and ICFI, we investigate their average values and variance under correct and incorrect model specification. The aim of this is to examine whether the fit indices are 
-
--- dit hierna veranderen -- a useful addition for assessing model fit in IRT modelling.
-
+In this simulation study, we consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. For the MG LR test, we investigate whether the test is robust and at which rate the test is able to reject a misspecified model under different conditions when groups are made through random assignment. We then compare this rate against the rejection rates of a $\chi^2$-difference test and Pearson's $\chi^2$-test. For the TLI, CFI and ICFI, we investigate their average values and variance under correct and incorrect model specification. The simulation study was conducted in R (R Core Team, 2022).
 \subsection{Data generation}
 Data generation starts by first sampling the person parameters $\theta$ from a standard normal distribution. Then, either the 2PL or 3PL is chosen as basis for the data generation (see below). We choose to keep item parameters static over all simulations. For the difficulty parameter $\beta_i$, we choose the values [-1, -.5, 0, .5, 1]. As for the discrimination parameter $\alpha_i$, we choose from the values [0.7, 0.85, 1, 1.15, 1.3]. To create a more realistic scenario, these two parameters were then matched with one another in order to make sure that for every item difficulty, there are low and high discriminating items. Finally, when the data generating model is the 3PL, we choose the value [.25] for each item for the pseudo-guessing parameter $\gamma_i$. Then, probabilities are estimated for all items on a test, given $\theta$, the chosen model and item parameters. Finally, a matrix of simulated responses to a dichotomous test is created by sampling from a binomial distribution using the estimated probabilities. 
 \subsection{Simulation design}
-In the simulation study, we vary four factors. We examine three conditions of test length ($I = 5, 10, 20$), five conditions of sample size ($N = 200, 300, 500, 1000, 1500$), and two conditions for the model on which data generation is based (2PL, 3PL). This simulation design results in a total 30 conditions. Furthermore, within each of these conditions, we then vary the MG LR test based on the number of groups ($G = 2, 3, 4$). In each replication of each condition, we fit the 2PL model. The 2PL is fitted using functions from the \textit{ltm} package in R (Rizopoulos, 2006), which approximates marginal maximum likelihood estimation through the Gauss-Hermite quadrature rule. Then we obtain the results of the three fit indices and the three different types of goodness-of fit tests: (1) a $\chi^2$-difference test, which is obtained by testing the 2PL under the 3PL with the constraint that all $\gamma_i$ have to be equal through the mirt package (citation), (2) Pearson's $\chi^2$-test, which is estimated through aggregating score patterns from the data and comparing the observed score pattern frequencies to the expected score pattern frequencies under the given model, and (3) the MG LR test with a varying number of groups. We replicate each simulation condition 300 times.
+In the simulation study, we vary four factors. We examine three conditions of test length ($I = 5, 10, 20$), five conditions of sample size ($N = 200, 300, 500, 1000, 1500$), and two conditions for the model on which data generation is based (2PL, 3PL). This simulation design results in a total 30 conditions. Furthermore, within each of these conditions, we then vary the MG LR test based on the number of groups ($G = 2, 3, 4$). We replicate each simulation condition 300 times. In each replication of each condition, we fit the 2PL model. The 2PL is fitted using functions from the \textit{ltm} package (Rizopoulos, 2006), which approximates marginal maximum likelihood estimation through the Gauss-Hermite quadrature rule. Then we obtain the results of the three fit indices and the three different types of goodness-of fit tests: (1) a $\chi^2$-difference test, obtained by testing the 2PL under the 3PL with the constraint that all $\gamma_i$ have to be equal through the \textit{mirt} package (Chalmers, 2012), (2) Pearson's $\chi^2$-test, estimated through aggregating score patterns from the data and comparing the observed score pattern frequencies to the expected score pattern frequencies under the given model, and (3) the MG LR test with a varying number of random groups. 
 \subsection{Performance metrics}
-We study performance of the different goodness-of-fit tests by estimating both type I error and power. Both values are estimated by obtaining the detection rate, which is the number of times the null hypothesis is rejected divided by the total number of replications per condition. Type I error is estimated when generating data under the 2PL and fitting the 2PL model. Power is estimated when generating data under the 3PL and fitting the 2PL model. With these values, we compare the different type of tests with one another under every condition, where a test with lower power or higher type I error is noted as performing worse. For all tests, we chose a level of significance of $\alpha = .05$. \\
-\indent To measure the performance of the TLI, CFI and ICFI, we estimate the mean and standard error (SE) of each fit index under every condition. Then, we can inspect whether the averagefit index values decrease in the conditions where data is generated under the 3PL, compared to when data is generated under the 2PL. 
+We study performance of the different goodness-of-fit tests by estimating both empirical $\alpha$ (i.e., type I error) and power. Both values are estimated by obtaining the detection rate, which is the number of times the null hypothesis is rejected divided by the total number of replications per condition. Empirical $\alpha$ is estimated when generating data under the 2PL and fitting the 2PL. Power is estimated when generating data under the 3PL and fitting the 2PL model. With these values, we compare the different type of tests with one another under every condition, where a test with lower power or higher type I error is noted as performing worse. For all tests, we chose a level of significance of $\alpha = .05$. \\
+\indent To measure the performance of the TLI, CFI and ICFI, we estimate the mean and standard error (SE) of each fit index under every condition. Then, we can inspect whether the average fit index values decrease in the conditions where data is generated under the 3PL, compared to when data is generated under the 2PL. 
 
 \subsection{Results}
 
-To asses the performance of the MG LR test with randomised groups and the three fit indices, we conducted the above described simulation study. Non-convergence of the models occured $<.001$ percent of the time. Furthermore, when test length was 20, the empirical $\alpha$ and power estimates for Pearson's $\chi^2$-test were not calculated. This is because of the large amount of possible score patterns ($2^20$) in this condition, which required too much computational power for the scope of the current study. \\
-\indent \textit{Table \ref{tab:1}} presents the empirical rejection rates test at the $\alpha = .05$ level for the different $\chi^2$-based goodness-of-fit tests. The asymptomatic can be observed clearly. As sample size increases, empirical $\alpha$ values approach the nominal level of .05. At large sample sizes, the rejection rates of the MG LR and $\chi^2$ difference test seem to not deviate far from the nominal level for different levels of test lengths. Therefore, we can state that these two tests statistics indeed asymptotically follow their supposed $\chi^2$ distribution under the null hypothesis. However, this also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution, resulting in higher rejection rates. For Pearson's $\chi^2$ test, the table also shows that as the number of items increases, the empirical $\alpha$ increases dramatically from 0.06 to 0.22. This is in accordance with the issues we discussed in the introduction, where the test does not follow a $\chi^2$ distribution when many score patterns are low or missing. These results can be seen as confirmation for the theory and design behind our study. Important to remember, however, is that empirical data is almost never as clean. \\
-\indent Next, we present the power estimates of the different goodness-of-fit tests in \textit{Table \ref{tab:2}}. For the $\chi^2$-difference test, the table presents clearly that as sample size and/or test length increase, the power to reject the tested model also increases in favour of the true model up to a power of 1.00 when \textit{I = 20} and \textit{N = 1500}. The results for Pearson's $\chi^2$-test reflect that the test seems to not be able to detect model misspecification between the 2PL and 3PL.  
-
-For the MG LR test, the table shows that the power estimates still converge to the nominal $\alpha$ level of .05. This means that when not under the null hypothesis, the LR statistic of our test (equation 7) still asymptotically follows a $\chi^2$-distribution. 
-
-Even though usually these tests only follow their distribution under the null hypothesis. 
-
-Although an interesting finding, these results entail that the test can not be used for assessing model-fit in its current state. Therefore, we were inspired to run a follow-up simulation study that we discuss below.
-
-NOTE: why is power of pearson's $\chi^2$ test also so low/barely increasing?
-
-\textit{Table \ref{tab:3}} and \textit{Table \ref{tab:4}} exhibit the mean and standard error for the TLI, CFI and our NFI under correct and incorrect model specification respectively. Both tables show that as sample size increases, the values on the fit indices move closer to 1 (i.e., a good model fit). However, if test length increases, fit index values move closer to 0 instead. This can be interpreted in the following way: as test length increases, the fit of the baseline model becomes relatively better compared to the tested model. This result has not been found before in IRT literature. However, it might be due to our choice of baseline model. This result therefore further strengthens the argument made by (Van Laar \& Braeken, 2021) who emphasized that the choice of baseline model is important when working with fit indices. 
-
-Even though fit indices value tend to 0 as test length increases, the values for the TLI and CFI are nevertheless on average higher under correct model specification compared to incorrect model specification (e.g., for \textit{N = 400 \& I = 10}, the mean of the TLI is 0.11 under correct model specification, whereas it is .00 under incorrect model specification). This means that these fit indices can be used for model-fit decisions. However, test length would have to be taken into account if a `rule-of-thumb' is desired. 
-
-
-The tables also show that for cases where there is a small sample size and few test items, there are high standard errors. This indicates that when assessing model-fit in low sample size settings, a point estimate might not be enough. Other methods such as bootstrapping might be required in order to be able to decide which model fits best. For high sample sizes and/or larger test lengths, this should not pose an issue. 
-
-For the TLI, negative values sometimes occurred under model misspecification, this can occur when the degrees of the hypothesized model are small and correlations among observed variables are low (Wang \& Wang, 2019; Widaman \& Thompson, 2003). In the current study, we rounded these slightly negative values to 0. 
-
-The new fit index, based on the cocurrence of score patterns and their expected occurence, shows less promise. The values seem to not differ in incorrect model specification compared to correct model specification. Therefore, this fit index was not able to decide which of the two models fit the data better in the current study. This finding is in accordance with the results given by the Pearson's $\chi^2$-test. Together, they strongly indicate that model fit measures based on observed and expected score-pattern frequencies are not able to detect model misfit between the 2PL and 3PL in IRT. \\
-
-\indent 
-
-
+To asses the performance of the MG LR test with randomised groups and the three fit indices, we conducted the above described simulation study. Non-convergence of the models occured $<.001$ percent of the time. Furthermore, when test length was 20, the empirical $\alpha$ and power estimates for Pearson's $\chi^2$-test were not estimated. This is because of the large amount of possible score patterns ($2^20$) in this condition, which required too much computational power for the scope of the current study. \\
+\indent \textit{Table \ref{tab:1}} presents the empirical rejection rates test at the $\alpha = .05$ level for the different $\chi^2$ based goodness-of-fit tests. Here, the asymptomatic property of the tests can be observed clearly. As sample size increases, empirical $\alpha$ values approach the nominal level of .05. At large sample sizes, the rejection rates of the MG LR and $\chi^2$ difference test seem to not deviate far from the nominal level for different levels of test lengths. Therefore, we can state that these two tests statistics indeed asymptotically follow their supposed $\chi^2$ distribution under the null hypothesis. However, this also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution, resulting in higher rejection rates. For Pearson's $\chi^2$ test, the table also shows that as the number of items increases, the empirical $\alpha$ increases dramatically from 0.06 to 0.22. \\ This is in accordance with the issues we discussed in the introduction, where Pearson's $\chi^2$-test does not follow a $\chi^2$ distribution when many score patterns are low or missing. These results can be seen as confirmation for the theory and design behind our study. Important to remember, however, is that empirical data is almost never as clean.
 % Table for Empirical Alpha results
-\begin{table}[ht]
-\caption{Empirical Alpha estimates for different goodness-of-fit tests}
+\begin{table}[t!]
+\caption{Empirical $\alpha$ estimates for the different goodness-of-fit tests}
 \begin{tabular}{ r r | a c a c a }
 \toprule
 \multicolumn{2}{c}{Conditions} & \multicolumn{5}{c}{Goodness-of-fit test} \\
@@ -241,10 +210,10 @@ The new fit index, based on the cocurrence of score patterns and their expected 
 \label{tab:1}
 \end{table}
 
-\newpage
+\indent Next, we present the power estimates of the different goodness-of-fit tests in \textit{Table \ref{tab:2}}. For the $\chi^2$-difference test, the table presents clearly that as sample size and/or test length increase, the power to reject the tested model also increases in favour of the true model up to a power of 1.00 when $I = 20$ \& $N = 1500$. The results for Pearson's $\chi^2$-test reflect that the test seems to not be able to detect model misspecification between the 2PL and 3PL with power estimates only slightly larger than the empirical $\alpha$ estimates. For the MG LR test, the table shows a very interesting result. Namely, the power estimates of the test still converge to the nominal $\alpha$ level of .05. This means that when not under the null hypothesis, the LR statistic of our test (equation 7) still asymptotically follows a $\chi^2$-distribution when groups are based on random assignment. Although an interesting finding, these results entail that the test can not be used to detect model misfit when working with randomised groups.
 
 \begin{table}[ht]
-\caption{Power estimates for different goodness-of-fit tests}
+\caption{Power estimates for the different goodness-of-fit tests}
 \begin{tabular}{ r r | a c a c a }
 \toprule
 \multicolumn{2}{c}{Conditions} & \multicolumn{5}{c}{Goodness-of-fit test} \\
@@ -273,11 +242,10 @@ The new fit index, based on the cocurrence of score patterns and their expected 
 \label{tab:2}
 \end{table}
 
-\newpage
+\indent For the fit indices, \textit{Table \ref{tab:3}} and \textit{Table \ref{tab:4}} exhibit the mean and standard error for the TLI, CFI and ICFI under correct and incorrect model specification respectively. Both tables show that as sample size increases, the values on the fit indices move closer to 1 (i.e., a good model fit). However, if test length increases, fit index values move closer to 0 instead. This can be interpreted in the following way: as test length increases, the fit of the baseline model becomes relatively better compared to the tested model. This result has not been found before in IRT literature. This phenomenon might be due to our choice of baseline model and further strengthens the argument made by (Van Laar \& Braeken, 2021) who emphasized that the choice of baseline model is important when working with fit indices. However, even though fit indices value tend to 0 as test length increases, the values for the TLI and CFI are on average higher under correct model specification compared to incorrect model specification for every single condition (e.g., for $N = 400$ \& $I = 10$, the mean of the TLI is 0.11 under correct model specification, whereas it is .00 under incorrect model specification). This means that these fit indices can be used for model-fit decisions. However, test length would have to be taken into account if a `rule-of-thumb' is desired. \\
 
-
-\begin{table}[ht]
-\caption{TLI and CFI values under correct model specification}
+\begin{table}[ht!]
+\caption{TLI, CFI and ICFI values under correct model specification}
 \begin{tabular}{ r r | a c a }
 \toprule
 \multicolumn{2}{c}{Conditions} & \multicolumn{1}{c}{TLI} & \multicolumn{1}{c}{CFI} & \multicolumn{1}{c}{NFI} \\
@@ -306,10 +274,12 @@ The new fit index, based on the cocurrence of score patterns and their expected 
 \label{tab:3}
 \end{table}
 
+\indent The tables also show that for cases where there is a small sample size and few test items, there are high standard errors. This indicates that when assessing model-fit in low sample size settings, a point estimate might not be enough. Other methods such as bootstrapping might be required in order to be able to properly decide which model fits best. For high sample sizes and/or larger test lengths, this should not pose an issue. For the TLI, negative values sometimes occurred at higher test lengths under model misspecification. Previous literature has shown that this can occur when the degrees of the hypothesized model are small and correlations among observed variables are low (Wang \& Wang, 2019; Widaman \& Thompson, 2003). In the current study, we rounded these slightly negative values to 0. 
 \newpage
+\indent Finally, the ICFI shows less promise compared to the TLI and CFI. The values seem to not differ in incorrect model specification compared to correct model specification. In fact, the average values are usually higher under incorrect model specification. Therefore, the fit index was not able to decide which of the two models fit the data better in the current study. This finding is in accordance with the results given by the Pearson's $\chi^2$-test. Together, they strongly indicate that model fit measures based on observed and expected score-pattern frequencies are not able to detect model misfit between the 2PL and 3PL in IRT. \\
 
-\begin{table}[ht]
-\caption{TLI and CFI values under incorrect model specification}
+\begin{table}[t!]
+\caption{TLI, CFI and ICFI values under incorrect model specification}
 \begin{tabular}{ r r | a c a }
 \toprule
 \multicolumn{2}{c}{Conditions} & \multicolumn{1}{c}{TLI} & \multicolumn{1}{c}{CFI} & \multicolumn{1}{c}{NFI} \\
@@ -342,15 +312,28 @@ The new fit index, based on the cocurrence of score patterns and their expected 
 
 \section{Simulation Study II}
 
-To further investigate the possible uses of our LR test, we decided to investigate the uses of the LR statistics with existing groups. 
+In this simulation study, we consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. For the MG LR test, we investigate at which rate the test is able to reject a model under different conditions when groups are based on true differences. The simulation study was conducted in R. \\
+\indent Similar to Simulation Study I, we again vary the four factors test length, sample size, the model type and the number of groups with the same conditions. However, we also investigate a fifth factor: group differences, which has two conditions, (1) differences in $\theta$ and (2) differences in item parameters (i.e., $\alpha_i$, $\beta_i$ and for the 3PL conditions, $\gamma_i$. 
+
+This is because compared to Simulation Study I, data generation is no longer according to the same parameters for the whole data. Instead, we generate data according to group assignment. To illustrate/elucidate/elaborate, 
+
+when there are two groups, for the differences in $\theta$ conditions, the first group will be  have a mean of 0, second a mean of -0.25. In case of three groups, third group = mean of -0.50, etc.
+
+For the differences in item parameters, first group will have the parameters specified in Simulation Study I. Group two, all beta parameters are lowered by 0.5, all alpha parameters by 0.125, and gamma parameters by 0.05. For the third group, they are lowered by this amount twice.
+
+Furthermore, we no longer use $\chi^2$ difference and Pearson's $\chi^2$ test, as these are used to detect model misfit, whereas we are now in the field of detecting group differences / measurement invariance.
+
+
+
 Again we investigate the same conditions of test length ($I = 5, 10, 20$), sample size ($N = 200, 300, 500, 1000, 1500$) and the number of groups for the multigroup LR test ($G = 2, 3, 4$). 
 
-However, compared to Simulation Study I, data generation is now from a multigroup setting. More specifically, we vary data generation in two ways compared to the first simulation study. 
-
-
-Compared to Simulation Study I, the only difference is that now we generate data from a multigroup setting. This means that we again vary the number of groups ($G = 2, 3, 4$) and this time also vary the item parameters per group.  XX. The only differences between SS 1 are in data generation.
+Performance is still the detection rate, however, now they are all considered power estimates against group differences.
 
 \subsection{Results}
+
+To research whether the MG LR test has power to discern whether there are group differences, we ran the above described simulation study. 
+
+tables...
 
 \section{Empirical example}
 To examine the possible uses of our MG LR test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.

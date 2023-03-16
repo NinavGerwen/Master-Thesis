@@ -292,3 +292,77 @@ theta_power
 ```
 
 
+## Power 2.1 Analysis
+
+```{r}
+library(ltm)
+library(dplyr)
+library(mirt)
+library(tidyr)
+## This is for empirical alpha estimation
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+n_groups <- as.factor(c(2, 3, 4))
+
+n_sim <- 300
+
+## We vary three factors, and for the simulation study, we 
+## cross-examine them through a nested for loop
+
+PL3_gamma_diff <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+
+set.seed(1248)
+
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+    
+    for(d in levels(n_groups)){
+      
+      prop_1 <- rep(NA, n_sim)
+      
+      temp_k <- as.numeric(as.character(a))
+      temp_g <- as.numeric(as.character(d))
+      temp_n <- round(as.numeric(as.character(b))/temp_g)
+      
+      start.vals <- start.values(temp_k)
+      
+        for(i in 1:n_sim){
+        ## Then, for every condition, generate data according to the
+        ## current condition
+
+          temp_data <- gamma.diff.data.gen(n = temp_n, k = temp_k, g = temp_g, 
+                                           method = "param", model = "3PL")
+            
+          temp_model <- ltm(temp_data[ , 1:temp_k] ~ z1, IRT.param = TRUE)
+          7
+          l_0 <- temp_model$log.Lik
+        
+          p_value_1 <- 1 - pchisq(q = MG.LR.test(l_0 = l_0, data = temp_data, g = temp_g, 
+                                                 k = temp_k, start.val = start.vals), 
+                              df = (temp_g - 1) * 2 * temp_k)
+ 
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+
+        }
+      
+        PL3_gamma_diff <- rbind(PL3_gamma_diff, c(a, b, d, mean(prop_1)))
+      }
+      
+
+  }
+  
+}
+
+
+PL3_gamma_diff <- PL3_gamma_diff %>%
+  pivot_wider(., names_from = G, values_from = MG.LR) %>%
+  .[-1, -3]
+
+rownames(PL3_gamma_diff) <- NULL
+colnames(PL3_gamma_diff) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
+
+PL3_gamma_diff
+
+```
+
