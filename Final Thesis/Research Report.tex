@@ -56,10 +56,11 @@ Item Response Theory (IRT) is an often used tool for designing and analysing tes
 \indent Consequently, fit indices were introduced as a second procedure to assess model fit. Fit indices are mathematical descriptives that indicate how well a model fits to the data. Note, however, that fit indices alone are not sufficient to infer whether a model fits well as they are not an inferential statistic and only describe the overall fit. Taken together with goodness-of-fit tests, fit indices do allow researchers to have a more comprehensive overview of model fit. For example, when due to a lot of power, a goodness-of-fit test shows that the model should be rejected, fit indices can indicate whether the model is still reasonable. \\ 
 \indent Previous research in IRT has seen the development of multiple fit indices. (e.g., $Y\text{-}Q_1$; Yen, 1981, $\text{RMSEA}_n$; Maydeu-Olivares \& Joe, 2014). For an overview of the use and limitations of several IRT fit indices, see Nye et al. (2020). Fit indices from Structural Equation Modeling can also be used in IRT. Although research has been done to examine the performance of a few fit indices from Structural Equation Modeling in IRT (e.g., RMSEA \& SRMR; Maydeu-Olivares \& Joe, 2014), hardly any research has been done towards the use of the Tucker-Lewis Index (TLI; Tucker \& Lewis, 1973) and the Comparative Fit Index (CFI; Bentler, 1990) in an IRT context. Only one paper examines the CFI (Yang, 2020) and two papers investigate the TLI (Cai et al., 2021; Yang, 2020) in an IRT setting. Both studies concluded that the two fit indices can add addititional insights in assessing model fit. However, there have been no studies that investigate the performance of the TLI and CFI when calculated through the $\chi^2$ statistic and with a baseline model that allows for independence between test items. The calculations of the fit indices influence their performance and this should therefore be investigated further. \\
 
-NIEUWE FIT INDEX HIER INTRODUCEREN ---
+INTRODUCTIE NIEUWE FIT INDEX ---
 
-\indent Furthermore, we research another possible fit index not investigated before in the field of IRT. This fit index is based on the identity coefficient by Zegers \& ten Berge (1985), which indicates the degree to which two variables of absolute scales are identical. Therefore, this coefficient can reflect the degree to which the observed score pattern frequencies are aligned with the expected score pattern frequencies under a given model. \\
+\indent Furthermore, we research another possible fit index not investigated before in the field of IRT. This fit index is based on the identity coefficient by Zegers \& ten Berge (1985), which indicates the degree to which two variables of absolute scales are identical. Therefore, this coefficient can reflect the degree to which the observed score pattern frequencies are aligned with the expected score pattern frequencies under a given IRT model. \\
 
+-- ERGENS NOG PRATEN OVER MEASUREMENT INVARIANCE?? Group differences? momenteel komt dit namelijk uit het niets
 
 \indent To summarise, in the field of IRT there are not enough usable goodness-of-fit tests available to test the 2- and 3PL model and scarce studies investigating the performance of the TLI and CFI. We address these two issues by developing and evaluating a new Likelihood Ratio (LR) goodness-of-fit test based on multiple groups, named the Multiple Group LR (MG LR) test, and assessing the performance of the TLI and CFI based on calculations not researched before in an IRT setting. Finally, we also research the performance of a new fit index inspired by the identity coefficient by Zegers \& ten Berge (1985), named the identity coefficient fit index (ICFI) in the context of IRT.
 
@@ -83,7 +84,7 @@ P(X_i = 1 | \theta, \alpha_{i}, \beta_{i}, \gamma_{i}) = \gamma_{i} + (1 - \gamm
 \frac{e^{\alpha_{i}\theta - \beta_{i}}}{1 + e^{\alpha_{i}\theta - \beta_{i}}},
 \end{equation}
 
-where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 3PL depends on (a) the latent variable $\theta$, (b) the location parameter of the item $\beta_{i}$, which denotes how difficult the item is, (c) the scaling parameter of the item $\alpha_{i}$, which shows how well item $i$ discriminates between individuals who score a 0 and individuals who score a 1, and (d) an item-specific lower asymptote $\gamma_{i}$, which indicates whether there is a baseline probability of scoring a 1 (e.g., a multiple choice test with 4 options has a .25 baseline probability of scoring a 1). The 2PL is a special case of the 3PL, where $\gamma_{i}$ equals 0 for all items. \\
+where $X_i$ is a random variable indicating the response to item $i$. The probability of scoring a 1 on item $i$ in the 3PL depends on (a) the latent variable $\theta$, (b) the location parameter of the item $\beta_{i}$, which denotes how difficult the item is, (c) the scaling parameter of the item $\alpha_{i}$, which shows how well item $i$ discriminates between individuals who score a 0 and individuals who score a 1, and (d) an item-specific lower asymptote $\gamma_{i}$, which indicates whether there is a baseline probability of scoring a 1 (e.g., a multiple choice question with 4 options has a .25 baseline probability of scoring a 1). The 2PL is a special case of the 3PL, where $\gamma_{i}$ equals 0 for all items. \\
 \indent Combining an IRF with the assumption of conditional independence allows us to model the probability of a complete score pattern to $k$ items simply by factoring the probabilities for each item:
 
 \begin{equation}
@@ -121,7 +122,7 @@ where $O_{\boldsymbol{x}}$ is the observed frequency for score pattern $\boldsym
 \frac{max(\mathcal{L}_0)}{\prod_{j = 1}^g max(\mathcal{L}_j)},
 \end{equation}
  
-where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for group $j$. Group $j$ can either be gained by by randomly assigning the observations to $g$ groups or it could be $g$ existing groups. Wilks' theorem also applies to this likelihood statistic. Because all three aforementioned tests asymptotically follow a $\chi^2$ distribution, they can be used for Null Hypothesis Significance Testing. \\
+where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for group $j$. Group $j$ can either be gained by randomly assigning observations to $g$ groups or it could be $g$ existing groups. Wilks' theorem also applies to this likelihood statistic. Because all three aforementioned tests asymptotically follow a $\chi^2$ distribution, they can be used for Null Hypothesis Significance Testing. \\
 \indent For fit indices, we research the performance of the TLI and CFI. These indices are estimated through the use of a baseline and saturated model. Our baseline model is a complete-independence model, which has the following IRF:
 
 \begin{equation}
@@ -135,7 +136,7 @@ where the probability of scoring a 1 on item $i$ is dependent only on the diffic
 \hat{\beta_{i}} = ln(\frac{n - n_i}{n_i}), 
 \end{equation*}
 
-where $n_i$ is the number of observations who scored a 1 on item $i$ and $n$ is the total number of observations. In the saturated model there are as many parameters as data points, which leads to a perfect fit. We choose the following saturated model:
+where $n_i$ is the number of observations who scored a 1 on item $i$ and $n$ is the total number of observations. In a saturated model there are as many parameters as data points, which leads to a perfect fit. We choose the following saturated model:
 
 \begin{equation}
 P(\boldsymbol{X} = \boldsymbol{x}) = \pi_{\boldsymbol{x}},
@@ -156,10 +157,10 @@ where $n_{\boldsymbol{x}}$ is the number of observations with score pattern $\bo
 \text{TLI} = \frac{\chi^2_0/df_0 - \chi^2_T/df_T}{\chi^2_0/df_0 - 1}.
 \end{equation}
 
-In both equations, $\chi^{2}_{T}$ is the result of a $\chi^2$-difference test between the tested model and the saturated model with $df_T$ degrees of freedom, and $\chi^{2}_{0}$ is the outcome of a $\chi^2$-difference test between the baseline model and the saturated model with $df_0$ degrees of freedom. Besides the TLI and CFI, we also research the performance of the identity coefficient (ICFI). In parallel to the Pearson's $\chi^2$ test, the ICFI measures model-fit by comparing the observed score pattern frequencies to the expected score pattern frequencies under a given model. The ICFI can be calculated through the following formula: 
+In both equations, $\chi^{2}_{T}$ is the result of a $\chi^2$-difference test between the tested model and the saturated model with $df_T$ degrees of freedom, and $\chi^{2}_{0}$ is the outcome of a $\chi^2$-difference test between the baseline model and the saturated model with $df_0$ degrees of freedom. Besides the TLI and CFI, we also research the performance of the ICFI. Parallel to the Pearson's $\chi^2$ test, the ICFI measures model fit by comparing the observed score pattern frequencies to the expected score pattern frequencies under a given model. The ICFI can be calculated through the following formula: 
 
 \begin{equation}
-\text{NFI} = \frac{2 \cdot \sum_{\boldsymbol{x}} O_{\boldsymbol{x}} \cdot \sum_{\boldsymbol{x}} E_{\boldsymbol{x}}}{  \sum_{\boldsymbol{x}} \{ O_{\boldsymbol{x}}\}^2 +  \sum_{\boldsymbol{x}} \{ E_{\boldsymbol{x}} \}^2 },
+\text{ICFI} = \frac{2 \cdot \sum_{\boldsymbol{x}} O_{\boldsymbol{x}} \cdot \sum_{\boldsymbol{x}} E_{\boldsymbol{x}}}{  \sum_{\boldsymbol{x}} \{ O_{\boldsymbol{x}}\}^2 +  \sum_{\boldsymbol{x}} \{ E_{\boldsymbol{x}} \}^2 },
 \end{equation}
 
 where $O_{\boldsymbol{x}}$ is the observed frequency for score pattern $\boldsymbol{x}$ and $E_{\boldsymbol{x}}$ is the expected frequency for score pattern $\boldsymbol{x}$ under a given model. 
@@ -242,7 +243,7 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \label{tab:2}
 \end{table}
 
-\indent For the fit indices, \textit{Table \ref{tab:3}} and \textit{Table \ref{tab:4}} exhibit the mean and standard error for the TLI, CFI and ICFI under correct and incorrect model specification respectively. Both tables show that as sample size increases, the values on the fit indices move closer to 1 (i.e., a good model fit). However, if test length increases, fit index values move closer to 0 instead. This can be interpreted in the following way: as test length increases, the fit of the baseline model becomes relatively better compared to the tested model. This result has not been found before in IRT literature. This phenomenon might be due to our choice of baseline model and further strengthens the argument made by (Van Laar \& Braeken, 2021) who emphasized that the choice of baseline model is important when working with fit indices. However, even though fit indices value tend to 0 as test length increases, the values for the TLI and CFI are on average higher under correct model specification compared to incorrect model specification for every single condition (e.g., for $N = 400$ \& $I = 10$, the mean of the TLI is 0.11 under correct model specification, whereas it is .00 under incorrect model specification). This means that these fit indices can be used for model-fit decisions. However, test length would have to be taken into account if a `rule-of-thumb' is desired. \\
+\indent For the fit indices, \textit{Table \ref{tab:3}} and \textit{Table \ref{tab:4}} exhibit the mean and standard error for the TLI, CFI and ICFI under correct and incorrect model specification respectively. Both tables show that as sample size increases, the values on the fit indices move closer to 1 (i.e., a good model fit). However, if test length increases, fit index values move closer to 0 instead. This can be interpreted in the following way: as test length increases, the fit of the baseline model becomes relatively better compared to the tested model. This result has not been found before in IRT literature. This phenomenon might be due to our choice of baseline model and further strengthens the argument made by (Van Laar \& Braeken, 2021) who emphasized that the choice of baseline model is important when working with fit indices. However, even though fit indices value tend to 0 as test length increases, the values for the TLI and CFI are on average higher under correct model specification compared to incorrect model specification for every single condition (e.g., for $N = 400$ \& $I = 10$, the mean of the TLI is 0.11 under correct model specification, whereas it is .00 under incorrect model specification). This means that these fit indices can be used for model fit decisions. However, test length would have to be taken into account if a `rule-of-thumb' is desired. \\
 
 \begin{table}[ht!]
 \caption{TLI, CFI and ICFI values under correct model specification}
@@ -274,7 +275,7 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \label{tab:3}
 \end{table}
 
-\indent The tables also show that for cases where there is a small sample size and few test items, there are high standard errors. This indicates that when assessing model-fit in low sample size settings, a point estimate might not be enough. Other methods such as bootstrapping might be required in order to be able to properly decide which model fits best. For high sample sizes and/or larger test lengths, this should not pose an issue. For the TLI, negative values sometimes occurred at higher test lengths under model misspecification. Previous literature has shown that this can occur when the degrees of the hypothesized model are small and correlations among observed variables are low (Wang \& Wang, 2019; Widaman \& Thompson, 2003). In the current study, we rounded these slightly negative values to 0. 
+\indent The tables also show that for cases where there is a small sample size and few test items, there are high standard errors. This indicates that when assessing model fit in low sample size settings, a point estimate might not be enough. Other methods such as bootstrapping might be required in order to be able to properly decide which model fits best. For high sample sizes and/or larger test lengths, this should not pose an issue. For the TLI, negative values sometimes occurred at higher test lengths under model misspecification. Previous literature has shown that this can occur when the degrees of the hypothesized model are small and correlations among observed variables are low (Wang \& Wang, 2019; Widaman \& Thompson, 2003). In the current study, we rounded these slightly negative values to 0. 
 \newpage
 \indent Finally, the ICFI shows less promise compared to the TLI and CFI. The values seem to not differ in incorrect model specification compared to correct model specification. In fact, the average values are usually higher under incorrect model specification. Therefore, the fit index was not able to decide which of the two models fit the data better in the current study. This finding is in accordance with the results given by the Pearson's $\chi^2$-test. Together, they strongly indicate that model fit measures based on observed and expected score-pattern frequencies are not able to detect model misfit between the 2PL and 3PL in IRT. \\
 
@@ -311,35 +312,10 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \newpage
 
 \section{Simulation Study II}
-
 In this simulation study, we also only consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. For the MG LR test, we investigate at which rate the test is able to reject a model under different conditions when groups are based on true differences. The simulation study was conducted in R. \\
-\indent Similar to Simulation Study I, we again vary the four factors test length, sample size, the model type and the number of groups with the same conditions. However, we also investigate a fifth factor: group differences, which has three conditions, (1) differences in $\theta$, (2) differences in the item parameters $\alpha_i$ and $\beta_i$ and (3) differences in the item parameters $\alpha_i$, $\beta_i$ and $\gamma_i$.
-
-(i.e., $\alpha_i$, $\beta_i$ and for the 3PL conditions, $\gamma_i$). 
-
-Data generation for Simulation Study II works in the same way as in Simulation Study I with one key difference. Now, data generation is no longer according to the same parameters for the whole dataset. Instead, the parameters are dependent on two factors: the group differences factor, and the number of groups factor $G$. 
-
-In the differences in $\theta$ conditions, the item parameters are the same for all $G$ groups. However, the mean of the normal distribution depends on group membership. Between every group, there is a mean difference of -0.25 with the previous group. For example, when $G = 3$, group one has a mean of 0, group two a mean of -0.25, and group three a mean of -0.50. 
-
-In the differences in item parameter conditions, the opposite happens. Here, the person parameters are all sampled from the same standard normal distribution. However, the item parameters now depend on group membership. For the discrimination parameter per item, $\alpha_i$, all values are lowered by 0.125 for each consecutive group. Whereas for the difficulty parameter per item, $\beta_i$, the values are lowered by 0.5 per consecutive group. So when $G = 2$, group one has $\alpha_1 = 0.7$ and $\beta_1 = -1$, so group two has $\alpha_1 = 0.575$ and $\beta_1 = -1.5$. Finally, we also wished to research the effect of stronger differences. 
-
-
-To illustrate, when there are two groups, the first group will 
-
-
-This is because compared to Simulation Study I, data generation is no longer according to the same parameters for the whole data. Instead, we generate data according to group assignment. To illustrate/elucidate/elaborate, 
-
-when there are two groups, for the differences in $\theta$ conditions, the first group will be  have a mean of 0, second a mean of -0.25. In case of three groups, third group = mean of -0.50, etc.
-
-For the differences in item parameters, first group will have the parameters specified in Simulation Study I. Group two, all beta parameters are lowered by 0.5, all alpha parameters by 0.125, and gamma parameters by 0.05. For the third group, they are lowered by this amount twice.
-
-Furthermore, we no longer use $\chi^2$ difference and Pearson's $\chi^2$ test, as these are used to detect model misfit, whereas we are now in the field of detecting group differences / measurement invariance.
-
-
-
-Again we investigate the same conditions of test length ($I = 5, 10, 20$), sample size ($N = 200, 300, 500, 1000, 1500$) and the number of groups for the MG LR test ($G = 2, 3, 4$). 
-
-Performance is still the detection rate, however, now they are all considered power estimates against group differences.
+\indent Similar to Simulation Study I, we again vary the four factors test length ($I = 5, 10, 20$), sample size ($N = 200, 300, 500, 1000, 1500$), the model type (2PL, 3PL) and the number of groups ($G = 2, 3, 4$). We also investigate a fifth factor: group differences, which has three conditions, (1) differences in $\theta$, (2) differences in the item parameters $\alpha_i$ and $\beta_i$ and (3) differences in the item parameters $\alpha_i$, $\beta_i$ and $\gamma_i$ (only applicable to the 3PL condition). This results in a total of 225 distinct conditions. Each condition is replicated 300 times again. \\
+\indent Data generation for Simulation Study II works in the same way as in Simulation Study I with one key difference. Now, data generation is no longer according to the same parameters for the whole dataset. Instead, the parameters are dependent on two factors: the group differences factor, and the number of groups factor $G$. In the differences in $\theta$ conditions, the item parameters are the same for all $G$ groups. However, the mean of the normal distribution depends on group membership. Between every group, there is a mean difference of $-0.25$ with the previous group. For example, when $G = 3$, group one has a mean of 0, group two a mean of $-0.25$, and group three a mean of $-0.50$. In the differences in item parameter conditions, the opposite happens. Here, the person parameters are all sampled from the same standard normal distribution. However, the item parameters now depend on group membership. For the discrimination parameter per item, $\alpha_i$, all values are lowered by 0.125 for each consecutive group. Whereas for the difficulty parameter per item, $\beta_i$, the values are lowered by 0.5 per consecutive group. So when $G = 2$, group one has $\alpha_1 = 0.7$ and $\beta_1 = -1$, so group two has $\alpha_1 = 0.575$ and $\beta_1 = -1.5$. For the conditions where $\gamma_i$ differs, we chose to lower the $\gamma_i$ values by .05 per consecutive group. \\
+\indent Furthermore, we no longer use $\chi^2$ difference and Pearson's $\chi^2$ test, as these are used to detect model misfit, whereas we are now in the field of detecting group differences / measurement invariance. Performance is again measured by the detection rate. However, now they are all considered power estimates against group differences.
 
 \subsection{Results}
 
@@ -382,27 +358,27 @@ To research whether the MG LR test has power to discern whether there are group 
 
 \begin{table}[ht]
 \caption{Power estimates for the MG LR test under group differences in item parameters}
-\begin{tabular}{ r r | a c a | c a c }
+\begin{tabular}{ r r | a c a | c a c | a c a }
 \toprule
-\multicolumn{2}{c}{} & \multicolumn{3}{c}{2PL} & \multicolumn{3}{c}{3PL} \\
-\multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} \\
-\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 & 2 & 3 & 4\\
+\multicolumn{2}{c}{} & \multicolumn{3}{c}{2PL} & \multicolumn{3}{c}{3PL $\alpha_i$ \& $\beta_i$} & \multicolumn{3}{c}{3PL $\alpha_i$ \& $\beta_i$ \& $\gamma_i$}\\
+\multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} \\
+\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 & 2 & 3 & 4 & 2 & 3 & 4 \\
 \midrule
-5 & 200 & 0.10 & 0.09 & 0.12 & ... & ... & ... \\ 
-& 300 & 0.09 & 0.08 & 0.14 & ... & ... & ... \\
-& 500 & 0.07 & 0.09 & 0.12 & ... & ... & ... \\
-& 1000 & 0.06 & 0.05 & 0.08 & ... & ... & ... \\
-& 1500 & 0.05 & 0.07 & 0.05 & ... & ... & ... \\
-10 & 200 & 0.09 & 0.14 & 0.20 & ... & ... & ... \\ 
-& 300 & 0.11 & 0.11 & 0.13 & ... & ... & ... \\
-& 500 & 0.05 & 0.09 & 0.08 & ... & ... & ... \\
-& 1000 & 0.08 & 0.07 & 0.07 & ... & ... & ... \\
-& 1500 & 0.06 & 0.06 & 0.06 & ... & ... & ... \\
-20 & 200 & 0.10 & 0.11 & 0.16 & ... & ... & ... \\ 
-& 300 & 0.08 & 0.10 & 0.11 & ... & ... & ... \\
-& 500 & 0.05 & 0.08 & 0.08 & ... & ... & ... \\
-& 1000 & 0.03 & 0.05 & 0.06 & ... & ... & ... \\
-& 1500 & 0.03 & 0.05 & 0.07 & ... & ... & ... \\
+5 & 200 & ... & ... & ... & ... & ... & ... & ... & ... & ...\\ 
+& 300 & 0.09 & 0.08 & 0.14 & ... & ... & ... & ... & ... & ...\\
+& 500 & 0.07 & 0.09 & 0.12 & ... & ... & ... & ... & ... & ...\\
+& 1000 & 0.06 & 0.05 & 0.08 & ... & ... & ... & ... & ... & ...\\
+& 1500 & 0.05 & 0.07 & 0.05 & ... & ... & ... & ... & ... & ...\\
+10 & 200 & 0.09 & 0.14 & 0.20 & ... & ... & ... & ... & ... & ...\\ 
+& 300 & 0.11 & 0.11 & 0.13 & ... & ... & ... & ... & ... & ...\\
+& 500 & 0.05 & 0.09 & 0.08 & ... & ... & ... & ... & ... & ...\\
+& 1000 & 0.08 & 0.07 & 0.07 & ... & ... & ... & ... & ... & ... \\
+& 1500 & 0.06 & 0.06 & 0.06 & ... & ... & ... & ... & ... & ...\\
+20 & 200 & 0.10 & 0.11 & 0.16 & ... & ... & ... & ... & ... & ...\\ 
+& 300 & 0.08 & 0.10 & 0.11 & ... & ... & ... & ... & ... & ...\\
+& 500 & 0.05 & 0.08 & 0.08 & ... & ... & ... & ... & ... & ...\\
+& 1000 & 0.03 & 0.05 & 0.06 & ... & ... & ... & ... & ... & ...\\
+& 1500 & 0.03 & 0.05 & 0.07 & ... & ... & ... & ... & ... & ...\\
 \bottomrule
 \end{tabular}
 
@@ -418,13 +394,14 @@ To examine the possible uses of our MG LR test, the TLI and CFI, we estimated an
 
 \section{Discussion}
 
-The current study investigated earlier existing and new possible measures of model-fit in the context of IRT. 
+The current study investigated earlier existing and new possible measures of model fit in the context of IRT. 
 
 \subsection{Limitations}
 
 - didn't test 3PL
 - didn't test multidimensional IRT
 - didn't test polytome IRT
+- model differences: does not show where these differences are
 
 future research can do these, also the test can be used in any field of statistics. not just IRT.
 
