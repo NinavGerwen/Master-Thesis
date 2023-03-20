@@ -61,7 +61,7 @@ NIEUWE FIT INDEX HIER INTRODUCEREN ---
 \indent Furthermore, we research another possible fit index not investigated before in the field of IRT. This fit index is based on the identity coefficient by Zegers \& ten Berge (1985), which indicates the degree to which two variables of absolute scales are identical. Therefore, this coefficient can reflect the degree to which the observed score pattern frequencies are aligned with the expected score pattern frequencies under a given model. \\
 
 
-\indent To summarise, in the field of IRT there are not enough usable goodness-of-fit tests available to test the 2- and 3PL model and scarce studies investigating the performance of the TLI and CFI. We address these two issues by developing and evaluating a new Likelihood Ratio (LR) goodness-of-fit test based on multiple groups, named the Multiple Group LR (MG LR) test, and assessing the performance of the TLI and CFI based on calculations not researched before in an IRT setting. Finally, we also research the performance of a new fit index inspired by the identity coefficient by Zegers \& ten Berge (1985), named the identity coefficient fit index (ICFI), in the same setting.
+\indent To summarise, in the field of IRT there are not enough usable goodness-of-fit tests available to test the 2- and 3PL model and scarce studies investigating the performance of the TLI and CFI. We address these two issues by developing and evaluating a new Likelihood Ratio (LR) goodness-of-fit test based on multiple groups, named the Multiple Group LR (MG LR) test, and assessing the performance of the TLI and CFI based on calculations not researched before in an IRT setting. Finally, we also research the performance of a new fit index inspired by the identity coefficient by Zegers \& ten Berge (1985), named the identity coefficient fit index (ICFI) in the context of IRT.
 
 \subsection{The present study}
 In order to evaluate the MG LR test for the 2- and 3PL in IRT and to better understand the possible uses of the CFI, TLI  and ICFI in an IRT setting, the present study answers the following five research questions through two simulation studies:
@@ -178,7 +178,7 @@ We study performance of the different goodness-of-fit tests by estimating both e
 \subsection{Results}
 
 To asses the performance of the MG LR test with randomised groups and the three fit indices, we conducted the above described simulation study. Non-convergence of the models occured $<.001$ percent of the time. Furthermore, when test length was 20, the empirical $\alpha$ and power estimates for Pearson's $\chi^2$-test were not estimated. This is because of the large amount of possible score patterns ($2^20$) in this condition, which required too much computational power for the scope of the current study. \\
-\indent \textit{Table \ref{tab:1}} presents the empirical rejection rates test at the $\alpha = .05$ level for the different $\chi^2$ based goodness-of-fit tests. Here, the asymptomatic property of the tests can be observed clearly. As sample size increases, empirical $\alpha$ values approach the nominal level of .05. At large sample sizes, the rejection rates of the MG LR and $\chi^2$ difference test seem to not deviate far from the nominal level for different levels of test lengths. Therefore, we can state that these two tests statistics indeed asymptotically follow their supposed $\chi^2$ distribution under the null hypothesis. However, this also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution, resulting in higher rejection rates. For Pearson's $\chi^2$ test, the table also shows that as the number of items increases, the empirical $\alpha$ increases dramatically from 0.06 to 0.22. \\ This is in accordance with the issues we discussed in the introduction, where Pearson's $\chi^2$-test does not follow a $\chi^2$ distribution when many score patterns are low or missing. These results can be seen as confirmation for the theory and design behind our study. Important to remember, however, is that empirical data is almost never as clean.
+\indent \textit{Table \ref{tab:1}} presents the empirical rejection rates test at the $\alpha = .05$ level for the different $\chi^2$ based goodness-of-fit tests. Here, the asymptomatic property of the tests can be observed clearly. As sample size increases, empirical $\alpha$ values approach the nominal level of .05. At large sample sizes, the rejection rates of the MG LR and $\chi^2$ difference test seem to not deviate far from the nominal level for different levels of test lengths. Therefore, we can state that these two tests statistics indeed asymptotically follow their supposed $\chi^2$ distribution under the null hypothesis. However, this also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution, resulting in higher rejection rates. For Pearson's $\chi^2$ test, the table also shows that as the number of items increases, the empirical $\alpha$ increases dramatically from 0.06 to 0.22. This is in accordance with the issues we discussed in the introduction, where Pearson's $\chi^2$-test does not follow a $\chi^2$ distribution when many score patterns are low or missing. These results can be seen as confirmation for the theory and design behind our study. Important to remember, however, is that empirical data is almost never as clean.
 % Table for Empirical Alpha results
 \begin{table}[t!]
 \caption{Empirical $\alpha$ estimates for the different goodness-of-fit tests}
@@ -206,7 +206,7 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \end{tabular}
 
 \bigskip
-\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; LR2 = MG LR test with $g = 2$; LR3 = MG LR test with $g = 3$; LR4 = MG LR test with $g = 4$; $\chi^2$ = $\chi^2$-difference test under the three-parameter logistic model with no constraints; P-$\chi^2$ = Pearson's $\chi^2$ test.
+\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; LR2 = MG LR test with $g = 2$; LR3 = MG LR test with $g = 3$; LR4 = MG LR test with $g = 4$; $\chi^2$ = $\chi^2$-difference test under the three-parameter logistic model with equal $\gamma$ constraint; P-$\chi^2$ = Pearson's $\chi^2$ test.
 \label{tab:1}
 \end{table}
 
@@ -238,7 +238,7 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \end{tabular}
 
 \bigskip
-\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = three-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; LR2 = MG LR test with $g = 2$; LR3 = MG LR test with $g = 3$; LR4 = MG LR test with $g = 4$; $\chi^2$ = $\chi^2$-difference test under the three-parameter logistic model with no constraints; P-$\chi^2$ = Pearson's $\chi^2$ test.
+\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = three-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; LR2 = MG LR test with $g = 2$; LR3 = MG LR test with $g = 3$; LR4 = MG LR test with $g = 4$; $\chi^2$ = $\chi^2$-difference test under the three-parameter logistic model with equal $\gamma$ constraint; P-$\chi^2$ = Pearson's $\chi^2$ test.
 \label{tab:2}
 \end{table}
 
@@ -333,7 +333,42 @@ Performance is still the detection rate, however, now they are all considered po
 
 To research whether the MG LR test has power to discern whether there are group differences, we ran the above described simulation study. 
 
-tables...
+\newpage 
+
+\begin{table}[ht]
+\caption{Power estimates for the MG LR test under group differences (for 2PL and 3PL)}
+\begin{tabular}{ r r | a c a }
+\toprule
+\multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} \\
+\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 \\
+\midrule
+5 & 200 & 0.10 & 0.09 & 0.12 \\ 
+& 300 & 0.09 & 0.08 & 0.14 \\
+& 500 & 0.07 & 0.09 & 0.12 \\
+& 1000 & 0.06 & 0.05 & 0.08 \\
+& 1500 & 0.05 & 0.07 & 0.05 \\
+10 & 200 & 0.09 & 0.14 & 0.20 \\ 
+& 300 & 0.11 & 0.11 & 0.13 \\
+& 500 & 0.05 & 0.09 & 0.08 \\
+& 1000 & 0.08 & 0.07 & 0.07 \\
+& 1500 & 0.06 & 0.06 & 0.06 \\
+20 & 200 & 0.10 & 0.11 & 0.16 \\ 
+& 300 & 0.08 & 0.10 & 0.11 \\
+& 500 & 0.05 & 0.08 & 0.08 \\
+& 1000 & 0.03 & 0.05 & 0.06 \\
+& 1500 & 0.03 & 0.05 & 0.07 \\
+\bottomrule
+\end{tabular}
+
+\bigskip
+\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; \textit{G} = number of groups generated.
+\label{tab:5}
+\end{table}
+
+\newpage
+
+
+\newpage
 
 \section{Empirical example}
 To examine the possible uses of our MG LR test, the TLI and CFI, we estimated and interpreted their values on a real-life dataset, gained from XX, which contains information about XXX ($N = ...$). The dataset has XX items on a dichotomous scale that together measure XXX. We fitted the 3PL model with XX.
