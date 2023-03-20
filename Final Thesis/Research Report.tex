@@ -70,7 +70,7 @@ In order to evaluate the MG LR test for the 2- and 3PL in IRT and to better unde
 \item{What is the power of the MG LR test when groups are based on random assignment?}
 \item{Under random assignment, how does the performance of the MG LR test compare to the performance of a $\chi^2$-difference and Pearson's $\chi^2$-test?}
 \item{What is the performance of the TLI, CFI and ICFI in detecting model mismatch between the 2PL and 3PL in IRT?}
-\item{What is the power of the MG LR test when groups are based on true differences?}
+\item{What is the power of the MG LR test when groups are based on true differences in either their latent distribution or item parameters?}
 \end{enumerate}
 
 Results from the simulation studies are reported to answer the research questions. Furthermore, empirical data from ... are used to illustrate the value of the investigated model fit measures.
@@ -121,7 +121,7 @@ where $O_{\boldsymbol{x}}$ is the observed frequency for score pattern $\boldsym
 \frac{max(\mathcal{L}_0)}{\prod_{j = 1}^g max(\mathcal{L}_j)},
 \end{equation}
  
-where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for group $j$, which is gained by randomly assigning the observations to $g$ groups. Wilks' theorem also applies to this likelihood statistic. Because all three aforementioned tests asymptotically follow a $\chi^2$ distribution, they can be used for Null Hypothesis Significance Testing. \\
+where $L_0$ is the likelihood of the chosen model for the whole dataset and $L_j$ is the likelihood of the chosen model for group $j$. Group $j$ can either be gained by by randomly assigning the observations to $g$ groups or it could be $g$ existing groups. Wilks' theorem also applies to this likelihood statistic. Because all three aforementioned tests asymptotically follow a $\chi^2$ distribution, they can be used for Null Hypothesis Significance Testing. \\
 \indent For fit indices, we research the performance of the TLI and CFI. These indices are estimated through the use of a baseline and saturated model. Our baseline model is a complete-independence model, which has the following IRF:
 
 \begin{equation}
@@ -312,8 +312,20 @@ To asses the performance of the MG LR test with randomised groups and the three 
 
 \section{Simulation Study II}
 
-In this simulation study, we consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. For the MG LR test, we investigate at which rate the test is able to reject a model under different conditions when groups are based on true differences. The simulation study was conducted in R. \\
-\indent Similar to Simulation Study I, we again vary the four factors test length, sample size, the model type and the number of groups with the same conditions. However, we also investigate a fifth factor: group differences, which has two conditions, (1) differences in $\theta$ and (2) differences in item parameters (i.e., $\alpha_i$, $\beta_i$ and for the 3PL conditions, $\gamma_i$. 
+In this simulation study, we also only consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. For the MG LR test, we investigate at which rate the test is able to reject a model under different conditions when groups are based on true differences. The simulation study was conducted in R. \\
+\indent Similar to Simulation Study I, we again vary the four factors test length, sample size, the model type and the number of groups with the same conditions. However, we also investigate a fifth factor: group differences, which has three conditions, (1) differences in $\theta$, (2) differences in the item parameters $\alpha_i$ and $\beta_i$ and (3) differences in the item parameters $\alpha_i$, $\beta_i$ and $\gamma_i$.
+
+(i.e., $\alpha_i$, $\beta_i$ and for the 3PL conditions, $\gamma_i$). 
+
+Data generation for Simulation Study II works in the same way as in Simulation Study I with one key difference. Now, data generation is no longer according to the same parameters for the whole dataset. Instead, the parameters are dependent on two factors: the group differences factor, and the number of groups factor $G$. 
+
+In the differences in $\theta$ conditions, the item parameters are the same for all $G$ groups. However, the mean of the normal distribution depends on group membership. Between every group, there is a mean difference of -0.25 with the previous group. For example, when $G = 3$, group one has a mean of 0, group two a mean of -0.25, and group three a mean of -0.50. 
+
+In the differences in item parameter conditions, the opposite happens. Here, the person parameters are all sampled from the same standard normal distribution. However, the item parameters now depend on group membership. For the discrimination parameter per item, $\alpha_i$, all values are lowered by 0.125 for each consecutive group. Whereas for the difficulty parameter per item, $\beta_i$, the values are lowered by 0.5 per consecutive group. So when $G = 2$, group one has $\alpha_1 = 0.7$ and $\beta_1 = -1$, so group two has $\alpha_1 = 0.575$ and $\beta_1 = -1.5$. Finally, we also wished to research the effect of stronger differences. 
+
+
+To illustrate, when there are two groups, the first group will 
+
 
 This is because compared to Simulation Study I, data generation is no longer according to the same parameters for the whole data. Instead, we generate data according to group assignment. To illustrate/elucidate/elaborate, 
 
@@ -325,7 +337,7 @@ Furthermore, we no longer use $\chi^2$ difference and Pearson's $\chi^2$ test, a
 
 
 
-Again we investigate the same conditions of test length ($I = 5, 10, 20$), sample size ($N = 200, 300, 500, 1000, 1500$) and the number of groups for the multigroup LR test ($G = 2, 3, 4$). 
+Again we investigate the same conditions of test length ($I = 5, 10, 20$), sample size ($N = 200, 300, 500, 1000, 1500$) and the number of groups for the MG LR test ($G = 2, 3, 4$). 
 
 Performance is still the detection rate, however, now they are all considered power estimates against group differences.
 
@@ -336,37 +348,68 @@ To research whether the MG LR test has power to discern whether there are group 
 \newpage 
 
 \begin{table}[ht]
-\caption{Power estimates for the MG LR test under group differences (for 2PL and 3PL)}
-\begin{tabular}{ r r | a c a }
+\caption{Power estimates for the MG LR test under group differences in $\theta$}
+\begin{tabular}{ r r | a c a | c a c }
 \toprule
-\multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} \\
-\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 \\
+\multicolumn{2}{c}{} & \multicolumn{3}{c}{2PL} & \multicolumn{3}{c}{3PL} \\
+\multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} \\
+\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 & 2 & 3 & 4\\
 \midrule
-5 & 200 & 0.10 & 0.09 & 0.12 \\ 
-& 300 & 0.09 & 0.08 & 0.14 \\
-& 500 & 0.07 & 0.09 & 0.12 \\
-& 1000 & 0.06 & 0.05 & 0.08 \\
-& 1500 & 0.05 & 0.07 & 0.05 \\
-10 & 200 & 0.09 & 0.14 & 0.20 \\ 
-& 300 & 0.11 & 0.11 & 0.13 \\
-& 500 & 0.05 & 0.09 & 0.08 \\
-& 1000 & 0.08 & 0.07 & 0.07 \\
-& 1500 & 0.06 & 0.06 & 0.06 \\
-20 & 200 & 0.10 & 0.11 & 0.16 \\ 
-& 300 & 0.08 & 0.10 & 0.11 \\
-& 500 & 0.05 & 0.08 & 0.08 \\
-& 1000 & 0.03 & 0.05 & 0.06 \\
-& 1500 & 0.03 & 0.05 & 0.07 \\
+5 & 200 & 0.10 & 0.09 & 0.12 & ... & ... & ... \\ 
+& 300 & 0.09 & 0.08 & 0.14 & ... & ... & ... \\
+& 500 & 0.07 & 0.09 & 0.12 & ... & ... & ... \\
+& 1000 & 0.06 & 0.05 & 0.08 & ... & ... & ... \\
+& 1500 & 0.05 & 0.07 & 0.05 & ... & ... & ... \\
+10 & 200 & 0.09 & 0.14 & 0.20 & ... & ... & ... \\ 
+& 300 & 0.11 & 0.11 & 0.13 & ... & ... & ... \\
+& 500 & 0.05 & 0.09 & 0.08 & ... & ... & ... \\
+& 1000 & 0.08 & 0.07 & 0.07 & ... & ... & ... \\
+& 1500 & 0.06 & 0.06 & 0.06 & ... & ... & ... \\
+20 & 200 & 0.10 & 0.11 & 0.16 & ... & ... & ... \\ 
+& 300 & 0.08 & 0.10 & 0.11 & ... & ... & ... \\
+& 500 & 0.05 & 0.08 & 0.08 & ... & ... & ... \\
+& 1000 & 0.03 & 0.05 & 0.06 & ... & ... & ... \\
+& 1500 & 0.03 & 0.05 & 0.07 & ... & ... & ... \\
 \bottomrule
 \end{tabular}
 
 \bigskip
-\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; \textit{G} = number of groups generated.
+\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; \textit{G} = number of groups under which the data was generated.
 \label{tab:5}
 \end{table}
 
 \newpage
 
+\begin{table}[ht]
+\caption{Power estimates for the MG LR test under group differences in item parameters}
+\begin{tabular}{ r r | a c a | c a c }
+\toprule
+\multicolumn{2}{c}{} & \multicolumn{3}{c}{2PL} & \multicolumn{3}{c}{3PL} \\
+\multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} \\
+\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 & 2 & 3 & 4\\
+\midrule
+5 & 200 & 0.10 & 0.09 & 0.12 & ... & ... & ... \\ 
+& 300 & 0.09 & 0.08 & 0.14 & ... & ... & ... \\
+& 500 & 0.07 & 0.09 & 0.12 & ... & ... & ... \\
+& 1000 & 0.06 & 0.05 & 0.08 & ... & ... & ... \\
+& 1500 & 0.05 & 0.07 & 0.05 & ... & ... & ... \\
+10 & 200 & 0.09 & 0.14 & 0.20 & ... & ... & ... \\ 
+& 300 & 0.11 & 0.11 & 0.13 & ... & ... & ... \\
+& 500 & 0.05 & 0.09 & 0.08 & ... & ... & ... \\
+& 1000 & 0.08 & 0.07 & 0.07 & ... & ... & ... \\
+& 1500 & 0.06 & 0.06 & 0.06 & ... & ... & ... \\
+20 & 200 & 0.10 & 0.11 & 0.16 & ... & ... & ... \\ 
+& 300 & 0.08 & 0.10 & 0.11 & ... & ... & ... \\
+& 500 & 0.05 & 0.08 & 0.08 & ... & ... & ... \\
+& 1000 & 0.03 & 0.05 & 0.06 & ... & ... & ... \\
+& 1500 & 0.03 & 0.05 & 0.07 & ... & ... & ... \\
+\bottomrule
+\end{tabular}
+
+\bigskip
+\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; \textit{G} = number of groups under which the data was generated.
+\label{tab:6}
+\end{table}
 
 \newpage
 
