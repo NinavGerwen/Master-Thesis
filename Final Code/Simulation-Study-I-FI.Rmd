@@ -1,58 +1,50 @@
 ---
-title: "Example of a Simulation Study using Randomly Generated IRT Data"
+title: "Simulation Study I: Fit indices (TLI, CFI and ICFI)"
 author: "Nina van Gerwen (1860852)"
-date: "21-01-2023"
+date: "24-03-2023"
 output: html_document
 ---
 
-## Loading the functions
+## 1. Preparation
 
-To load the functions, we use source() and choose the appropriate files. To 
+To run the simulations, we load functions that we created ourselves. For this, we use source() and choose the appropriate files. To 
 find out how the functions work exactly, please look at the function files directly.
 
-```{r IRF calculation functions}
-## Data generation is based on three models, therefore we created functions for
-## the calculations of every model (1PL - 2PL - 3PL)
-
+```{r Function loading}
 source("Functions/model-calculations.R")
 source("Functions/data-generation.R")
-source("Functions/missingness.R")
 source("Functions/fit-indices calculations.R")
 source("Functions/data-aggregation.R")
-
 ```
 
-## Null condition
+## 2. Null condition
 
 ```{r}
 ## LTM to fit the required models
-require(ltm)
+library(ltm)
 ## DPLYR for some tidying
-require(dplyr)
+library(dplyr)
 ## MAGRITTR for the pipe
-require(magrittr)
+library(magrittr)
 
-## Here, we define the levels of the factors we want to investigate
-## for the simulation study,
+## Define the levels of the factors we vary for the simulation study,
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-## And we set the number of replications you want
+## Set the number of replications you want
 n_sim <- 300
 
 ## Our output will be a data frame with first the conditions, and then the
 ## results, and we pre-define the data frame here with some NAs
 ## so that later we can put the results in here
 null_results <- data.frame(test_length = NA, sample_size = NA, TLI_M = NA,
-                          TLI_SE = NA, CFI_M = NA, CFI_SE = NA, New_FI_M = NA,
-                          New_FI_SE = NA)
+                          TLI_SE = NA, CFI_M = NA, CFI_SE = NA, ICFI_M = NA,
+                          ICFI_SE = NA)
 
 ## Set a seed for reproducibility
 set.seed(1248)
 
-## And to run the study, we start a nested for loop
-
-## With first a for loop for both factors
+## To run the study, we start a nested for loop with the levels of the factors
 for(a in levels(test_length)){
 
   for(b in levels(sample_size)){
@@ -63,7 +55,7 @@ for(a in levels(test_length)){
       ## equal to the number of replications for the fit indices
       tli_values <- rep(NA, n_sim)
       cfi_values <- rep(NA, n_sim)
-      new_fi <- rep(NA, n_sim)
+      icfi_values <- rep(NA, n_sim)
       
       ## To improve efficiency, we note the current levels of factors
       ## so that we can refer to this in future function arguments
@@ -79,17 +71,17 @@ for(a in levels(test_length)){
           ## First, generating data according to the factors
           temp_data <- data.gen(n = temp_n, k = temp_k, model = "2PL")
                         
-          ## Then fitting the hypothesized model
+          ## Fitting the hypothesized model
           temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
           
     ## For efficiency purposes, we note all these values once instead
-    ## of for every single fit index 
+    ## calculating them for every single fit index 
           
           ## And obtaining the log likelihood
           l_0 <- temp_model$log.Lik
           
           ## For the saturated model, we require an aggregrated version 
-          ## of the data, therefore we note this 
+          ## of the data, therefore we save this with our own function
           aggr_data <- score.pattern.aggr(temp_data, temp_n)
           
           ## We note the degrees of freedom for the different tested models
@@ -98,7 +90,8 @@ for(a in levels(test_length)){
           
           df_tested <- df.tested(k = temp_k)
           
-          ## And also note  the chi-square values
+          ## And also note the chi-square values of the 
+          ## hypothesized model compared to the base and saturated model
           chi_base <- chi.base(agg_data = aggr_data, data = temp_data,
                                n = temp_n, k = temp_k)
           
@@ -113,8 +106,8 @@ for(a in levels(test_length)){
           cfi_values[j] <- CFI.Yang(chi_base = chi_base, df_base = df_base, 
                                chi_tested = chi_tested, df_tested = df_tested)
           
-          ## And for the new fit index, we work 
-          new_fi[j] <- exp.obs.FI(temp_model, temp_k)
+          ## And we also calculate the icfi values through a predefined function
+          icfi_values[j] <- exp.obs.FI(temp_model, temp_k)
           
         }
       
@@ -123,7 +116,7 @@ for(a in levels(test_length)){
       ## to the result dataframe through rbind()
       null_results <- rbind(null_results, c(a, b, mean(tli_values), sd(tli_values),
                                           mean(cfi_values), sd(cfi_values),
-                                          mean(new_fi), sd(new_fi)))
+                                          mean(icfi_values), sd(icfi_values)))
 
   }
   
@@ -134,72 +127,49 @@ null_results <- null_results[-1 ,]
 ## And resetting the rownames
 rownames(null_results) <- NULL
 
-## And tada! your results for the 'null-condition'
 null_results
 ```
 
-TLI en CFI values lijken op beide calculatie methodes erg naar beneden
-te gaan met aantal items. Dit betekent dat relatief aan het aantal items, 
-het base model het stukken beter doet ten opzichte van het hypothesized 
-model? Komt dit omdat ons base model gewoon een erg goed/efficient model is?
 
-## Miss-specification condition
+## 3. Miss-specification condition
 
 ```{r}
-## LTM to fit the required models
-require(ltm)
-## DPLYR for some tidying
-require(dplyr)
-## MAGRITTR for the pipe
-require(magrittr)
+library(ltm)
+library(dplyr)
+library(magrittr)
 
-## Here, you can define the levels of the factors you want to investigate
-## for the simulation study,
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
-## And you set the number of replications you want
 n_sim <- 300
 
-## Our output will be a data frame with first the conditions, and then the
-## results, and we pre-define the data frame here with some NAs
 miss_results <- data.frame(test_length = NA, sample_size = NA, TLI_M = NA,
-                          TLI_SE = NA, CFI_M = NA, CFI_SE = NA, New_FI_M = NA,
-                          New_FI_SE = NA)
+                          TLI_SE = NA, CFI_M = NA, CFI_SE = NA, ICFI_M = NA,
+                          ICFI_SE = NA)
 
-## Then set a seed for reproducibility
 set.seed(1248)
 
-## And now we start a nested for loop for the study
-
-## With first a for loop for both factors
 for(a in levels(test_length)){
 
   for(b in levels(sample_size)){
       
-      ## Then, in every condition, you create an empty vector of size
-      ## equal to the number of replications for the fit indices
       tli_values <- rep(NA, n_sim)
       cfi_values <- rep(NA, n_sim)
-      new_fi <- rep(NA, n_sim)
+      icfi_values <- rep(NA, n_sim)
       
-      ## You get the correct level of the factors as numerics
       temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
-      
-        ## And then you get results for every condition by for every
-        ## replication, doing the following:
+
         for(j in 1:n_sim){
     
-          ## Generating data according to the factors
+          ## Everything here is the same as described above, except 
+          ## that data is generated according to the 3PL
           temp_data <- data.gen(n = temp_n, k = temp_k, model = "3PL")
                         
-          ## Fitting the hypothesized model
           temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE)
           
           l_0 <- temp_model$log.Lik
           
-          ## Aggregrating the data
           aggr_data <- score.pattern.aggr(temp_data, temp_n)
           
           df_base <- df.base(k = temp_k)
@@ -219,28 +189,28 @@ for(a in levels(test_length)){
           cfi_values[j] <- CFI.Yang(chi_base = chi_base, df_base = df_base, 
                                chi_tested = chi_tested, df_tested = df_tested)
           
-          new_fi[j] <- exp.obs.FI(model = temp_model, k = temp_k)
+          icfi_values[j] <- exp.obs.FI(model = temp_model, k = temp_k)
         
         }
       
-      ## Then, after the values have been calculated n_sim times, 
-      ## we can get their mean and standard deviation and add these
-      ## to the result dataframe through rbind()
       miss_results <- rbind(miss_results, c(a, b, mean(tli_values, na.rm = TRUE), sd(tli_values, na.rm = TRUE),
                                           mean(cfi_values, na.rm = TRUE), sd(cfi_values, na.rm = TRUE),
-                                          mean(new_fi, na.rm = TRUE), sd(new_fi, na.rm = TRUE)))
+                                          mean(icfi_values, na.rm = TRUE), sd(icfi_values, na.rm = TRUE)))
 
   }
   
 }
 
-## Now we just have to clean up the dataframe by removing the first row
 miss_results <- miss_results[-1 ,]
-## And resetting the rownames
+
 rownames(miss_results) <- NULL
 
-## And tada! your results for the 'miss-condition'
 miss_results
 ```
 
-Miss results zijn iig stukken lager nog!
+## 4. Session Information for Reproducibility
+
+```{r session Info }
+sessionInfo()
+```
+

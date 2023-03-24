@@ -1,6 +1,15 @@
 ## This function generates dichotomous IRT data of sample size n
 ## with test length k, according to three IRT models (1PL, 2Pl, 3PL)
+
+## Note that to use this function, you need to source also the
+## functions listed in the model-calculations.R file
+
+## The data generation function takes as input the number of samples you want,
+## the length of the test and according to which model you want to
+## generate data
 data.gen <- function(n, k, model = "1PL"){
+  
+  ## Then, data generation is done in the following way:
   
   ## First, create a matrix of thetas (person parameters) by sampling
   ## from a standard normal distribution
@@ -27,6 +36,10 @@ data.gen <- function(n, k, model = "1PL"){
       alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3), ncol = k,
                       nrow = n, byrow = TRUE)
     }
+    ## For larger test lengths, we want to match alphas and betas with one 
+    ## another, so that the test is more realistic (as there are now
+    ## combinations of the two parameters with one another instead of them
+    ## all being the same for every 5 items)
     if(k == 10){
       alpha <- matrix(data = c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1,
                                0.85, 0.7), ncol = k, nrow = n,

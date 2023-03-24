@@ -1,39 +1,129 @@
 ---
-title: "Master Thesis Code"
+title: "Simulation Study II: Detecting Group Differences"
 author: "Nina van Gerwen (1860852)"
-date: "2022-10-28"
+date: "24-03-2023"
 output: html_document
 ---
 
-## Functions for IRF calculations
+## 1. Preparation
 
-These are necessary in data generation as we will vary the data generating model.
+To run the simulations, we load functions that we created ourselves. For this, we use source() and choose the appropriate files. To 
+find out how the functions work exactly, please look at the function files directly.
 
-```{r}
+```{r Function loading }
 source("Functions/model-calculations.R")
 source("Functions/start.values.R")
 source("Functions/multigroup-data-gen.R")
 source("Functions/multigroup-lr-test-calculation.R")
 ```
 
-## Empirical alpha analysis
+## 2. Power analysis for differences in item parameters alpha and beta
 
-```{r Final first run}
-library(ltm)
-library(dplyr)
-library(mirt)
-library(tidyr)
-## This is for empirical alpha estimation
+### 2.1. 2PL Condition
+
+```{r Item Param Power 2PL}
+library(ltm)      ## to fit the 2PL
+library(dplyr)    ## for some tidying and the pipe
+library(tidyr)    ## for more tidying
+
+## Set the factor levels and number of simulations for the study
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 n_groups <- as.factor(c(2, 3, 4))
 
 n_sim <- 300
 
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
+## We vary three factors, which we cross-examine them through a nested for loop
 
-alpha_results_two <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+## First, we want a dataset to hold the results
+IPP_a_b_2PL <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+
+## Set a seed for reproducibility
+set.seed(1248)
+
+## Then, start the nested for loop with all factors
+for(a in levels(test_length)){
+
+  for(b in levels(sample_size)){
+    
+    for(d in levels(n_groups)){
+      
+      ## In the end, we want a vector which will contain 0's and 1's 
+      ## for each time the hypothesis is respectively not rejected or rejected
+      ## so, we first create space of size equal to the number of simulations
+      prop_1 <- rep(NA, n_sim)
+      
+      ## Temporarily save all the current levels of the factors as numerics
+      temp_k <- as.numeric(as.character(a))
+      temp_g <- as.numeric(as.character(d))
+      temp_n <- round(as.numeric(as.character(b))/temp_g)
+      
+      ## To improve the convergence of the models we use, we work with 
+      ## the start values function
+      start.vals <- start.values(temp_k)
+      
+        ## Now, for each condition:
+        for(i in 1:n_sim){
+
+          ## Generate data according to current parameters
+          temp_data <- multigroup.data.gen(n = temp_n, k = temp_k, g = temp_g, 
+                                           method = "param", model = "2PL")
+            
+          ## Fit the 2PL model
+          temp_model <- ltm(temp_data[ , 1:temp_k] ~ z1, IRT.param = TRUE)
+          
+          ## Get the likelihood of the fitted 2PL model
+          l_0 <- temp_model$log.Lik
+        
+          ## Calculate the p-value of our MG LR test
+          p_value_1 <- 1 - pchisq(q = MG.LR.test(l_0 = l_0, data = temp_data, g = temp_g, 
+                                                 k = temp_k, start.val = start.vals), 
+                              df = (temp_g - 1) * 2 * temp_k)
+ 
+          ## Check whether the null hypothesis is rejected or not
+          ## and put this in the ith value of the earlier created vector
+          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
+
+        }
+        
+        ## Now, to get the rejection rate, we use rbind and get the mean of 
+        ## the earlier created vector as the rejection rate
+        IPP_a_b_2PL <- rbind(IPP_a_b_2PL, c(a, b, d, mean(prop_1)))
+      }
+      
+
+  }
+  
+}
+
+## Some pivoting and subsetting in order to get a nicer overview of the results
+IPP_a_b_2PL <- IPP_a_b_2PL %>% 
+  pivot_wider(., names_from = G, values_from = MG.LR) %>%
+  .[-1, -3]
+
+## Resetting the rownames and colnames of the results 
+rownames(IPP_a_b_2PL) <- NULL
+colnames(IPP_a_b_2PL) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
+
+## Calling the results
+IPP_a_b_2PL
+```
+
+### 2.2. 3PL Condition
+
+```{r Item Param Power 3PL}
+library(ltm)
+library(dplyr)
+library(mirt)
+library(tidyr)
+
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+n_groups <- as.factor(c(2, 3, 4))
+
+n_sim <- 300
+
+IPP_a_b_3PL <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
 
 set.seed(1248)
 
@@ -52,11 +142,11 @@ for(a in levels(test_length)){
       start.vals <- start.values(temp_k)
       
         for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
-
+          
+          ## For this study, everything is the same, except that data is
+          ## generated according to the 3PL model
           temp_data <- multigroup.data.gen(n = temp_n, k = temp_k, g = temp_g, 
-                                           method = "param", model = "2PL")
+                                           method = "param", model = "3PL")
             
           temp_model <- ltm(temp_data[ , 1:temp_k] ~ z1, IRT.param = TRUE)
           
@@ -70,7 +160,7 @@ for(a in levels(test_length)){
 
         }
       
-        alpha_results_two <- rbind(alpha_results_two, c(a, b, d, mean(prop_1)))
+        IPP_a_b_3PL <- rbind(IPP_a_b_3PL, c(a, b, d, mean(prop_1)))
       }
       
 
@@ -78,23 +168,35 @@ for(a in levels(test_length)){
   
 }
 
-
-alpha_results_two <- alpha_results_two %>% 
+IPP_a_b_3PL <- IPP_a_b_3PL %>%
   pivot_wider(., names_from = G, values_from = MG.LR) %>%
   .[-1, -3]
 
-rownames(alpha_results_two) <- NULL
-colnames(alpha_results_two) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
-  
-alpha_results_two
+rownames(IPP_a_b_3PL) <- NULL
+colnames(IPP_a_b_3PL) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
 
-## -----------------------------------------------------------------------------
+IPP_a_b_3PL
+```
 
-theta_alpha <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+
+## 3. Power analysis for differences in theta
+
+### 3.1 2PL Condition
+
+```{r Theta Power 2PL }
+library(ltm)
+library(dplyr)
+library(tidyr)
+
+test_length <- as.factor(c(5, 10, 20))
+sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
+n_groups <- as.factor(c(2, 3, 4))
+
+n_sim <- 300
+
+TP_2PL <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
 
 set.seed(1248)
-
-## HIERVOOR THETA NAAR -0.5 VERANDERD, NIET MEER -1, VERANDER TERUG NINA
 
 for(a in levels(test_length)){
 
@@ -111,9 +213,10 @@ for(a in levels(test_length)){
       start.vals <- start.values(temp_k)
       
         for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
 
+          ## For this, everything is again the same as in the first 
+          ## annotated study, except that we now simulate for differences
+          ## in theta in the multigroup.data.gen() function
           temp_data <- multigroup.data.gen(n = temp_n, k = temp_k, g = temp_g, 
                                            method = "theta", model = "2PL")
             
@@ -129,7 +232,7 @@ for(a in levels(test_length)){
 
         }
       
-        theta_alpha <- rbind(theta_alpha, c(a, b, d, mean(prop_1)))
+        TP_2PL <- rbind(TP_2PL, c(a, b, d, mean(prop_1)))
       }
       
 
@@ -138,22 +241,23 @@ for(a in levels(test_length)){
 }
 
 
-theta_alpha <- theta_alpha %>%
+TP_2PL <- TP_2PL %>%
   pivot_wider(., names_from = G, values_from = MG.LR) %>%
   .[-1, -3]
   
-rownames(theta_alpha) <- NULL
-colnames(theta_alpha) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
-theta_alpha
+rownames(TP_2PL) <- NULL
+colnames(TP_2PL) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
+TP_2PL
 ```
 
 
-## Power analysis
+### 3.2. 3PL Condition
 
-```{r Final second run}
+```{r Theta Power 3PL }
 library(ltm)
 library(dplyr)
 library(mirt)
+library(tidyr)
 
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
@@ -161,10 +265,7 @@ n_groups <- as.factor(c(2, 3, 4))
 
 n_sim <- 300
 
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
-
-power_results_two <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+TP_3PL <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
 
 set.seed(1248)
 
@@ -183,80 +284,8 @@ for(a in levels(test_length)){
       start.vals <- start.values(temp_k)
       
         for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
 
-          temp_data <- multigroup.data.gen(n = temp_n, k = temp_k, g = temp_g, 
-                                           method = "param", model = "3PL")
-            
-          temp_model <- ltm(temp_data[ , 1:temp_k] ~ z1, IRT.param = TRUE)
-          
-          l_0 <- temp_model$log.Lik
-        
-          p_value_1 <- 1 - pchisq(q = MG.LR.test(l_0 = l_0, data = temp_data, g = temp_g, 
-                                                 k = temp_k, start.val = start.vals), 
-                              df = (temp_g - 1) * 2 * temp_k)
- 
-          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
-
-        }
-      
-        power_results_two <- rbind(power_results_two, c(a, b, d, mean(prop_1)))
-      }
-      
-
-  }
-  
-}
-
-power_results_two <- power_results_two %>%
-  pivot_wider(., names_from = G, values_from = MG.LR) %>%
-  .[-1, -3]
-
-rownames(power_results_two) <- NULL
-colnames(power_results_two) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
-
-power_results_two
-```
-
-## Power with thetas
-
-```{r Final second run}
-library(ltm)
-library(dplyr)
-library(mirt)
-## This is for empirical alpha estimation
-test_length <- as.factor(c(5, 10, 20))
-sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
-n_groups <- as.factor(c(2, 3, 4))
-
-n_sim <- 300
-
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
-
-theta_power <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
-
-set.seed(1248)
-
-for(a in levels(test_length)){
-
-  for(b in levels(sample_size)){
-    
-    for(d in levels(n_groups)){
-      
-      prop_1 <- rep(NA, n_sim)
-      
-      temp_k <- as.numeric(as.character(a))
-      temp_g <- as.numeric(as.character(d))
-      temp_n <- round(as.numeric(as.character(b))/temp_g)
-      
-      start.vals <- start.values(temp_k)
-      
-        for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
-
+          ## Now, data generation according to differences in theta and 3PL
           temp_data <- multigroup.data.gen(n = temp_n, k = temp_k, g = temp_g, 
                                            method = "theta", model = "3PL")
             
@@ -272,7 +301,7 @@ for(a in levels(test_length)){
 
         }
       
-        theta_power <- rbind(theta_power, c(a, b, d, mean(prop_1)))
+        TP_3PL <- rbind(TP_3PL, c(a, b, d, mean(prop_1)))
       }
       
 
@@ -281,35 +310,34 @@ for(a in levels(test_length)){
 }
 
 
-theta_power <- theta_power %>%
+TP_3PL <- TP_3PL %>%
   pivot_wider(., names_from = G, values_from = MG.LR) %>%
   .[-1, -3]
 
-rownames(theta_power) <- NULL
-colnames(theta_power) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
+rownames(TP_3PL) <- NULL
+colnames(TP_3PL) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
 
-theta_power
+TP_3PL
 ```
 
 
-## Power 2.1 Analysis
+## 4. Power Analysis for differences in item parameters alpha, beta and gamma
 
-```{r}
+### 4.1. 3PL Condition 
+
+```{r Item Param Power 3PL (incl. gamma) }
 library(ltm)
 library(dplyr)
 library(mirt)
 library(tidyr)
-## This is for empirical alpha estimation
+
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 n_groups <- as.factor(c(2, 3, 4))
 
 n_sim <- 300
 
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
-
-PL3_gamma_diff <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
+IPP_a_b_g_3PL <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
 
 set.seed(1248)
 
@@ -328,9 +356,9 @@ for(a in levels(test_length)){
       start.vals <- start.values(temp_k)
       
         for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
 
+          ## Now, data generation according to a new function which also
+          ## allows for differences in the pseudo-guessing parameter for the 3PL
           temp_data <- gamma.diff.data.gen(n = temp_n, k = temp_k, g = temp_g, 
                                            method = "param", model = "3PL")
             
@@ -346,7 +374,7 @@ for(a in levels(test_length)){
 
         }
       
-        PL3_gamma_diff <- rbind(PL3_gamma_diff, c(a, b, d, mean(prop_1)))
+        IPP_a_b_g_3PL <- rbind(IPP_a_b_g_3PL, c(a, b, d, mean(prop_1)))
       }
       
 
@@ -355,73 +383,20 @@ for(a in levels(test_length)){
 }
 
 
-PL3_gamma_diff <- PL3_gamma_diff %>%
+IPP_a_b_g_3PL <- IPP_a_b_g_3PL %>%
   pivot_wider(., names_from = G, values_from = MG.LR) %>%
   .[-1, -3]
 
-rownames(PL3_gamma_diff) <- NULL
-colnames(PL3_gamma_diff) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
+rownames(IPP_a_b_g_3PL) <- NULL
+colnames(IPP_a_b_g_3PL) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
 
-PL3_gamma_diff
-
+IPP_a_b_g_3PL
 ```
 
 
-### TEST with less extreme diff
+## 5. Session Information for Reproducibility
 
-```{r}
-set.seed(1248)
-
-less_extreme_test <- data.frame(test_length = NA, sample_size = NA, G = NA, MG.LR = NA)
-
-for(a in levels(test_length)){
-
-  for(b in levels(sample_size)){
-    
-    for(d in levels(n_groups)){
-      
-      prop_1 <- rep(NA, n_sim)
-      
-      temp_k <- as.numeric(as.character(a))
-      temp_g <- as.numeric(as.character(d))
-      temp_n <- round(as.numeric(as.character(b))/temp_g)
-      
-      start.vals <- start.values(temp_k)
-      
-        for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
-
-          temp_data <- less.extreme.data.gen(n = temp_n, k = temp_k, g = temp_g, 
-                                           method = "param", model = "2PL")
-            
-          temp_model <- ltm(temp_data[ , 1:temp_k] ~ z1, IRT.param = TRUE)
-          
-          l_0 <- temp_model$log.Lik
-        
-          p_value_1 <- 1 - pchisq(q = MG.LR.test(l_0 = l_0, data = temp_data, g = temp_g, 
-                                                 k = temp_k, start.val = start.vals), 
-                              df = (temp_g - 1) * 2 * temp_k)
- 
-          prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
-
-        }
-      
-        less_extreme_test <- rbind(less_extreme_test, c(a, b, d, mean(prop_1)))
-      }
-      
-
-  }
-  
-}
-
-
-less_extreme_test <- less_extreme_test %>% 
-  pivot_wider(., names_from = G, values_from = MG.LR) %>%
-  .[-1, -3]
-
-rownames(less_extreme_test) <- NULL
-colnames(less_extreme_test) <- c("test_length", "sample_size", "LR2", "LR3", "LR4")
-
+```{r session info }
+sessionInfo()
 ```
 

@@ -1,18 +1,18 @@
 ---
-title: "Master Thesis Code"
+title: "Simulation Study I: Goodness-of-fit Tests"
 author: "Nina van Gerwen (1860852)"
-date: "2022-10-28"
+date: "24-03-2023"
 output: html_document
 ---
 
-## Functions for IRF calculations
+## 1. Preparations
 
-These are necessary in data generation as we will vary the data generating model.
+To run the simulations, we load functions that we created ourselves. For this, we use source() and choose the appropriate files. To 
+find out how the functions work exactly, please look at the function files directly.
 
-```{r}
+```{r Function loading }
 source("Functions/model-calculations.R")
 source("Functions/data-generation.R")
-source("Functions/missingness.R")
 source("Functions/data-aggregation.R")
 source("Functions/lr-test-calculation.R")
 source("Functions/chi-square-diff-test.R")
@@ -20,58 +20,67 @@ source("Functions/pearson-chi-sq-test.R")
 source("Functions/start.values.R")
 ```
 
-## Functions for model fit calculations
+## 2. Empirical alpha analysis
 
-To fit the 1PL model, we can use the rasch() function.
-To fit the 2PL model, we can use the ltm() function.
-To fit the 3PL model, we can use the tpm() function.
+```{r Empirical alpha analysis }
+library(ltm)    ## to fit the 2PL
+library(dplyr)  ## for some tidying
+library(mirt)   ## to fit the 3PL
 
-## Empirical alpha analysis
-
-```{r Final first run}
-library(ltm)
-library(dplyr)
-library(mirt)
-## This is for empirical alpha estimation
+## Set the different conditions for the factors we vary and number of 
+## replications
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 n_sim <- 300
 
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
-
+## We want a dataframe that can hold the final results of the 
+## performance of the different GoF tests
 alpha_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
                       LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
 
+## Seed for reproducibility
 set.seed(1248)
 
+## Start the nested for loop with the factors we vary
 for(a in levels(test_length)){
 
   for(b in levels(sample_size)){
       
+      ## For each GoF test, we want a vector of size equal to the number of
+      ## replications that will have 0s where the null hypothesis is not rejected
+      ## and 1s where the null hypothesis is rejected
       prop_1 <- rep(NA, n_sim)
       prop_2 <- rep(NA, n_sim)
       prop_3 <- rep(NA, n_sim)
       prop_4 <- rep(NA, n_sim)
       prop_5 <- rep(NA, n_sim)
       
+      ## Temporarily save all current levels of the factors as numerics
       temp_n <- as.numeric(as.character(b))
       temp_k <- as.numeric(as.character(a))
       
+      ## To speed up convergence of the models, we use the true parameter values as
+      ## the start values, which can be gained through our own created function
       start.vals <- start.values(temp_k)
       
+        ## Then, for every replication:
         for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
 
+          ## Generate data according to the 2PL model and current sample size
+          ## and test length
           temp_data <- data.gen(n = temp_n, k = temp_k, 
                                 model = "2PL")
           
+          ## Fit the 2PL model
           temp_model <- ltm(temp_data ~ z1, IRT.param = TRUE, start.val = start.vals)
           
+          ## Obtain the likelihood of the 2PL model on the dataset
           l_0 <- temp_model$log.Lik
         
+          ## And for every different test:
+          ## calculate the p-value of the chi-square statistic with the
+          ## correct amount of degrees of freedom
           p_value_1 <- 1 - pchisq(q = LR.test(l_0 = l_0, data = temp_data, g = 2, start.val = start.vals), 
                               df = 2 * temp_k)
  
@@ -83,13 +92,18 @@ for(a in levels(test_length)){
           
           p_value_4 <- equal.mirt.diff.test(l_0 = l_0, dataset = temp_data, k = temp_k)
           
+          ## For pearson's chi^2 test, only obtain p-values for conditions where
+          ## the test length is not equal to 20 (due to computational issues)
           if(temp_k == 20){
           p_value_5 <- 1
           } else {
           p_value_5 <- pearson.test(model = temp_model, k = temp_k)
           }
           
-          
+          ## Then, on the earlier created vectors, state for the p-value
+          ## of each test
+          ## whether they are smaller then .05 (i.e., if they are rejected). If
+          ## so, put a 1 on the ith value of the vector, else a 0
           prop_1[i] <- ifelse(p_value_1 < .05, 1, 0)
           prop_2[i] <- ifelse(p_value_2 < .05, 1, 0)
           prop_3[i] <- ifelse(p_value_3 < .05, 1, 0)
@@ -97,12 +111,16 @@ for(a in levels(test_length)){
           prop_5[i] <- ifelse(p_value_5 < .05, 1, 0)
         }
       
+      ## Finally, put the results of the current conditions in the 
+      ## data frame with rbind (the rejection rate is the mean of the
+      ## created vectors)
       alpha_results <- rbind(alpha_results, c(a, b, mean(prop_1), mean(prop_2), 
                                   mean(prop_3), mean(prop_4), mean(prop_5)))
   }
   
 }
 
+## Some subsetting and resetting rownames
 alpha_results <- alpha_results[-1 ,]
 rownames(alpha_results) <- NULL
 
@@ -111,26 +129,19 @@ alpha_results
 
 34 times non convergence. Proportion of < .001.
 
+## 3. Power analysis
 
-## Power analysis
-
-```{r Final second run}
-## This is for power estimation
+```{r Power analysis}
 library(ltm)
 library(dplyr)
 library(mirt)
-## This is for empirical alpha estimation
+
 test_length <- as.factor(c(5, 10, 20))
 sample_size <- as.factor(c(200, 300, 500, 1000, 1500))
 
 set.seed(1248)
 
 n_sim <- 300
-
-## We vary three factors, and for the simulation study, we 
-## cross-examine them through a nested for loop
-
-## TUPLES
 
 power_results <- data.frame(test_length = NA, sample_size = NA, LR2 = NA,
                       LR3 = NA, LR4 = NA, Chisq = NA, P_Chisq = NA)
@@ -151,9 +162,9 @@ for(a in levels(test_length)){
       start.vals <- start.values(temp_k)
       
         for(i in 1:n_sim){
-        ## Then, for every condition, generate data according to the
-        ## current condition
 
+          ## Everything is according to the same principles as described
+          ## above, except that data is now generated according to the 3PL
           temp_data <- data.gen(n = temp_n, 
                                 k = temp_k, 
                                 model = "3PL")
@@ -199,7 +210,13 @@ rownames(power_results) <- NULL
 
 power_results
 ```
-71 times nonconvergence. Total times model = fit: 45.000 times
 
+71 times nonconvergence. Proportion of <.001.
+
+4. Session Information for Reproducibility
+
+```{r}
+sessionInfo()
+```
 
 
