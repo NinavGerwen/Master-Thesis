@@ -56,7 +56,6 @@ Item Response Theory (IRT) is an often used tool for designing and analysing tes
 
 \indent Therefore, we explore a new possible goodness-of-fit test to test for model misspecification between the 2PL and 3PL in IRT. The test we are interested in originates from multi-group analyses, where it can be used to detect group differences in existing groups. However, what if there were no existing groups, and groups are made by random assignment instead. In this scenario, if a wrong model were to be specified, would the test have power to reject this model in favour of the true model? We expect that the test will have power to detect this model misspecification. If the test does not turn out to have any power, this would mean that the test is robust against violations of model specification. \\
 
-
 \indent The second procedure of assessing model fit is through the use of fit indices. Fit indices are mathematical descriptives that indicate how well a model fits to the data. Note, however, that fit indices alone are not sufficient to infer whether a model fits well as they are not an inferential statistic and only describe the overall fit. Taken together with goodness-of-fit tests, fit indices do allow researchers to have a more comprehensive overview of model fit. For example, when due to a lot of power, a goodness-of-fit test shows that the model should be rejected, fit indices can indicate whether the model is still reasonable. \\ 
 \indent Previous research in IRT has seen the development of multiple fit indices. (e.g., $Y\text{-}Q_1$; Yen, 1981, $\text{RMSEA}_n$; Maydeu-Olivares \& Joe, 2014). For an overview of the use and limitations of several IRT fit indices, see Nye et al. (2020). Fit indices from Structural Equation Modeling can also be used in IRT. Although research has been done to examine the performance of few fit indices from Structural Equation Modeling in IRT (e.g., RMSEA \& SRMR; Maydeu-Olivares \& Joe, 2014), hardly any research has been done towards the use of the Tucker-Lewis Index (TLI; Tucker \& Lewis, 1973) and the Comparative Fit Index (CFI; Bentler, 1990) in an IRT context. Only one paper examines the CFI (Yang, 2020) and two papers investigate the TLI (Cai et al., 2021; Yang, 2020) in an IRT setting. Both studies concluded that the two fit indices can add additional insights in assessing model fit. However, there have been no studies that investigate the performance of the TLI and CFI when calculated through the $\chi^2$ statistic and with a baseline model that allows for independence between test items. The calculations of the fit indices influence their performance and should therefore be investigated further. \\
 
@@ -71,6 +70,7 @@ In order to evaluate the MG LR test for the 2- and 3PL in IRT and to better unde
 \item{What is the power of the MG LR test to detect model misspecification when groups are based on random assignment?}
 \item{Under random assignment, how does the performance of the MG LR test compare to the performance of a $\chi^2$-difference and Pearson's $\chi^2$-test in detecting model misspecification?}
 \item{What is the performance of the TLI, CFI and ICFI in detecting model mismatch between the 2PL and 3PL in IRT?}
+\item{When groups are based on true differences, what is the power of the MG LR test to detect these differences in IRT?}
 \end{enumerate}
 
 Results from the simulation studies are reported to answer the research questions. Furthermore, empirical data from ... are used to illustrate the value of the investigated model fit measures.
@@ -177,7 +177,7 @@ We study performance of the different goodness-of-fit tests by estimating both e
 
 \subsection{Results}
 
-To asses the performance of the MG LR test with randomised groups and the three fit indices, we conducted the above described simulation study. Non-convergence of the models occured $<.001$ percent of the time. Furthermore, when test length was 20, the empirical $\alpha$ and power estimates for Pearson's $\chi^2$-test were not estimated. This is because of the large amount of possible score patterns ($2^20$) in this condition, which required too much computational power for the scope of the current study. \\
+To asses the performance of the MG LR test with randomised groups and the three fit indices, we conducted the above described simulation study. Non-convergence of the models occurred $<.001$ percent of the time. Furthermore, when test length was 20, the empirical $\alpha$ and power estimates for Pearson's $\chi^2$-test were not estimated. This is because of the large amount of possible score patterns ($2^20$) in this condition, which required too much computational power for the scope of the current study. \\
 \indent \textit{Table \ref{tab:1}} presents the empirical rejection rates test at the $\alpha = .05$ level for the different $\chi^2$ based goodness-of-fit tests. Here, the asymptomatic property of the tests can be observed clearly. As sample size increases, empirical $\alpha$ values approach the nominal level of .05. At large sample sizes, the rejection rates of the MG LR and $\chi^2$ difference test seem to not deviate far from the nominal level for different levels of test lengths. Therefore, we can state that these two tests statistics indeed asymptotically follow their supposed $\chi^2$ distribution under the null hypothesis. However, this also means that for low sample sizes, the test statistic does not yet completely follow a $\chi^2$ distribution, resulting in higher rejection rates. For Pearson's $\chi^2$ test, the table also shows that as the number of items increases, the empirical $\alpha$ increases dramatically from 0.06 to 0.22. This is in accordance with the issues we discussed in the introduction, where Pearson's $\chi^2$-test does not follow a $\chi^2$ distribution when many score patterns are low or missing. These results can be seen as confirmation for the theory and design behind our study. Important to remember, however, is that empirical data is almost never as clean.
 % Table for Empirical Alpha results
 \begin{table}[t!]
@@ -242,7 +242,7 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \label{tab:2}
 \end{table}
 
-\indent For the fit indices, \textit{Table \ref{tab:3}} and \textit{Table \ref{tab:4}} exhibit the mean and standard error for the TLI, CFI and ICFI under correct and incorrect model specification respectively. Both tables show that as sample size increases, the values on the fit indices move closer to 1 (i.e., a good model fit). However, if test length increases, fit index values move closer to 0 instead. This can be interpreted in the following way: as test length increases, the fit of the baseline model becomes relatively better compared to the tested model. This result has not been found before in IRT literature. This phenomenon might be due to our choice of baseline model and further strengthens the argument made by (Van Laar \& Braeken, 2021) who emphasized that the choice of baseline model is important when working with fit indices. However, even though fit indices value tend to 0 as test length increases, the values for the TLI and CFI are on average higher under correct model specification compared to incorrect model specification for every single condition (e.g., for $N = 400$ \& $I = 10$, the mean of the TLI is 0.11 under correct model specification, whereas it is .00 under incorrect model specification). This means that these fit indices can be used for model fit decisions. However, test length would have to be taken into account if a `rule-of-thumb' is desired. \\
+\indent For the fit indices, \textit{Table \ref{tab:3}} and \textit{Table \ref{tab:4}} exhibit the mean and standard error for the TLI, CFI and ICFI under correct and incorrect model specification respectively. Both tables show that as sample size increases, the values on the fit indices move closer to 1 (i.e., a good model fit). However, if test length increases, fit index values move closer to 0 instead. This can be interpreted in the following way: as test length increases, the fit of the baseline model becomes relatively better compared to the tested model. This result has not been found before in IRT literature. This phenomenon might be due to our choice of baseline model and further strengthens the argument made by (Van Laar \& Braeken, 2021) who emphasised that the choice of baseline model is important when working with fit indices. However, even though fit indices value tend to 0 as test length increases, the values for the TLI and CFI are on average higher under correct model specification compared to incorrect model specification for every single condition (e.g., for $N = 400$ \& $I = 10$, the mean of the TLI is 0.11 under correct model specification, whereas it is .00 under incorrect model specification). This means that these fit indices can be used for model fit decisions. However, test length would have to be taken into account if a `rule-of-thumb' is desired. \\
 
 \begin{table}[ht!]
 \caption{TLI, CFI and ICFI values under correct model specification}
@@ -313,12 +313,22 @@ To asses the performance of the MG LR test with randomised groups and the three 
 \section{Simulation Study II}
 In this simulation study, we also only consider IRT with unidimensional $\theta$, dichotomous test items and the IRF for the 2- and 3PL. For the MG LR test, we investigate at which rate the test is able to reject a model under different conditions when groups are based on true differences. The simulation study was conducted in R. \\
 \indent Similar to Simulation Study I, we again vary the four factors test length ($I = 5, 10, 20$), sample size ($N = 200, 300, 500, 1000, 1500$), the model type (2PL, 3PL) and the number of groups ($G = 2, 3, 4$). We also investigate a fifth factor: group differences, which has three conditions, (1) differences in $\theta$, (2) differences in the item parameters $\alpha_i$ and $\beta_i$ and (3) differences in the item parameters $\alpha_i$, $\beta_i$ and $\gamma_i$ (only applicable to the 3PL condition). This results in a total of 225 distinct conditions. Each condition is replicated 300 times. \\
-\indent Data generation for Simulation Study II works in the same way as in Simulation Study I with one key difference. Now, data generation is no longer according to the same parameters described in Simulation Study I for the whole dataset. Instead, the parameters are dependent on two factors: the group differences factor, and the number of groups factor $G$. In the differences in $\theta$ conditions, the item parameters are the same for all $G$ groups. However, the mean of the normal distribution depends on group membership. Between every group, there is a mean difference of $-0.25$ with the previous group. For example, when $G = 3$, group one has a mean of 0, group two a mean of $-0.25$, and group three a mean of $-0.50$. In the differences in item parameter conditions, the opposite happens. Here, the person parameters are all sampled from the same standard normal distribution. However, the item parameters now depend on group membership. For the discrimination parameter per item, $\alpha_i$, all values are lowered by 0.10 for each consecutive group. Whereas for the difficulty parameter per item, $\beta_i$, the values are lowered by 0.25 per consecutive group. So when $G = 2$, group one has $\alpha_1 = 0.7$ and $\beta_1 = -1$, so group two has $\alpha_1 = 0.65$ and $\beta_1 = -1.25$. For the conditions where $\gamma_i$ differs, we chose to lower the $\gamma_i$ values by .05 per consecutive group. \\
+\indent Data generation for Simulation Study II works in the same way as in Simulation Study I with one key difference. Now, data generation is no longer according to the same parameters described in Simulation Study I for the whole dataset. Instead, the parameters are dependent on two factors: the group differences factor, and the number of groups factor $G$. In the differences in $\theta$ conditions, the item parameters are the same for all $G$ groups. However, the mean of the normal distribution depends on group membership. Between every group, there is a mean difference of $-0.25$ with the previous group. For example, when $G = 3$, group one has a mean of 0, group two a mean of $-0.25$, and group three a mean of $-0.50$. In the differences in item parameter conditions, the opposite happens. Here, the person parameters are all sampled from the same standard normal distribution. However, the item parameters now depend on group membership. For the discrimination parameter per item, $\alpha_i$, all initial values (identical to Simulation Study I) are lowered by 0.10 for each consecutive group. Whereas for the difficulty parameter per item, $\beta_i$, the values are lowered by 0.25 per consecutive group. So when $G = 2$, group one has $\alpha_1 = 0.7$ and $\beta_1 = -1$, so group two has $\alpha_1 = 0.65$ and $\beta_1 = -1.25$. For the conditions where $\gamma_i$ differs, we chose to lower the $\gamma_i$ values by .05 per consecutive group. \\
 \indent Furthermore, we no longer use $\chi^2$ difference and Pearson's $\chi^2$ test, as these are used to detect model misspecification, whereas we are now in the field of detecting group differences. Performance is again measured by the detection rate. However, now they are all considered power estimates against group differences.
 
 \subsection{Results}
 
-To research whether the MG LR test has power to discern whether there are group differences, we ran the above described simulation study. 
+To research whether the MG LR test has power to discern whether there are group differences, we ran the above described simulation study. Non-convergence of the models occurred $<.001$ percent of the time. \\
+\indent For when differences are based on a small difference - according to Cohen's standards in Psychology (1988) - in the mean of distribution of the latent variable, \textit{Table \ref{tab:5}} presents the power of the MG LR test for different test lengths, sample sizes and number of groups. The table shows exactly what one would expect of a power study, where the power to reject the null hypothesis increases to 1.00 as sample size increases. The table also shows that with the number of groups, the power to reject the null hypothesis also increases. However, there do not seem to be large differences in the power of the MG LR test depending on the data generating model. In fact, if anything, the power estimates seem to be slightly lower. This would entail that as model complexity increases, the MG LR test loses some of its power. \\
+\indent \textit{Table \ref{tab:6}}
+
+alpha beta, 2PL: 51 times nonconvergence
+alpha beta, 3PL: ~ 100 times nonconvergence
+
+theta, 2PL: 21 times nonconvergence
+theta 3PL: 87 times nonconvergence
+
+--> All less than 0.01
 
 \newpage 
 
@@ -328,28 +338,28 @@ To research whether the MG LR test has power to discern whether there are group 
 \toprule
 \multicolumn{2}{c}{} & \multicolumn{3}{c}{2PL} & \multicolumn{3}{c}{3PL} \\
 \multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} \\
-\rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 & 2 & 3 & 4\\
+\rowcolor{white} \multicolumn{1}{c}{\textit{I}} & \multicolumn{1}{c}{\textit{N}} & 2 & 3 & 4 & 2 & 3 & 4 \\
 \midrule
-5 & 200 & 0.10 & 0.09 & 0.12 & ... & ... & ... \\ 
-& 300 & 0.09 & 0.08 & 0.14 & ... & ... & ... \\
-& 500 & 0.07 & 0.09 & 0.12 & ... & ... & ... \\
-& 1000 & 0.06 & 0.05 & 0.08 & ... & ... & ... \\
-& 1500 & 0.05 & 0.07 & 0.05 & ... & ... & ... \\
-10 & 200 & 0.09 & 0.14 & 0.20 & ... & ... & ... \\ 
-& 300 & 0.11 & 0.11 & 0.13 & ... & ... & ... \\
-& 500 & 0.05 & 0.09 & 0.08 & ... & ... & ... \\
-& 1000 & 0.08 & 0.07 & 0.07 & ... & ... & ... \\
-& 1500 & 0.06 & 0.06 & 0.06 & ... & ... & ... \\
-20 & 200 & 0.10 & 0.11 & 0.16 & ... & ... & ... \\ 
-& 300 & 0.08 & 0.10 & 0.11 & ... & ... & ... \\
-& 500 & 0.05 & 0.08 & 0.08 & ... & ... & ... \\
-& 1000 & 0.03 & 0.05 & 0.06 & ... & ... & ... \\
-& 1500 & 0.03 & 0.05 & 0.07 & ... & ... & ... \\
+5 & 200 & 0.13 & 0.28 & 0.37 & 0.15 & 0.24 & 0.31 \\ 
+& 300 & 0.15 & 0.32 & 0.46 & 0.14 & 0.23 & 0.41 \\
+& 500 & 0.20 & 0.42 & 0.71 & 0.17 & 0.36 & 0.59 \\
+& 1000 & 0.40 & 0.79 & 0.98 & 0.33 & 0.64 & 0.90 \\
+& 1500 & 0.65 & 0.96 & 1.00 & 0.47 & 0.85 & 0.98 \\
+10 & 200 & 0.13 & 0.26 & 0.40 & 0.18 & 0.23 & 0.44 \\ 
+& 300 & 0.17 & 0.24 & 0.44 & 0.15 & 0.30 & 0.50 \\
+& 500 & 0.18 & 0.43 & 0.72 & 0.19 & 0.34 & 0.63 \\
+& 1000 & 0.42 & 0.80 & 0.98 & 0.38 & 0.66 & 0.92 \\
+& 1500 & 0.62 & 0.97 & 1.00 & 0.49 & 0.89 & 1.00 \\
+20 & 200 & 0.13 & 0.23 & 0.35 & 0.10 & 0.25 & 0.39 \\ 
+& 300 & 0.14 & 0.23 & 0.41 & 0.13 & 0.26 & 0.37 \\
+& 500 & 0.17 & 0.40 & 0.65 & 0.15 & 0.36 & 0.57 \\
+& 1000 & 0.38 & 0.76 & 0.97 & 0.26 & 0.68 & 0.89 \\
+& 1500 & 0.57 & 0.94 & 1.00 & 0.48 & 0.88 & 1.00 \\
 \bottomrule
 \end{tabular}
 
 \bigskip
-\small\textit{Note}. Fitted model = two-parameter logistic model; Data generating model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; \textit{G} = number of groups under which the data was generated.
+\small\textit{Note}. Fitted model = two-parameter logistic model; \textit{I} = test length; \textit{N} = sample size; \textit{G} = number of groups under which the data was generated.
 \label{tab:5}
 \end{table}
 
@@ -363,21 +373,21 @@ To research whether the MG LR test has power to discern whether there are group 
 \multicolumn{2}{c}{Conditions} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} & \multicolumn{3}{c}{\textit{G}} \\
 \rowcolor{white} \textit{I} & \textit{N} & 2 & 3 & 4 & 2 & 3 & 4 & 2 & 3 & 4 \\
 \midrule
-5 & 200 & ... & ... & ... & ... & ... & ... & ... & ... & ...\\ 
-& 300 & 0.09 & 0.08 & 0.14 & ... & ... & ... & ... & ... & ...\\
-& 500 & 0.07 & 0.09 & 0.12 & ... & ... & ... & ... & ... & ...\\
-& 1000 & 0.06 & 0.05 & 0.08 & ... & ... & ... & ... & ... & ...\\
-& 1500 & 0.05 & 0.07 & 0.05 & ... & ... & ... & ... & ... & ...\\
-10 & 200 & 0.09 & 0.14 & 0.20 & ... & ... & ... & ... & ... & ...\\ 
-& 300 & 0.11 & 0.11 & 0.13 & ... & ... & ... & ... & ... & ...\\
-& 500 & 0.05 & 0.09 & 0.08 & ... & ... & ... & ... & ... & ...\\
-& 1000 & 0.08 & 0.07 & 0.07 & ... & ... & ... & ... & ... & ... \\
-& 1500 & 0.06 & 0.06 & 0.06 & ... & ... & ... & ... & ... & ...\\
-20 & 200 & 0.10 & 0.11 & 0.16 & ... & ... & ... & ... & ... & ...\\ 
-& 300 & 0.08 & 0.10 & 0.11 & ... & ... & ... & ... & ... & ...\\
-& 500 & 0.05 & 0.08 & 0.08 & ... & ... & ... & ... & ... & ...\\
-& 1000 & 0.03 & 0.05 & 0.06 & ... & ... & ... & ... & ... & ...\\
-& 1500 & 0.03 & 0.05 & 0.07 & ... & ... & ... & ... & ... & ...\\
+5 & 200 & 0.12 & 0.31 & 0.36 & 0.15 & 0.24 & 0.30 & . & . & .\\ 
+& 300 & 0.20 & 0.34 & 0.43 & 0.14 & 0.23 & 0.39 & . & . & .\\
+& 500 & 0.22 & 0.43 & 0.73 & 0.18 & 0.38 & 0.56 & . & . & .\\
+& 1000 & 0.46 & 0.82 & 0.98 & 0.33 & 0.68 & 0.86 & . & . & .\\
+& 1500 & 0.72 & 0.98 & 1.00 & 0.51 & 0.85 & 0.98 & . & . & .\\
+10 & 200 & 0.14 & 0.30 & 0.48 & 0.19 & 0.31 & 0.50 & . & . & .\\ 
+& 300 & 0.21 & 0.30 & 0.51 & 0.18 & 0.35 & 0.62 & . & . & .\\
+& 500 & 0.22 & 0.45 & 0.80 & 0.21 & 0.39 & 0.65 & . & . & .\\
+& 1000 & 0.53 & 0.88 & 0.98 & 0.46 & 0.76 & 0.93 & . & . & .\\
+& 1500 & 0.76 & 0.98 & 1.00 & 0.63 & 0.90 & 1.00 & . & . & .\\
+20 & 200 & 0.13 & 0.23 & 0.35 & 0.10 & 0.25 & 0.39 & . & . & .\\ 
+& 300 & 0.14 & 0.23 & 0.41 & 0.13 & 0.26 & 0.37 & . & . & .\\
+& 500 & 0.17 & 0.40 & 0.65 & 0.15 & 0.36 & 0.57 & . & . & . \\
+& 1000 & 0.38 & 0.76 & 0.97 & 0.26 & 0.68 & 0.89 & . & . & .\\
+& 1500 & 0.57 & 0.94 & 1.00 & 0.48 & 0.88 & 1.00 & . & . & . \\
 \bottomrule
 \end{tabular}
 
@@ -402,7 +412,7 @@ The current study investigated earlier existing and new possible measures of mod
 - didn't test polytome IRT
 - model differences: does not show where these differences are
 
-future research can do these, also the test can be used in any field of statistics. not just IRT.
+future research can do these, also the test can be used in any field of statistics. not just IRT. (e.g., SEM)
 
 
 \subsection{Conclusion}

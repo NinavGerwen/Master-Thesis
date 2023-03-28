@@ -214,20 +214,20 @@ gamma.diff.data.gen <- function(n, k, g, method = "theta", model = "3PL"){
     for(i in 1:g){
       theta <- matrix(data = rep((rnorm(n)), k), ncol = k)
       
-      beta <- matrix(data = rep( (c(-1, -0.5, 0, 0.5, 1) - ((as.numeric(i) -  1)/2)) , k/5), 
+      beta <- matrix(data = rep( (c(-1, -0.5, 0, 0.5, 1) - ((as.numeric(i) -  1)/4)) , k/5), 
                      nrow = n, ncol = k, byrow = TRUE)
       
       if(k == 5){
-        alpha <- matrix(data = (c(0.7, 0.85, 1, 1.15, 1.3) - ((as.numeric(i) - 1)/8)), ncol = k,
+        alpha <- matrix(data = (c(0.7, 0.85, 1, 1.15, 1.3) - ((as.numeric(i) - 1)/10)), ncol = k,
                         nrow = n, byrow = TRUE)
       }
       if(k == 10){
-        alpha <- matrix(data = (c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1, 0.85, 0.7) - ((as.numeric(i) - 1)/8)), ncol = k, nrow = n,
+        alpha <- matrix(data = (c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1, 0.85, 0.7) - ((as.numeric(i) - 1)/10)), ncol = k, nrow = n,
                         byrow = TRUE)
       }
       if(k == 20){
         alpha <- matrix(data = (c(0.7, 0.85, 1, 1.15, 1.3, 1.3, 1.15, 1, 0.85, 
-                                  0.7, 1.15, 1.3, 0.7, 0.85, 1, 1, 0.7, 1.3, 0.85, 1.15) - ((as.numeric(i) - i)/8)), ncol = k, nrow = n,
+                                  0.7, 1.15, 1.3, 0.7, 0.85, 1, 1, 0.7, 1.3, 0.85, 1.15) - ((as.numeric(i) - 1)/10)), ncol = k, nrow = n,
                         byrow = TRUE)
       }
       
