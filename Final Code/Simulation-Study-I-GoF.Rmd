@@ -213,7 +213,7 @@ power_results
 
 71 times nonconvergence. Proportion of <.001.
 
-4. Session Information for Reproducibility
+## 4. Session Information for Reproducibility
 
 ```{r}
 sessionInfo()
