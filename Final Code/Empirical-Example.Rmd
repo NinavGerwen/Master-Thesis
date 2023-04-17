@@ -1,0 +1,122 @@
+---
+title: "Empirical Example"
+author: "Nina van Gerwen (1860852)"
+date: "2023-04-17"
+output: html_document
+---
+
+## 1: Setup
+
+```{r}
+source("Functions/fit-indices calculations.R")
+source("Functions/data-aggregation.R")
+
+library(ltm)
+library(mirt)
+library(dplyr)
+
+emp_data <- LSAT
+
+aggr_data <- score.pattern.aggr(emp_data, 1000)
+```
+
+
+## 2: Fitting the four models
+
+```{r}
+set.seed(1248)
+two.pl <- ltm(emp_data ~ z1, IRT.param = TRUE)
+
+three.pl <- tpm(emp_data, IRT.param = TRUE)
+
+three.pl.equal.gamma <- mirt(data = emp_data, model = 1, itemtype = "3PL", optimizer = "nlminb", 
+           TOL = .0001, control = list(maxit = 1000),
+           verbose = FALSE, constrain = list(c(3, 7, 11, 15, 19)))
+
+constraints <- cbind(1:5, rep(1, 5), 0.25)
+three.pl.25 <- tpm(emp_data, IRT.param = TRUE, constraint = constraints)
+```
+
+
+
+## 3: Calculating the TLI and CFI for each model
+
+```{r}
+chibase <- chi.base(agg_data = aggr_data, data = emp_data, n = 1000, k = 5)
+df.base <- ((5 * 6) / 2)
+```
+
+
+
+### 3.1: TLI and CFI for the 2PL
+
+```{r}
+chitested.twopl <- chi.tested(l_0 = two.pl$log.Lik, agg_data = aggr_data, n = 1000)
+df.tested.twopl <- ((5 * 6) / 2) - 5
+
+TLI.twopl <- TLI(chi_base = chibase, df_base = df.base, 
+                 chi_tested = chitested.twopl, df_tested = df.tested.twopl)
+TLI.twopl
+
+CFI.twopl <- CFI(chi_base = chibase, df_base = df.base,
+                 chi_tested = chitested.twopl, df_tested = df.tested.twopl)
+CFI.twopl
+```
+
+
+
+### 3.2: TLI and CFI for the 3PL
+
+```{r}
+chitested.threepl <- chi.tested(l_0 = three.pl$log.Lik, agg_data = aggr_data, n = 1000)
+df.tested.threepl <- ((5 * 6) / 2) - 10
+
+TLI.threepl <- TLI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl,
+                   df_tested = df.tested.threepl)
+TLI.threepl
+
+CFI.threepl <- CFI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl,
+                   df_tested = df.tested.threepl)
+CFI.threepl
+```
+
+
+### 3.3: TLI and CFI for the 3PL with equal $\gamma_i$ constraint
+
+```{r}
+chitested.threepl.equal.gamma <- three.pl.equal.gamma %>% logLik(.) %>%
+  chi.tested(l_0 = ., agg_data = aggr_data, n = 1000)
+df.tested.threepl.equal.gamma <- ((5 * 6)/2) - 6
+
+TLI.threepl.equal.gamma <- TLI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl.equal.gamma,
+                   df_tested = df.tested.threepl.equal.gamma)
+TLI.threepl.equal.gamma
+
+CFI.threepl.equal.gamma <- CFI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl.equal.gamma,
+                   df_tested = df.tested.threepl.equal.gamma)
+CFI.threepl.equal.gamma
+```
+
+
+### 3.4: TLI and CFI for 3PL with $\gamma_i = 0.25$
+
+```{r}
+chitested.final <- chi.tested(l_0 = three.pl.25$log.Lik, agg_data = aggr_data, n = 1000)
+df.tested.final <- ((5 * 6)/2) - 5
+
+TLI.final <- TLI(chi_base = chibase, df_base = df.base, chi_tested = chitested.final,
+                   df_tested = df.tested.final)
+TLI.final
+
+CFI.final <- CFI(chi_base = chibase, df_base = df.base, chi_tested = chitested.final,
+                   df_tested = df.tested.final)
+CFI.final
+```
+
+
+## Session Information for Reproducibility
+
+```{r}
+sessionInfo()
+```
+

@@ -1,12 +1,17 @@
 %% This BibTeX bibliography file was created using BibDesk.
 %% https://bibdesk.sourceforge.io/
 
-%% Created for Nina van Gerwen at 2023-03-16 13:45:19 +0100 
+%% Created for Nina van Gerwen at 2023-04-17 18:04:08 +0200 
 
 
 %% Saved with string encoding Unicode (UTF-8) 
 
-
+@book{cohen2013statistical,
+  title={Statistical power analysis for the behavioral sciences},
+  author={Cohen, Jacob},
+  year={2013},
+  publisher={Academic press}
+}
 
 @article{dataset,
 	author = {Darrell Bock, R and Lieberman, Marcus},
@@ -21,7 +26,6 @@
 	year = {1970}}
 
 @article{consq3,
-	abstract = { In this article, the practical consequences of violations of unidimensionality on selection decisions in the framework of unidimensional item response theory (IRT) models are investigated based on simulated data. The factors manipulated include the severity of violations, the proportion of misfitting items, and test length. The outcomes that were considered are the precision and accuracy of the estimated model parameters, the correlations of estimated ability (θ^) and number-correct (NC) scores with the true ability (θ), the ranks of the examinees and the overlap between sets of examinees selected based on either θ, θ^, or NC scores, and the bias in criterion-related validity estimates. Results show that the θ^ values were unbiased by violations of unidimensionality, but their precision decreased as multidimensionality and the proportion of misfitting items increased; the estimated item parameters were robust to violations of unidimensionality. The correlations between θ, θ^, and NC scores, the agreement between the three selection criteria, and the accuracy of criterion-related validity estimates are all negatively affected, to some extent, by increasing levels of multidimensionality and the proportion of misfitting items. However, removing the misfitting items only improved the results in the case of severe multidimensionality and large proportion of misfitting items, and deteriorated them otherwise. },
 	author = {Daniela R. Cri{\c s}an and Jorge N. Tendeiro and Rob R. Meijer},
 	date-added = {2022-09-28 13:36:17 +0200},
 	date-modified = {2022-09-28 13:36:24 +0200},
@@ -101,7 +105,6 @@
 	year = {2021}}
 
 @article{chi2sens,
-	abstract = {Monte Carlo computer simulations were used to investigate the performance of three χ2 test statistics in confirmatory factor analysis (CFA). Normal theory maximum likelihood χ2 (ML), Browne's asymptotic distribution free χ2 (ADF), and the Satorra-Bentler rescaled χ2 (SB) were examined under varying conditions of sample size, model specification, and multivariate distribution. For properly specified models, ML and SB showed no evidence of bias under normal distributions across all sample sizes, whereas ADF was biased at all but the largest sample sizes. ML was increasingly overestimated with increasing nonnormality, but both SB (at all sample sizes) and ADF (only at large sample sizes) showed no evidence of bias. For misspecified models, ML was again inflated with increasing nonnormality, but both SB and ADF were underestimated with increasing nonnormality. It appears that the power of the SB and ADF test statistics to detect a model misspecification is attenuated given nonnormally distributed data.},
 	author = {Curran, {Patrick J.} and Stephen West and Finch, {John F.}},
 	date-added = {2022-09-22 10:21:55 +0200},
 	date-modified = {2022-09-22 10:22:00 +0200},
@@ -144,7 +147,6 @@
 	bdsk-url-1 = {https://doi.org/10.1080/00273171.2014.911075}}
 
 @article{dichotirtfit2,
-	abstract = { Fit of the model to the data is important if the benefits of item response theory (IRT) are to be obtained. In this study, the authors compared model selection results using the likelihood ratio test, two information-based criteria, and two Bayesian methods. An example illustrated the potential for inconsistency in model selection depending on which of the indices was used. Results from a simulation study indicated that the inconsistencies among the indices were common but that model selection was relatively accurate for longer tests administered to larger sample of examinees. The cross-validation log-likelihood (CVLL) appeared to work the best of the five models for the conditions simulated in this study. },
 	author = {Taehoon Kang and Allan S. Cohen},
 	date-added = {2022-09-22 10:15:06 +0200},
 	date-modified = {2022-09-22 10:15:11 +0200},
@@ -160,7 +162,6 @@
 	bdsk-url-1 = {https://doi.org/10.1177/0146621606292213}}
 
 @article{dichotirtfit,
-	abstract = { New goodness-of-fit indices are introduced for dichotomous item response theory (IRT) models. These indices are based on the likelihoods of number-correct scores derived from the IRT model, and they provide a direct comparison of the modeled and observed frequencies for correct and incorrect responses for each number-correct score. The behavior of Pearson's X2 (S-X2) and the likelihood ratio G2 (S-G2) was assessed in a simulation study and compared with two fit indices similar to those currently in use (Q1-X2 and Q1-G2). The simulations included three conditions in which the simulating and fitting models were identical and three conditions involving model misspecification. S-X2 performed well, with Type I error rates close to the expected .05 and .01 levels. Performance of this index improved with increased test length. S-G2 tended to reject the null hypothesis too often, as did Q1-X2 and Q1-G2. The power of S-X2 appeared to be similar for all test lengths, but varied depending on the type of model misspecification. },
 	author = {Maria Orlando and David Thissen},
 	date-added = {2022-09-22 10:14:18 +0200},
 	date-modified = {2022-09-22 10:14:29 +0200},
@@ -294,14 +295,13 @@
 	volume = {50},
 	year = {1985}}
 
-@Article{mirt,
-    title = {{mirt}: A Multidimensional Item Response Theory Package
-      for the {R} Environment},
-    author = {R. Philip Chalmers},
-    journal = {Journal of Statistical Software},
-    year = {2012},
-    volume = {48},
-    number = {6},
-    pages = {1--29},
-    doi = {10.18637/jss.v048.i06},
-  }
+@article{mirt,
+	author = {R. Philip Chalmers},
+	doi = {10.18637/jss.v048.i06},
+	journal = {Journal of Statistical Software},
+	number = {6},
+	pages = {1--29},
+	title = {{mirt}: A Multidimensional Item Response Theory Package for the {R} Environment},
+	volume = {48},
+	year = {2012},
+	bdsk-url-1 = {https://doi.org/10.18637/jss.v048.i06}}
