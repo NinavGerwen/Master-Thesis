@@ -361,6 +361,7 @@ display: none;
 <h2>1: Setup</h2>
 <pre class="r"><code>source(&quot;Functions/fit-indices calculations.R&quot;)
 source(&quot;Functions/data-aggregation.R&quot;)
+source(&quot;Functions/chi-square-diff-test.R&quot;)
 
 library(ltm)</code></pre>
 <pre><code>## Loading required package: MASS</code></pre>
@@ -466,6 +467,24 @@ TLI.final</code></pre>
 CFI.final</code></pre>
 <pre><code>## [1] 0.8030864</code></pre>
 </div>
+</div>
+<div id="using-the-chi2-difference-test" class="section level2">
+<h2>Using the <span class="math inline">\(\chi^2\)</span>-difference
+test</h2>
+<pre class="r"><code>l_a &lt;- three.pl$log.Lik
+l_a_eq &lt;- logLik(three.pl.equal.gamma)
+l_0 &lt;- two.pl$log.Lik
+
+chisq_val &lt;- 2 * (l_a - l_0)
+
+p_val &lt;- 1 - pchisq(chisq_val, df = 5)
+p_val</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>chisq_val_eq &lt;- 2 * (logLik(three.pl.equal.gamma) - two.pl$log.Lik)
+
+p_val_eq &lt;- 1 - pchisq(chisq_val_eq, df = 1)
+p_val_eq</code></pre>
+<pre><code>## [1] 1</code></pre>
 </div>
 <div id="session-information-for-reproducibility" class="section level2">
 <h2>Session Information for Reproducibility</h2>

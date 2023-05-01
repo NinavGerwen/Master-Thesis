@@ -10,6 +10,7 @@ output: html_document
 ```{r}
 source("Functions/fit-indices calculations.R")
 source("Functions/data-aggregation.R")
+source("Functions/chi-square-diff-test.R")
 
 library(ltm)
 library(mirt)
@@ -111,6 +112,25 @@ TLI.final
 CFI.final <- CFI(chi_base = chibase, df_base = df.base, chi_tested = chitested.final,
                    df_tested = df.tested.final)
 CFI.final
+```
+
+
+## Using the $\chi^2$-difference test
+
+```{r}
+l_a <- three.pl$log.Lik
+l_a_eq <- logLik(three.pl.equal.gamma)
+l_0 <- two.pl$log.Lik
+
+chisq_val <- 2 * (l_a - l_0)
+
+p_val <- 1 - pchisq(chisq_val, df = 5)
+p_val
+
+chisq_val_eq <- 2 * (logLik(three.pl.equal.gamma) - two.pl$log.Lik)
+
+p_val_eq <- 1 - pchisq(chisq_val_eq, df = 1)
+p_val_eq
 ```
 
 
