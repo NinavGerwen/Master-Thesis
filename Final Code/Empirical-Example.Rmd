@@ -10,7 +10,6 @@ output: html_document
 ```{r}
 source("Functions/fit-indices calculations.R")
 source("Functions/data-aggregation.R")
-source("Functions/chi-square-diff-test.R")
 
 library(ltm)
 library(mirt)
@@ -119,8 +118,11 @@ CFI.final
 
 ```{r}
 l_a <- three.pl$log.Lik
+l_a
 l_a_eq <- logLik(three.pl.equal.gamma)
+l_a_eq
 l_0 <- two.pl$log.Lik
+l_0
 
 chisq_val <- 2 * (l_a - l_0)
 
