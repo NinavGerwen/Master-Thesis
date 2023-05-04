@@ -25,18 +25,22 @@ aggr_data <- score.pattern.aggr(emp_data, 1000)
 
 ```{r}
 set.seed(1248)
-two.pl <- ltm(emp_data ~ z1, IRT.param = TRUE)
 
-three.pl <- tpm(emp_data, IRT.param = TRUE)
+two.pl <- mirt(data = emp_data, model = 1, itemtype = "2PL", optimizer = "nlminb",
+                    TOL = .0000000000001, control = list(maxit = 1000),
+                    verbose = FALSE)
+
+three.pl <- mirt(data = emp_data, model = 1, itemtype = "3PL", optimizer = "nlminb",
+                    TOL = .0000000000001, control = list(maxit = 1000),
+                    verbose = FALSE)
 
 three.pl.equal.gamma <- mirt(data = emp_data, model = 1, itemtype = "3PL", optimizer = "nlminb", 
-           TOL = .0001, control = list(maxit = 1000),
+           TOL = .00000000001, control = list(maxit = 1000),
            verbose = FALSE, constrain = list(c(3, 7, 11, 15, 19)))
 
 constraints <- cbind(1:5, rep(1, 5), 0.25)
 three.pl.25 <- tpm(emp_data, IRT.param = TRUE, constraint = constraints)
 ```
-
 
 
 ## 3: Calculating the TLI and CFI for each model
@@ -51,7 +55,7 @@ df.base <- ((5 * 6) / 2)
 ### 3.1: TLI and CFI for the 2PL
 
 ```{r}
-chitested.twopl <- chi.tested(l_0 = two.pl$log.Lik, agg_data = aggr_data, n = 1000)
+chitested.twopl <- chi.tested(l_0 = logLik(two.pl), agg_data = aggr_data, n = 1000)
 df.tested.twopl <- ((5 * 6) / 2) - 5
 
 TLI.twopl <- TLI(chi_base = chibase, df_base = df.base, 
@@ -68,7 +72,7 @@ CFI.twopl
 ### 3.2: TLI and CFI for the 3PL
 
 ```{r}
-chitested.threepl <- chi.tested(l_0 = three.pl$log.Lik, agg_data = aggr_data, n = 1000)
+chitested.threepl <- chi.tested(l_0 = logLik(three.pl), agg_data = aggr_data, n = 1000)
 df.tested.threepl <- ((5 * 6) / 2) - 10
 
 TLI.threepl <- TLI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl,
@@ -117,11 +121,11 @@ CFI.final
 ## Using the $\chi^2$-difference test
 
 ```{r}
-l_a <- three.pl$log.Lik
+l_a <- logLik(three.pl)
 l_a
 l_a_eq <- logLik(three.pl.equal.gamma)
 l_a_eq
-l_0 <- two.pl$log.Lik
+l_0 <- logLik(two.pl)
 l_0
 
 chisq_val <- 2 * (l_a - l_0)
@@ -129,7 +133,7 @@ chisq_val <- 2 * (l_a - l_0)
 p_val <- 1 - pchisq(chisq_val, df = 5)
 p_val
 
-chisq_val_eq <- 2 * (logLik(three.pl.equal.gamma) - two.pl$log.Lik)
+chisq_val_eq <- 2 * (l_a_eq - l_0)
 
 p_val_eq <- 1 - pchisq(chisq_val_eq, df = 1)
 p_val_eq

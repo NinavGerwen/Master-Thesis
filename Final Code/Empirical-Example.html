@@ -361,7 +361,6 @@ display: none;
 <h2>1: Setup</h2>
 <pre class="r"><code>source(&quot;Functions/fit-indices calculations.R&quot;)
 source(&quot;Functions/data-aggregation.R&quot;)
-source(&quot;Functions/chi-square-diff-test.R&quot;)
 
 library(ltm)</code></pre>
 <pre><code>## Loading required package: MASS</code></pre>
@@ -394,12 +393,17 @@ aggr_data &lt;- score.pattern.aggr(emp_data, 1000)</code></pre>
 <div id="fitting-the-four-models" class="section level2">
 <h2>2: Fitting the four models</h2>
 <pre class="r"><code>set.seed(1248)
-two.pl &lt;- ltm(emp_data ~ z1, IRT.param = TRUE)
 
-three.pl &lt;- tpm(emp_data, IRT.param = TRUE)
+two.pl &lt;- mirt(data = emp_data, model = 1, itemtype = &quot;2PL&quot;, optimizer = &quot;nlminb&quot;,
+                    TOL = .0000000000001, control = list(maxit = 1000),
+                    verbose = FALSE)
+
+three.pl &lt;- mirt(data = emp_data, model = 1, itemtype = &quot;3PL&quot;, optimizer = &quot;nlminb&quot;,
+                    TOL = .0000000000001, control = list(maxit = 1000),
+                    verbose = FALSE)
 
 three.pl.equal.gamma &lt;- mirt(data = emp_data, model = 1, itemtype = &quot;3PL&quot;, optimizer = &quot;nlminb&quot;, 
-           TOL = .0001, control = list(maxit = 1000),
+           TOL = .00000000001, control = list(maxit = 1000),
            verbose = FALSE, constrain = list(c(3, 7, 11, 15, 19)))
 
 constraints &lt;- cbind(1:5, rep(1, 5), 0.25)
@@ -411,31 +415,31 @@ three.pl.25 &lt;- tpm(emp_data, IRT.param = TRUE, constraint = constraints)</cod
 df.base &lt;- ((5 * 6) / 2)</code></pre>
 <div id="tli-and-cfi-for-the-2pl" class="section level3">
 <h3>3.1: TLI and CFI for the 2PL</h3>
-<pre class="r"><code>chitested.twopl &lt;- chi.tested(l_0 = two.pl$log.Lik, agg_data = aggr_data, n = 1000)
+<pre class="r"><code>chitested.twopl &lt;- chi.tested(l_0 = logLik(two.pl), agg_data = aggr_data, n = 1000)
 df.tested.twopl &lt;- ((5 * 6) / 2) - 5
 
 TLI.twopl &lt;- TLI(chi_base = chibase, df_base = df.base, 
                  chi_tested = chitested.twopl, df_tested = df.tested.twopl)
 TLI.twopl</code></pre>
-<pre><code>## [1] 0.5742506</code></pre>
+<pre><code>## [1] 0.5742509</code></pre>
 <pre class="r"><code>CFI.twopl &lt;- CFI(chi_base = chibase, df_base = df.base,
                  chi_tested = chitested.twopl, df_tested = df.tested.twopl)
 CFI.twopl</code></pre>
-<pre><code>## [1] 0.8122015</code></pre>
+<pre><code>## [1] 0.8122018</code></pre>
 </div>
 <div id="tli-and-cfi-for-the-3pl" class="section level3">
 <h3>3.2: TLI and CFI for the 3PL</h3>
-<pre class="r"><code>chitested.threepl &lt;- chi.tested(l_0 = three.pl$log.Lik, agg_data = aggr_data, n = 1000)
+<pre class="r"><code>chitested.threepl &lt;- chi.tested(l_0 = logLik(three.pl), agg_data = aggr_data, n = 1000)
 df.tested.threepl &lt;- ((5 * 6) / 2) - 10
 
 TLI.threepl &lt;- TLI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl,
                    df_tested = df.tested.threepl)
 TLI.threepl</code></pre>
-<pre><code>## [1] 0.0855081</code></pre>
+<pre><code>## [1] 0.1488423</code></pre>
 <pre class="r"><code>CFI.threepl &lt;- CFI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl,
                    df_tested = df.tested.threepl)
 CFI.threepl</code></pre>
-<pre><code>## [1] 0.7023193</code></pre>
+<pre><code>## [1] 0.7287266</code></pre>
 </div>
 <div id="tli-and-cfi-for-the-3pl-with-equal-gamma_i-constraint" class="section level3">
 <h3>3.3: TLI and CFI for the 3PL with equal <span class="math inline">\(\gamma_i\)</span> constraint</h3>
@@ -446,11 +450,11 @@ df.tested.threepl.equal.gamma &lt;- ((5 * 6)/2) - 6
 TLI.threepl.equal.gamma &lt;- TLI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl.equal.gamma,
                    df_tested = df.tested.threepl.equal.gamma)
 TLI.threepl.equal.gamma</code></pre>
-<pre><code>## [1] 0.5255021</code></pre>
+<pre><code>## [1] 0.5269454</code></pre>
 <pre class="r"><code>CFI.threepl.equal.gamma &lt;- CFI(chi_base = chibase, df_base = df.base, chi_tested = chitested.threepl.equal.gamma,
                    df_tested = df.tested.threepl.equal.gamma)
 CFI.threepl.equal.gamma</code></pre>
-<pre><code>## [1] 0.7943952</code></pre>
+<pre><code>## [1] 0.7954783</code></pre>
 </div>
 <div id="tli-and-cfi-for-3pl-with-gamma_i-0.25" class="section level3">
 <h3>3.4: TLI and CFI for 3PL with <span class="math inline">\(\gamma_i =
@@ -471,16 +475,21 @@ CFI.final</code></pre>
 <div id="using-the-chi2-difference-test" class="section level2">
 <h2>Using the <span class="math inline">\(\chi^2\)</span>-difference
 test</h2>
-<pre class="r"><code>l_a &lt;- three.pl$log.Lik
-l_a_eq &lt;- logLik(three.pl.equal.gamma)
-l_0 &lt;- two.pl$log.Lik
-
-chisq_val &lt;- 2 * (l_a - l_0)
+<pre class="r"><code>l_a &lt;- logLik(three.pl)
+l_a</code></pre>
+<pre><code>## [1] -2466.649</code></pre>
+<pre class="r"><code>l_a_eq &lt;- logLik(three.pl.equal.gamma)
+l_a_eq</code></pre>
+<pre><code>## [1] -2466.653</code></pre>
+<pre class="r"><code>l_0 &lt;- logLik(two.pl)
+l_0</code></pre>
+<pre><code>## [1] -2466.653</code></pre>
+<pre class="r"><code>chisq_val &lt;- 2 * (l_a - l_0)
 
 p_val &lt;- 1 - pchisq(chisq_val, df = 5)
 p_val</code></pre>
-<pre><code>## [1] 1</code></pre>
-<pre class="r"><code>chisq_val_eq &lt;- 2 * (logLik(three.pl.equal.gamma) - two.pl$log.Lik)
+<pre><code>## [1] 0.9999996</code></pre>
+<pre class="r"><code>chisq_val_eq &lt;- 2 * (l_a_eq - l_0)
 
 p_val_eq &lt;- 1 - pchisq(chisq_val_eq, df = 1)
 p_val_eq</code></pre>
