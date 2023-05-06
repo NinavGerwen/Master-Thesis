@@ -118,7 +118,7 @@ CFI.final
 ```
 
 
-## Using the $\chi^2$-difference test
+## Performing two times the $\chi^2$-difference test
 
 ```{r}
 l_a <- logLik(three.pl)
