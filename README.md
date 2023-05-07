@@ -24,7 +24,7 @@ Below you find a table that gives more detailed information on all included file
 |Simulation-Study-II.rmd	|Rmarkdown file that contains the simulation which assessed the performance of the Multiple Group Likelihood Ratio test to discern group differences|
 |Simulation-Study-II.html	|Knitted version of the 'Simulation-Study-II.html' file that also contains session information under which the simulation was run|
 
-The results found in html files were used in the end product of the manuscript.
+The results found in the .html files were used in the end product of the manuscript.
 
 ## Manuscript Files
 
